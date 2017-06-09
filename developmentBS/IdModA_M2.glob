@@ -1,0 +1,50 @@
+DIGEST 2a194dd7fda574ee55be818851574318
+FIdModA_M2
+R15:25 EnvListAux7 <> <> lib
+R43:51 IdModType <> <> lib
+R70:83 Coq.Lists.List <> <> lib
+R101:118 Coq.Strings.String <> <> lib
+R136:161 Coq.Logic.ProofIrrelevance <> <> lib
+prf 172:189 <> valTyp_irrelevance
+R218:223 IdModType <> ValTyp class
+R225:225 IdModA_M2 <> T var
+R231:233 Coq.Init.Logic <> :type_scope:x_'='_x not
+R229:230 IdModA_M2 <> p1 var
+R234:235 IdModA_M2 <> p2 var
+R253:269 Coq.Logic.ProofIrrelevance <> proof_irrelevance prfax
+R253:269 Coq.Logic.ProofIrrelevance <> proof_irrelevance prfax
+R296:304 IdModType IdModType <> mod
+mod 287:291 <> IdMod
+def 322:323 IdMod Id
+R328:333 Coq.Strings.String <> string ind
+def 350:356 IdMod IdEqDec
+R361:370 Coq.Strings.String <> string_dec def
+inst 385:389 IdMod IdEq2
+R393:395 EnvListAux7 <> DEq class
+R397:398 IdModA_M2 IdMod Id def
+R409:411 EnvListAux7 <> dEq meth
+R416:422 IdModA_M2 IdMod IdEqDec def
+def 443:446 IdMod IdEq
+R451:455 IdModA_M2 IdMod IdEq2 inst
+def 473:473 IdMod W
+R478:481 Coq.Init.Datatypes <> list ind
+R486:488 Coq.Init.Datatypes <> :type_scope:x_'*'_x not
+R484:485 IdModA_M2 IdMod Id def
+R489:491 Coq.Init.Datatypes <> nat ind
+def 509:514 IdMod Loc_PI
+R519:536 IdModA_M2 <> valTyp_irrelevance thm
+def 553:557 IdMod BInit
+R563:565 Coq.Init.Datatypes <> nil constr
+R570:572 Coq.Init.Datatypes <> :type_scope:x_'*'_x not
+R568:569 IdModA_M2 IdMod Id def
+R573:575 Coq.Init.Datatypes <> nat ind
+inst 591:593 IdMod WP2
+R597:602 IdModType <> PState class
+R604:604 IdModA_M2 IdMod W def
+R637:642 IdModType <> b_init meth
+R615:620 IdModType <> loc_pi meth
+R625:630 IdModA_M2 IdMod Loc_PI def
+R647:651 IdModA_M2 IdMod BInit def
+def 685:686 IdMod WP
+R691:693 IdModA_M2 IdMod WP2 inst
+R701:705 IdModA_M2 IdMod <> mod
