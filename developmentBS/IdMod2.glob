@@ -1,0 +1,48 @@
+DIGEST f68f5e4fb18c67cce01962096215e872
+FIdMod2
+R15:25 EnvListAux7 <> <> lib
+R43:51 IdModType <> <> lib
+R70:83 Coq.Lists.List <> <> lib
+R101:118 Coq.Strings.String <> <> lib
+R136:161 Coq.Logic.ProofIrrelevance <> <> lib
+prf 313:330 <> valTyp_irrelevance
+R359:364 IdModType <> ValTyp class
+R366:366 IdMod2 <> T var
+R372:374 Coq.Init.Logic <> :type_scope:x_'='_x not
+R370:371 IdMod2 <> p1 var
+R375:376 IdMod2 <> p2 var
+R394:410 Coq.Logic.ProofIrrelevance <> proof_irrelevance prfax
+R394:410 Coq.Logic.ProofIrrelevance <> proof_irrelevance prfax
+inst 431:440 <> pstate_nat
+R444:449 IdModType <> PState class
+R451:453 Coq.Init.Datatypes <> nat ind
+R465:509 IdModType <> Build_PState constr
+R475:492 IdMod2 <> valTyp_irrelevance thm
+R653:661 IdModType IdModType <> mod
+mod 642:648 <> IdModM2
+def 678:679 IdModM2 Id
+R684:689 Coq.Strings.String <> string ind
+def 706:712 IdModM2 IdEqDec
+R717:726 Coq.Strings.String <> string_dec def
+inst 741:745 IdModM2 IdEq2
+R749:751 EnvListAux7 <> DEq class
+R753:754 IdMod2 IdModM2 Id def
+R765:767 EnvListAux7 <> dEq meth
+R772:778 IdMod2 IdModM2 IdEqDec def
+def 799:802 IdModM2 IdEq
+R807:811 IdMod2 IdModM2 IdEq2 inst
+def 830:830 IdModM2 W
+R835:837 Coq.Init.Datatypes <> nat ind
+def 854:859 IdModM2 Loc_PI
+R864:881 IdMod2 <> valTyp_irrelevance thm
+def 898:902 IdModM2 BInit
+inst 922:924 IdModM2 WP2
+R928:933 IdModType <> PState class
+R935:935 IdMod2 IdModM2 W def
+R969:974 IdModType <> b_init meth
+R946:951 IdModType <> loc_pi meth
+R956:961 IdMod2 IdModM2 Loc_PI def
+R979:983 IdMod2 IdModM2 BInit def
+def 1018:1019 IdModM2 WP
+R1024:1026 IdMod2 IdModM2 WP2 inst
+R1036:1042 IdMod2 IdModM2 <> mod

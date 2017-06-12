@@ -621,5 +621,74 @@ assumption.
 Qed.
 
 
+Lemma BindN_VHT1 (P0 P1: W -> Prop) (P2: Value -> W -> Prop)
+
+(fenv: funEnv) (env: valEnv) (e1 e2: Exp)
+
+      (k1: forall (e:Exp) (s: W), sigT (fun v: Value =>
+                 sigT (fun s': W =>
+             EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v)))))
+
+      (k2: forall (e:Exp) (s s1 s2: W) (v1 v2: Value),
+          EClosure fenv env (Conf Exp s e) (Conf Exp s1 (Val v1)) ->
+          EClosure fenv env (Conf Exp s e) (Conf Exp s2 (Val v2)) ->
+                (s1 = s2) /\ (v1 = v2)) :
+
+  HoareTriple_Eval P0 (fun _ => P1) fenv env e1 ->
+  HoareTriple_Eval P1 P2 fenv env e2 ->
+  HoareTriple_Eval P0 P2 fenv env (BindN e1 e2).
+Proof.
+intros H1 H2.
+unfold HoareTriple_Eval in *.
+intros s s' v H3 H4.
+inversion H3;subst.
+inversion X;subst.
+inversion X0;subst.
+eapply H2.
+eauto.
+apply H1 with s' v0.
+econstructor.
+auto.
+eapply H2.
+eauto.
+apply H1 with s v0.
+econstructor.
+auto.
+
+(*inversion X0;subst.
+inversion X2;subst.
+inversion X3;subst.
+eapply H2.
+eauto.
+apply H1 with s v0.
+apply StepIsEClos in X1.
+eauto.
+auto.
+eapply H2.
+eauto.
+apply H1 with s v0.
+apply StepIsEClos in X1.
+auto.
+auto.
+inversion X3;subst.
+inversion X5;subst.
+eapply H2.
+eauto.
+apply H1 with s v0.
+econstructor.
+eauto.
+apply StepIsEClos in X4.
+auto.
+auto.
+inversion X5;subst.
+inversion X7;subst.
+eapply H2.
+eauto.
+*)
+
+
+Admitted.
+
+
 End Hoare_Test_state.
 
