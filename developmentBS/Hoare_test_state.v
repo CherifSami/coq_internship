@@ -620,6 +620,18 @@ eauto.
 assumption.
 Qed.
 
+Lemma testing (fenv: funEnv) (env: valEnv) (k1: forall (e:Exp) (s: W), sigT (fun v: Value =>
+                 sigT (fun s': W =>
+             EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v))))) (k2: forall (e:Exp) (s s1 s2: W) (v1 v2: Value),
+          EClosure fenv env (Conf Exp s e) (Conf Exp s1 (Val v1)) ->
+          EClosure fenv env (Conf Exp s e) (Conf Exp s2 (Val v2)) ->
+                (s1 = s2) /\ (v1 = v2)) : 
+  forall (s s' s'':W) (e1 e2:Exp) (v1 v2:Value), 
+  EClosure fenv env (Conf Exp s e1) (Conf Exp s' (Val v1)) ->
+  EClosure fenv env (Conf Exp s (BindN e1 e2)) (Conf Exp s'' (Val v2)) -> 
+  EClosure fenv env (Conf Exp s' e2) (Conf Exp s'' (Val v2)).
+Proof.
+Admitted.
 
 Lemma BindN_VHT1 (P0 P1: W -> Prop) (P2: Value -> W -> Prop)
 
@@ -641,53 +653,94 @@ Proof.
 intros H1 H2.
 unfold HoareTriple_Eval in *.
 intros s s' v H3 H4.
+specialize k1 with e1 s as k1'.
+destruct k1'.
+destruct s0.
+eapply testing with fenv env s x0 s' e1 e2 x v in e as H5.
+eapply H2.
+eauto.
+eapply H1.
+eauto.
+auto.
+eauto.
+Qed.
+
+(*
+inversion H5;subst.
 inversion H3;subst.
 inversion X;subst.
-inversion X0;subst.
+inversion e;subst.
 eapply H2.
 eauto.
-apply H1 with s' v0.
-econstructor.
-auto.
-eapply H2.
+eapply H1.
 eauto.
-apply H1 with s v0.
-econstructor.
 auto.
+inversion X1.
+induction X0;subst.
 
-(*inversion X0;subst.
-inversion X2;subst.
-inversion X3;subst.
-eapply H2.
-eauto.
-apply H1 with s v0.
-apply StepIsEClos in X1.
-eauto.
-auto.
-eapply H2.
-eauto.
-apply H1 with s v0.
-apply StepIsEClos in X1.
-auto.
-auto.
-inversion X3;subst.
-inversion X5;subst.
+admit.
+
+inversion H3;subst.
+inversion X;subst.
 eapply H2.
 eauto.
 apply H1 with s v0.
 econstructor.
-eauto.
-apply StepIsEClos in X4.
 auto.
-auto.
-inversion X5;subst.
-inversion X7;subst.
+specialize k1 with e1 s as k1'.
+destruct k1'.
+destruct s0.
+eapply k2 in e as H.
+instantiate (1:=x1) in H.
+instantiate (1:=x2) in H.
+destruct H.
+inversion X0;subst.
+inversion X2;subst.
+admit.
+
+admit.
+specialize k1 with e1' n' as k1'.
+destruct k1'.
+destruct s0.
+inversion X0;subst.
+inversion X2;subst.
+admit.*)
+(*eapply k2 in e as H.
+instantiate (1:=x1) in H.
+instantiate (1:=x2) in H.
+destruct H.
+inversion X0;subst.
+inversion X2;subst.
 eapply H2.
 eauto.
+apply H1 with s x.
+admit.
+auto.
+eauto.
+econstructor.
+auto.
+inversion X0;subst.
+inversion X2;subst.
+eapply H2.
+eauto.
+eapply H1.
+eauto.
+apply StepIsEClos in X1.
+eauto.
+auto.
+inversion X3;subst.
+inversion X5;subst.
+eapply H2.
+eauto.
+eapply H1.
+eapply k2 in X1.
+eauto.
+auto.
 *)
 
-
 Admitted.
+
+
 
 
 End Hoare_Test_state.
