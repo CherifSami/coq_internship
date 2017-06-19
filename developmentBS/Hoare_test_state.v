@@ -719,5 +719,110 @@ auto.
 auto.
 Qed.
 
+Lemma simpl_BindMS : 
+forall (fenv fenv': funEnv) (env env': valEnv) (v : Value) (s : W),
+  EClosure fenv env (Conf Exp s (BindMS fenv' env' (Val v))) (Conf Exp s (Val v)).
+Proof.
+intros.
+econstructor.
+econstructor.
+econstructor.
+Qed.
+
+Lemma BindS_BStep1 (fenv: funEnv) (env: valEnv)
+      (e1 e2: Exp) (x: Id) (v: Value) (s s': W)
+  (k1: forall (fenv: funEnv) (env: valEnv) (e:Exp) (s: W),
+       sigT (fun v: Value =>
+                 sigT (fun s': W =>
+             EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v)))))
+  (k2: forall (e:Exp) (s s1 s2: W) (v1 v2: Value),
+          EClosure fenv env (Conf Exp s e) (Conf Exp s1 (Val v1)) ->
+          EClosure fenv env (Conf Exp s e) (Conf Exp s2 (Val v2)) ->
+                (s1 = s2) /\ (v1 = v2))  :
+  EClosure fenv env (Conf Exp s (BindS x e1 e2)) (Conf Exp s' (Val v)) ->
+  (sigT (fun s1 : W =>
+            (sigT2 (fun v1: Value =>
+                     EClosure fenv env (Conf Exp s e1) (Conf Exp s1 (Val v1)))
+                   (fun v1: Value =>
+                     EClosure fenv ((x,v1)::env) (Conf Exp s1 e2) (Conf Exp s' (Val v)))))).
+Proof.
+intros H.
+specialize k1 with fenv env e1 s as k.
+destruct k.
+destruct s0.
+specialize k1 with fenv ((x,x0)::env) e2 x1 as k.
+destruct k.
+destruct s0.
+econstructor.
+econstructor.
+eauto.
+clear k1.
+eapply BindS_extended_congruence in e as H2.
+instantiate (1:=e2) in H2.
+instantiate (1:=x) in H2.
+specialize BindS_EStep with fenv env x1 x x0 e2 as X.
+unfold singleE in X.
+unfold emptyE in X.
+apply StepIsEClos in X.
+eapply BindMS_extended_congruence in e0 as H3.
+instantiate (1:=[(x,x0)]) in H3.
+instantiate (1:=[]) in H3.
+instantiate (1:=env) in H3.
+instantiate (1:=fenv) in H3.
+eapply EClosConcat in H3 as H4.
+instantiate (1:=(Conf Exp s (BindS x e1 e2))) in H4.
+specialize simpl_BindMS with fenv emptyE env [(x, x0)] x2 x3 as X0.
+eapply EClosConcat in X0 as X1.
+instantiate (1:=(Conf Exp s (BindS x e1 e2))) in X1.
+specialize k2 with (BindS x e1 e2) s s' x3 v x2.
+apply k2 in H.
+clear k2.
+destruct H.
+rewrite H.
+rewrite H0.
+auto.
+auto.
+auto.
+eapply EClosConcat in X as X1.
+instantiate (1:=(Conf Exp s (BindS x e1 e2))) in X1.
+auto.
+auto.
+auto.
+auto.
+Admitted.
+
+
+Lemma BindS_VHT1 (P0: W -> Prop) (P1 P2: Value -> W -> Prop)
+
+(fenv: funEnv) (env: valEnv) (e1 e2: Exp) (x: Id)
+
+ (k1: forall (fenv: funEnv) (env: valEnv) (e:Exp) (s: W),
+       sigT (fun v: Value =>
+                 sigT (fun s': W =>
+             EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v)))))
+ (k2: forall (e:Exp) (s s1 s2: W) (v1 v2: Value),
+          EClosure fenv env (Conf Exp s e) (Conf Exp s1 (Val v1)) ->
+          EClosure fenv env (Conf Exp s e) (Conf Exp s2 (Val v2)) ->
+                (s1 = s2) /\ (v1 = v2)) :
+
+  HoareTriple_Eval P0 P1 fenv env e1 ->
+  (forall v, HoareTriple_Eval (P1 v) P2 fenv ((x,v)::env) e2) ->
+  HoareTriple_Eval P0 P2 fenv env (BindS x e1 e2).
+Proof.
+intros.
+unfold HoareTriple_Eval in *.
+intros.
+eapply BindS_BStep1 in X.
+destruct X.
+destruct s0.
+eapply H0.
+eauto.
+eapply H.
+eauto.
+auto.
+auto.
+auto.
+Qed.
+
 End Hoare_Test_state.
 
