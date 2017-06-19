@@ -1,2 +1,0 @@
-InterpEquiv.vo InterpEquiv.glob InterpEquiv.v.beautified: InterpEquiv.v ./EnvListAux7.vo ./EnvListAuxT1.vo ./TPipStaticM2.vo ./TPipDynamicM2.vo ./TRInductM2.vo ./WeakM2.vo ./TSoundnessRM2.vo ./ReflectInterpM2.vo ./SOS2Gallina.vo ./IdModType.vo
-InterpEquiv.vio: InterpEquiv.v ./EnvListAux7.vio ./EnvListAuxT1.vio ./TPipStaticM2.vio ./TPipDynamicM2.vio ./TRInductM2.vio ./WeakM2.vio ./TSoundnessRM2.vio ./ReflectInterpM2.vio ./SOS2Gallina.vio ./IdModType.vio
