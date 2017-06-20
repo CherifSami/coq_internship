@@ -18,7 +18,6 @@ Require Import TRInductM2.
 Require Import WeakM2.
 Require Import TSoundnessM2.
 Require Import IdModType.
-Require Import IdMod2.
 Require Import Hardware_Deep_v2.
 Require Import Coq.Logic.EqdepFacts.
 Require Import IdModA_M2.
@@ -39,6 +38,7 @@ Definition WP := HardwareC.WP.
 (**************************************************)
 
 Open Scope state_scope.
+
 
 Fixpoint findD {K V: Type} {h: DEq K} (m: list (K * V)) (d: V) (k: K) : V :=
   match m with
@@ -621,27 +621,6 @@ assumption.
 Qed.
 
 
-Lemma desperate2 (fenv: funEnv) (env: valEnv)
-      (k2: forall (e:Exp) (s s1 s2: W) (v1 v2: Value),
-          EClosure fenv env (Conf Exp s e) (Conf Exp s1 (Val v1)) ->
-          EClosure fenv env (Conf Exp s e) (Conf Exp s2 (Val v2)) ->
-                (s1 = s2) /\ (v1 = v2)) :
-  forall (s s':W) (e1 e1' e2:Exp), 
-  EClosure fenv env (Conf Exp s e1) (Conf Exp s' e1') ->
-  EClosure fenv env (Conf Exp s (BindN e1 e2)) (Conf Exp s' (BindN e1' e2)).
-Proof.
-intros.
-dependent induction X.
-econstructor.
-eapply IHX.
-eauto.
-destruct p2.
-Admitted.
-
-
-
-
-
 Lemma BindN_BStep1 (fenv: funEnv) (env: valEnv)
       (e1 e2: Exp) (v: Value) (s s': W) :
   (forall (e:Exp) (s: W), sigT (fun v: Value =>
@@ -789,7 +768,7 @@ auto.
 auto.
 auto.
 auto.
-Admitted.
+Qed.
 
 
 Lemma BindS_VHT1 (P0: W -> Prop) (P1 P2: Value -> W -> Prop)

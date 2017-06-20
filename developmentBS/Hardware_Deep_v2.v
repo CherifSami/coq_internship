@@ -18,8 +18,6 @@ Require Import TRInductM2.
 Require Import WeakM2.
 Require Import TSoundnessM2.
 Require Import IdModType.
-Require Import IdMod2.
-Require Import TestSami.
 
 
 Module Hardware (IdT: IdModType) <: IdModType.

@@ -1,0 +1,57 @@
+DIGEST 75671517e7ed3678aeac8892dfc2f33f
+FIdModA_M2_bis
+R15:25 EnvListAux7 <> <> lib
+R43:51 IdModType <> <> lib
+R70:83 Coq.Lists.List <> <> lib
+R101:118 Coq.Strings.String <> <> lib
+R136:161 Coq.Logic.ProofIrrelevance <> <> lib
+R179:181 ADT <> <> lib
+R199:206 Hardware <> <> lib
+prf 217:234 <> valTyp_irrelevance
+R263:268 IdModType <> ValTyp class
+R270:270 IdModA_M2_bis <> T var
+R276:278 Coq.Init.Logic <> :type_scope:x_'='_x not
+R274:275 IdModA_M2_bis <> p1 var
+R279:280 IdModA_M2_bis <> p2 var
+R298:314 Coq.Logic.ProofIrrelevance <> proof_irrelevance prfax
+R298:314 Coq.Logic.ProofIrrelevance <> proof_irrelevance prfax
+R345:353 IdModType IdModType <> mod
+mod 332:340 <> IdModA_M2
+def 371:372 IdModA_M2 Id
+R377:382 Coq.Strings.String <> string ind
+def 399:405 IdModA_M2 IdEqDec
+R410:419 Coq.Strings.String <> string_dec def
+inst 434:438 IdModA_M2 IdEq2
+R442:444 EnvListAux7 <> DEq class
+R446:447 IdModA_M2_bis IdModA_M2 Id def
+R458:460 EnvListAux7 <> dEq meth
+R465:471 IdModA_M2_bis IdModA_M2 IdEqDec def
+def 492:495 IdModA_M2 IdEq
+R500:504 IdModA_M2_bis IdModA_M2 IdEq2 inst
+def 522:522 IdModA_M2 W
+R527:531 Hardware <> state rec
+def 548:553 IdModA_M2 Loc_PI
+R558:575 IdModA_M2_bis <> valTyp_irrelevance thm
+prf 587:589 IdModA_M2 Hpx
+R594:596 Coq.Init.Peano <> :nat_scope:x_'<'_x not
+R597:602 ADT <> nbPage prfax
+R627:639 ADT <> nbPageNotZero prfax
+R627:639 ADT <> nbPageNotZero prfax
+def 702:706 IdModA_M2 BInit
+R724:807 Hardware <> Build_state constr
+R789:791 Coq.Init.Datatypes <> nil constr
+R799:801 Coq.Init.Datatypes <> :type_scope:x_'*'_x not
+R794:798 ADT <> paddr def
+R802:806 Hardware <> value ind
+R747:762 ADT <> Build_page constr
+R760:762 IdModA_M2_bis IdModA_M2 Hpx thm
+inst 847:849 IdModA_M2 WP2
+R853:858 IdModType <> PState class
+R860:860 IdModA_M2_bis IdModA_M2 W def
+R893:898 IdModType <> b_init meth
+R871:876 IdModType <> loc_pi meth
+R881:886 IdModA_M2_bis IdModA_M2 Loc_PI def
+R903:907 IdModA_M2_bis IdModA_M2 BInit def
+def 941:942 IdModA_M2 WP
+R947:949 IdModA_M2_bis IdModA_M2 WP2 inst
+R957:965 IdModA_M2_bis IdModA_M2 <> mod
