@@ -24,7 +24,7 @@ Require Import Hardware_Deep_v2.
 Require Import Coq.Logic.EqdepFacts.
 
 
-Module Hoare_Test_state <: IdModType.
+Module Hoare_Test_state_bis <: IdModType.
 
 Module HardwareC := Hardware IdModA_M2.
 Export HardwareC.
