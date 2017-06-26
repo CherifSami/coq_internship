@@ -12,21 +12,24 @@ Import ListNotations.
 
 Require Import Coq.Logic.ProofIrrelevance.
 
-Require Import IdModType.
-Require Import IdModA_M2_bis.
 
 Require Import TPipStaticM2.
 Require Import TPipDynamicM2.
 Require Import TRInductM2.
 Require Import WeakM2.
 Require Import TSoundnessM2.
-Require Import Hardware_Deep_v2.
+Require Import IdModType.
+Require Import Hardware_Deep_v2_bis.
 Require Import Coq.Logic.EqdepFacts.
-
+Require Import IdModA_M2_bis.
+Require Import Peano_dec.
+Require Import Coq.Logic.Eqdep_dec.
+Require Import Coq.Program.Equality.
+Require Import Coq.Structures.Equalities.
 
 Module Hoare_Test_state_bis <: IdModType.
 
-Module HardwareC := Hardware IdModA_M2.
+Module HardwareC := Hardware_bis IdModA_M2_b.
 Export HardwareC.
 
 Definition Id := HardwareC.Id.
@@ -40,549 +43,92 @@ Definition WP := HardwareC.WP.
 
 (**************************************************)
 
-Open Scope state_scope.
+Open Scope string_scope.
+
+(*** pepin src definitions*)
+
+Definition multiplexer:page := P 1.
+
+Definition PRidx:index := I 0.   (* descriptor *)
+Definition PDidx:index := I 2.   (* page directory *)
+Definition sh1idx:index := I 4. (* shadow 1*)
+Definition sh2idx:index := I 6. (* shadow 2*)
+Definition sh3idx:index := I 8. (* configuration pages list*)
+Definition PPRidx:index := I 10. (* parent (virtual address is null) *)
 
 
-Fixpoint findD {K V: Type} {h: DEq K} (m: list (K * V)) (d: V) (k: K) : V :=
+
+Fixpoint findD (m: list (paddr * sValue)) (pad: paddr) (v: sValue)  : sValue :=
   match m with
-     | nil => d
-     | cons (k', x) ls => match (dEq k k') with
-                            | left _ => x
-                            | right _ => findD ls d k
-                            end              
+     | nil => v
+     | cons ((P p,I i) , v') ls =>
+                     match pad with | (P p0,I i0) =>
+                              match (eq_nat_dec p p0,eq_nat_dec i i0) with
+                              | (left _ , left _) => v'
+                              |  _ => findD ls pad v
+                              end       
+                     end       
     end.
 
-Fixpoint update1 {K V: Type} {h: DEq K} (m: list (K * V)) (k: K) (v: V) :
-  list (K * V) :=
-  match m with
-     | nil => [(k,v)]
-     | cons (k', x) ls => match (dEq k k') with
-                            | left _ => (k',v):: ls
-                            | right _ => (k',x) :: update1 ls k v
-                            end              
-    end.
+Definition isVA table idx s: Prop := match findD (s.(memory)) (table,idx) (SP (P 0)) with 
+             |SVA _ => True
+             |_ => False
+             end.
 
-Lemma findUpdate {K V: Type} {h: DEq K} : 
-forall (m: list (K * V)) (x: K) (v v': V), findD(update1 m x v) v' x = v.
-Proof.
-intros.
-induction m.
-simpl.
-destruct dEq.
-auto.
-contradiction.
-induction a.
-unfold update1.
-destruct dEq.
-apply symmetry in e.
-rewrite e.
-simpl.
-destruct dEq.
-auto.
-contradiction.
-simpl.
-destruct dEq.
-contradiction.
-auto.
-Qed.
+Definition nextEntryIsPP table idx (tableroot:Value) s : Prop:= 
+match findD (s.(memory)) (table,(I (Vindex idx +1))) (SP (P 0)) with 
+                  | SP table => tableroot = cst sValue (SP table)
+                  |_ => False 
+end.
 
-Definition xf_read : XFun Id nat := {|
-   b_mod := fun s x => (s, findD s 0 x)    
+
+Definition xf_read (p: page) : XFun index sValue := {|
+   b_mod := fun s i => (s, findD (s.(memory)) (p,i) (SP (P 0)))    
 |}.                                                    
 
-Definition xf_write : XFun (Id * nat) unit := {|
-   b_mod := fun s x => (update1 s (fst x) (snd x), tt)    
-|}.                                                    
 
+Definition xf_succ : XFun index index := {|
+   b_mod := fun s i =>  (s, (I (Vindex i+1)))    
+|}.     
+
+Instance VT_svalue : ValTyp sValue.
+Instance VT_index : ValTyp index.
+
+
+Definition Read (p:page) (x:Id) : Exp :=
+  Modify index sValue VT_index VT_svalue (xf_read p) (Var x). 
+
+
+Definition Succ (x:Id) : Exp :=
+  Modify index index VT_index VT_index xf_succ (Var x). 
+
+
+Definition getSh1idx : Exp := Val (cst index sh1idx).  (* shadow1 *) 
+(**** with return to look like the original *)
 
 (*
-Definition xf_reset : XFun (PState W) unit := {|
-   b_mod := fun x _ => (b_init, tt)    
-|}.
-*)                                                 
+Definition getFstShadow (partition : page):=
+  perform idx11 := getSh1idx in
+  perform idx := MALInternal.Index.succ idx11 in
+  readPhysical partition idx.
+*)
 
-Instance VT_Id : ValTyp Id.
-
-Instance VT_IdNat : ValTyp (Id * nat).
-
-Definition Read (x: Id) : Exp :=
-  Modify Id nat VT_Id NatV xf_read (QV (cst Id x)).
-
-Definition Write (x: Id) (v: nat) : Exp :=
-  Modify (Id * nat) unit VT_IdNat UnitV xf_write (QV (cst (Id * nat) (x,v))).
-
-(*Definition Reset (VW: ValTyp (PState W)) : Exp :=
-  Modify (PState W) unit VW UnitV xf_reset
-         (QV (cst (PState nat) pstate_nat)).*)
-
-(** 1 *)
-
-Lemma write_entry_1 (P0: W -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (v: nat): 
-  forall (s s': W) (e: Exp),
-    EStep fenv env (Conf Exp s (Write x v))
-                      (Conf Exp s' e) ->
-  P0 (update1 s x v) -> P0 s'.
-Proof.
-intros s s' e H1 H2.
-inversion H1; subst.
-repeat apply inj_pair2 in H7.
-apply inj_pair2 in H9.
-rewrite H9.
-rewrite H7.
-unfold b_exec.
-unfold b_mod.
-unfold xf_write.
-simpl.
-auto.
-inversion X.
-Qed.
+Definition getFstShadow (p:page) : Exp :=
+ BindS "x" getSh1idx 
+           (BindS "y" (Succ "x") 
+                      (Read p "y")
+           ).
 
 
-Definition WriteEntry1SHT (P0: W -> Prop)
-                       (fenv: funEnv) (env: valEnv) (x: Id) (v: nat):=
-  HoareTriple_Step (fun s => P0 (update1 s x v)) (fun _ s => P0 s) fenv env (Write x v).
+Definition partitionDescriptorEntry s := 
+forall (p : page),  
+In p (s.(partitions)) -> 
+forall (idx : index), (idx = PDidx \/ idx = sh1idx \/ idx = sh2idx \/ idx = sh3idx \/ idx = PPRidx  \/ idx = PRidx ) ->
+isVA p idx  s /\ 
+exists p1 , nextEntryIsPP p idx (cst sValue (SP p1)) s  /\  
+(cst page p1) <> (cst page page0).
 
-Lemma write_entry_1_sht (P0: W -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (v: nat): 
-  forall (s s': W) (e: Exp),
-    WriteEntry1SHT P0 fenv env x v.
-Proof.
-intros s s' e.
-unfold WriteEntry1SHT.
-unfold HoareTriple_Step.
-apply write_entry_1.
-Qed.
-
-(** 2 *)
-
-Lemma write_entry_2 (P0: W -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (v: nat): 
-  forall (s s': W) (e: Exp),
-    EStep fenv env (Conf Exp s (Write x v))
-                      (Conf Exp s' e) ->
-  P0 (update1 s x v) -> P0 s' /\ s' = update1 s x v.
-Proof.
-intros s s' e H1 H2.
-split.
-eapply write_entry_1.
-eauto. auto.
-inversion H1;subst.
-repeat apply inj_pair2 in H7.
-apply inj_pair2 in H9.
-rewrite H7.
-rewrite H9.
-unfold b_exec.
-unfold xf_write.
-unfold b_mod.
-simpl.
-reflexivity.
-inversion X.
-Qed.
-
-Definition WriteEntry2SHT (P0: W -> Prop)
-                       (fenv: funEnv) (env: valEnv) (x: Id) (v: nat):=
-  HoareTriple_Step (fun s => P0 (update1 s x v)) (fun _ s => P0 s)
-                   fenv env (Write x v).
-
-Lemma write_Entry_2_sht (P0: W -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (v: nat): 
-  forall (s s': W) (e: Exp),
-    WriteEntry2SHT P0 fenv env x v.
-intros s s' e.
-unfold WriteEntry2SHT.
-unfold HoareTriple_Step.
-eapply write_entry_2.
-Qed.
-
-(** 3 *)
-
-Lemma read_entry_1 (P0: Value -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id): 
-  forall (s s': W) (v: Value),
-    EClosure fenv env (Conf Exp s (Read x))
-             (Conf Exp s' (Val v)) ->
-    P0 (cst nat (findD s 0 x)) -> P0 v.
-Proof.
-intros s s' v H1 H2.
-inversion H1;subst.
-inversion X;subst.
-repeat apply inj_pair2 in H7.
-apply inj_pair2 in H9.
-rewrite H7 in X.
-rewrite H9 in X.
-unfold xf_read in X.
-unfold b_exec in X.
-unfold b_eval in X.
-unfold b_mod in X.
-simpl in *.
-rewrite H7 in X0.
-rewrite H9 in X0.
-unfold xf_read in X0.
-unfold b_exec in X0.
-unfold b_eval in X0.
-unfold b_mod in X0.
-simpl in *.
-destruct v.
-destruct v.
-unfold cst in *.
-inversion X0;subst.
-apply inj_pair2 in H10.
-eauto.
-inversion X1;subst.
-inversion X1.
-Qed.
-
-
-
-Definition ReadEntry1SHT (P0: Value -> Prop)
-                       (fenv: funEnv) (env: valEnv) (x: Id):=
-  HoareTriple_Step (fun s => P0 (cst nat (findD s 0 x)))
-                   (fun e _ => forall v: Value,
-                                 e = Val v -> P0 v) fenv env (Read x).
-
-Definition ReadEntry1VHT (P0: Value -> Prop)
-                       (fenv: funEnv) (env: valEnv) (x: Id) :=
-  HoareTriple_Eval (fun s => P0 (cst nat (findD s 0 x)))
-                   (fun v _ => P0 v) fenv env (Read x).
-
-
-(** 4 *)
-
-Lemma read_entry_2 (P0: Value -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id): 
-  forall (s s': W) (v: Value),
-    EClosure fenv env (Conf Exp s (Read x))
-             (Conf Exp s' (Val v)) ->
-    P0 (cst nat (findD s 0 x)) -> P0 v /\ v = (cst nat (findD s' 0 x)).
-Proof.
-intros s s' v H1 H2.
-eauto.
-split.
-eapply read_entry_1.
-eauto. auto.
-destruct v.
-destruct v.
-unfold cst in *.
-inversion H1;subst.
-inversion X;subst.
-repeat apply inj_pair2 in H7.
-apply inj_pair2 in H9.
-rewrite H7 in X.
-rewrite H9 in X.
-unfold xf_read in X.
-unfold b_exec in X.
-unfold b_eval in X.
-unfold b_mod in X.
-simpl in *.
-rewrite H7 in X0.
-rewrite H9 in X0.
-unfold xf_read in X0.
-unfold b_exec in X0.
-unfold b_eval in X0.
-unfold b_mod in X0.
-simpl in *.
-inversion X0;subst.
-auto.
-inversion X;subst.
-inversion X1.
-inversion X1.
-Qed.
-
-
-Definition ReadEntry2SHT (P0: Value -> Prop)
-                       (fenv: funEnv) (env: valEnv) (x: Id):=
-  HoareTriple_Step (fun s => P0 (cst nat (findD s 0 x)))
-                   (fun e s => forall v: Value,
-                          e = Val v -> P0 v /\ v = cst nat (findD s 0 x)) fenv env (Read x).
-
-Definition ReadEntry2VHT (P0: Value -> Prop)
-                       (fenv: funEnv) (env: valEnv) (x: Id):=
-  HoareTriple_Eval (fun s => P0 (cst nat (findD s 0 x)))
-                   (fun v s => P0 v /\ v = cst nat (findD s 0 x)) fenv env (Read x).
-
-
-
-(** 5 *)
-
-Lemma wread_entry_1 (P0: Value -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (n: nat): 
-  forall (s s': W) (v: Value),
-    EClosure fenv env (Conf Exp s (BindN (Write x n) (Read x)))
-                      (Conf Exp s' (Val v)) ->
-  P0 (cst nat n) -> P0 v.
-Proof.
-intros s s' v H1 H2.
-inversion H1;subst.
-inversion X;subst.
-inversion X1;subst.
-repeat apply inj_pair2 in H7.
-apply inj_pair2 in H9.
-rewrite H7 in X.
-rewrite H9 in X.
-unfold xf_write in X.
-unfold b_exec in X.
-unfold b_eval in X.
-unfold b_mod in X.
-simpl in *.
-rewrite H7 in X0.
-rewrite H9 in X0.
-unfold xf_write in X0.
-unfold b_exec in X0.
-unfold b_eval in X0.
-unfold b_mod in X0.
-simpl in *.
-rewrite H7 in X1.
-rewrite H9 in X1.
-unfold xf_write in X1.
-unfold b_exec in X1.
-unfold b_eval in X1.
-unfold b_mod in X1.
-simpl in *.
-destruct v.
-destruct v.
-unfold cst in *.
-inversion X0;subst.
-inversion X2;subst.
-inversion X3;subst.
-inversion X4;subst.
-repeat apply inj_pair2 in H7.
-apply inj_pair2 in H10.
-rewrite H7 in X5.
-rewrite H10 in X5.
-unfold b_exec in X5.
-unfold b_eval in X5.
-unfold xf_read in X5.
-unfold b_mod in X5.
-simpl in *.
-rewrite H7 in X4.
-rewrite H10 in X4.
-unfold b_exec in X4.
-unfold b_eval in X4.
-unfold xf_read in X4.
-unfold b_mod in X4.
-simpl in *.
-inversion X5;subst.
-eauto.
-rewrite findUpdate.
-auto.
-inversion X6.
-inversion X6.
-inversion X4.
-inversion X2.
-Qed.
-
-
-Definition WReadEntry1EHT (P0: Value -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (n:nat) :=
-  HoareTriple_ExtendedStep (fun _ => P0 (cst nat n))
-                           (fun e _ => forall v: Value, e = Val v -> P0 v)
-                           fenv env (BindN (Write x n) (Read x)).
-
-Lemma wread_nat_1_eht (P0: Value -> Prop)
-      (fenv: funEnv) (env: valEnv) (x: Id) (n:nat):
-    WReadEntry1EHT P0 fenv env x n.
-Proof.
-unfold WReadEntry1EHT.
-unfold HoareTriple_ExtendedStep.
-intros s s' e' H1 H2 v H3.
-eapply wread_entry_1.
-rewrite <- H3.
-eauto. auto.
-Qed.
-
-
-Definition WReadEntry1VHT (P0: Value -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (n:nat):=
-  HoareTriple_Eval (fun _ => P0 (cst nat n))
-                    (fun v _ => P0 v)
-                    fenv env (BindN (Write x n) (Read x)).
- 
-Lemma wread_entry_1_vht (P0: Value -> Prop)
-      (fenv: funEnv) (env: valEnv) (x: Id) (n:nat):
-    WReadEntry1VHT P0 fenv env x n.
-Proof.
-unfold WReadEntry1VHT.
-unfold HoareTriple_Eval.
-eapply wread_entry_1.
-Qed.
-
-(** 6 *)
-
-Lemma wread_entry_2 (P0: Value -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (n:nat): 
-  forall (s s': W) (v: Value),
-    EClosure fenv env (Conf Exp s (BindN (Write x n) (Read x)))
-                      (Conf Exp s' (Val v)) ->
-  P0 (cst nat n) -> P0 v /\ (update1 s x n) = s' /\ v = cst nat n. 
-Proof.
-intros s s' v H1 H2.
-split.
-eapply wread_entry_1.
-eauto. auto.
-split.
--inversion H1;subst.
- inversion X;subst.
- inversion X1;subst.
- repeat apply inj_pair2 in H7.
- apply inj_pair2 in H9.
- rewrite H7 in X.
- rewrite H9 in X.
- unfold b_exec in X.
- unfold b_eval in X.
- unfold xf_write in X.
- unfold b_mod in X.
- simpl in *.
- rewrite H7 in X0.
- rewrite H9 in X0.
- unfold b_exec in X0.
- unfold b_eval in X0.
- unfold xf_write in X0.
- unfold b_mod in X0.
- simpl in *.
- rewrite H7 in X1.
- rewrite H9 in X1.
- unfold b_exec in X1. 
- unfold b_eval in X1.
- unfold xf_write in X1.
- unfold b_mod in X1.
- simpl in *.
- inversion X0;subst.
- inversion X2;subst.
- inversion X3;subst.
- inversion X4;subst.
- repeat apply inj_pair2 in H7.
- apply inj_pair2 in H10.
- rewrite H7 in X5.
- rewrite H10 in X5.
- unfold b_exec in X5.
- unfold b_eval in X5.
- unfold xf_write in X5.
- unfold b_mod in X5.
- simpl in *.
- inversion X5;subst.
- auto.
- inversion X6.
- inversion X6.
- inversion X4.
- inversion X2.
--destruct v.
- destruct v.
- unfold cst in *.
- inversion H1;subst.
- inversion X;subst.
- inversion X1;subst.
- repeat apply inj_pair2 in H7.
- apply inj_pair2 in H9.
- rewrite H7 in X1.
- rewrite H9 in X1.
- unfold b_eval in X1.
- unfold b_exec in X1.
- unfold xf_write in X1.
- unfold b_mod in X1.
- simpl in *.
- rewrite H7 in X0.
- rewrite H9 in X0.
- unfold b_eval in X0.
- unfold b_exec in X0.
- unfold xf_write in X0.
- unfold b_mod in X0.
- simpl in *.
- rewrite H7 in X.
- rewrite H9 in X.
- unfold b_eval in X.
- unfold b_exec in X.
- unfold xf_write in X.
- unfold b_mod in X.
- simpl in *.
- inversion X1;subst.
- repeat apply inj_pair2 in H10.
- apply inj_pair2 in H12.
- apply inj_pair2 in H15.
- inversion H1;subst.
- inversion X2;subst.
- inversion X3;subst.
- inversion X4;subst.
- repeat apply inj_pair2 in H7.
- apply inj_pair2 in H10.
- rewrite H7 in X4.
- rewrite H10 in X4.
- unfold b_eval in X4.
- unfold b_exec in X4.
- unfold xf_write in X4.
- unfold b_mod in X4.
- simpl in *.
- rewrite H7 in X3.
- rewrite H10 in X3.
- unfold b_eval in X3.
- unfold b_exec in X3.
- unfold xf_write in X3.
- unfold b_mod in X3.
- simpl in *.
- rewrite H7 in X2.
- rewrite H10 in X2.
- unfold b_eval in X2.
- unfold b_exec in X2.
- unfold xf_write in X2.
- unfold b_mod in X2.
- simpl in *.
- inversion X5;subst.
- inversion X6;subst.
- inversion X7;subst.
- repeat apply inj_pair2 in H7.
- rewrite H7 in X8.
- rewrite H13 in X8.
- unfold b_eval in X8.
- unfold b_exec in X8.
- unfold xf_write in X8.
- unfold xf_read in X8.
- unfold b_mod in X8.
- simpl in *.
- rewrite H7 in X7.
- rewrite H13 in X7.
- unfold b_eval in X7.
- unfold b_exec in X7.
- unfold xf_write in X7.
- unfold xf_read in X7.
- unfold b_mod in X7.
- simpl in *.
- inversion X8;subst.
- repeat apply inj_pair2 in H12.
- apply symmetry in H12.
- rewrite H12.
- rewrite findUpdate.
- auto.
- inversion X9;subst.
- inversion X9.
- inversion X7;subst.
- inversion X7.
- inversion X2.
-Qed.
-
-
-Definition WReadEntry2VHT (P0: Value -> Prop)
-           (fenv: funEnv) (env: valEnv) (x: Id) (n:nat):=
-  HoareTriple_Eval (fun _ => P0 (cst nat n))
-                    (fun v s => P0 v /\ v = cst nat n)
-                    fenv env (BindN (Write x n) (Read x)).
- 
-Lemma wread_entry_2_vht (P0: Value -> Prop)
-      (fenv: funEnv) (env: valEnv) (x: Id) (n:nat):
-    WReadEntry2VHT P0 fenv env x n.
-Proof.
-unfold WReadEntry2VHT.
-unfold HoareTriple_Eval.
-intros.
-split.
-eapply wread_entry_2.
-eauto.
-auto.
-eapply wread_entry_2.
-eauto.
-eauto.
-Qed.
-
-(** 7 *)
+(** Bind rules *)
 
 Lemma bindn_congruence1 (P: W -> Prop)
       (fenv: funEnv) (env: valEnv) (e: Exp) :
@@ -806,5 +352,194 @@ auto.
 auto.
 Qed.
 
-End Hoare_Test_state_bis.
 
+Lemma getSh1idxW (P: Value -> W -> Prop) (fenv: funEnv) (env: valEnv) :
+  {{wp P fenv env getSh1idx}} fenv >> env >> getSh1idx {{P}}.
+Proof.
+apply wpIsPrecondition.
+Qed.
+
+Lemma getSh1idxWp P fenv env :
+{{fun s => P s }} fenv >> env >> getSh1idx 
+{{fun (idxSh1 : Value) (s : state) => P s  /\ idxSh1 = cst index sh1idx }}.
+Proof.
+eapply weaken.
+eapply getSh1idxW.
+intros. 
+unfold wp.
+intros.
+split.
+unfold getSh1idx in X.
+inversion X;subst.
+auto.
+inversion X0.
+inversion X;subst.
+auto.
+inversion X0.
+Qed.
+
+Definition succfn (i:index) : index := match i with | I n => I (n+1) end.
+
+
+Lemma succW  (partition : page) (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
+  {{fun s => P s /\ v = cst index sh1idx}} 
+      fenv >> (x,v) :: env >> (Succ x)
+  {{fun (idxsuc : Value) (s : state) => P s  /\ idxsuc = cst index (succfn sh1idx)}}.
+Proof.
+unfold HoareTriple_Eval.
+intros.
+destruct H.
+unfold succfn.
+simpl.
+destruct v.
+destruct v.
+unfold cst in *.
+inversion H0;subst.
+repeat apply inj_pair2 in H3.
+rewrite H3 in X.
+clear H0 H3 v.
+inversion X;subst.
+inversion X0;subst. 
+repeat apply inj_pair2 in H6.
+rewrite H6 in X0. 
+rewrite H6 in X1.  
+inversion X2;subst.
+inversion X3;subst.
+inversion H0;subst.
+destruct IdEqDec in H2. 
+inversion H2;subst.
+clear e H2 X3 H0 XF1.
+inversion X1;subst.
+inversion X4;subst.
+inversion X3;subst.
+repeat apply inj_pair2 in H6.
+repeat apply inj_pair2 in H8.
+rewrite H6. rewrite H8.
+unfold b_exec.
+unfold b_eval.
+unfold xf_succ.
+unfold b_mod.
+simpl.
+auto.
+inversion X3;subst.
+repeat apply inj_pair2 in H6.
+repeat apply inj_pair2 in H8.
+rewrite H6 in X5. rewrite H8 in X5.
+unfold b_exec in X5.
+unfold b_eval in X5.
+unfold xf_succ in X5.
+unfold b_mod in X5.
+simpl in *.
+inversion X5.
+inversion X7.
+contradiction.
+Qed.
+
+Lemma readPhysicalW y table (v:Value) (P' : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) :
+{{fun s => v = cst index (succfn sh1idx) /\ exists p1 ,findD (s.(memory)) (table,succfn sh1idx) (SP (P 0)) =  SP p1 /\ P' (cst sValue (SP p1)) s }} 
+fenv >> (y,v)::env >> Read table y {{P'}}.
+Proof.
+unfold HoareTriple_Eval.
+intros.
+inversion H;subst.
+clear H.
+inversion H1;subst.
+clear H1.
+inversion H;subst.
+clear H.
+inversion X;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+rewrite H7 in X1.
+rewrite H7 in X0.
+inversion X2;subst.
+inversion X3;subst.
+inversion H;subst.
+destruct IdEqDec in H3.
+inversion H3;subst.
+clear H3 e X3 H XF1. 
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H11.
+inversion X1;subst.
+inversion X4;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H8.
+repeat apply inj_pair2 in H9.
+rewrite H7 in X4.
+rewrite H9 in X4.
+unfold xf_read at 2 in X4.
+unfold b_eval in X4.
+unfold b_exec in X4.
+unfold b_mod in X4.
+simpl in *.
+rewrite H0 in X4.
+rewrite H7 in X5.
+rewrite H9 in X5.
+unfold xf_read in X5.
+unfold b_eval in X5.
+unfold b_exec in X5.
+unfold b_mod in X5.
+simpl in *.
+rewrite H0 in X5.
+inversion X5;subst.
+auto.
+inversion X6.
+repeat apply inj_pair2 in H7.
+inversion X6.
+contradiction.
+Qed.
+
+Lemma getFstShadow1 (partition : page) (P : W -> Prop) (fenv: funEnv) (env: valEnv)
+  (k1: forall (fenv: funEnv) (env: valEnv) (e:Exp) (s: W),
+       sigT (fun v: Value =>
+                 sigT (fun s': W =>
+             EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v)))))
+  (k2: forall (fenv: funEnv) (env: valEnv) (e:Exp) (s s1 s2: W) (v1 v2: Value),
+          EClosure fenv env (Conf Exp s e) (Conf Exp s1 (Val v1)) ->
+          EClosure fenv env (Conf Exp s e) (Conf Exp s2 (Val v2)) ->
+                (s1 = s2) /\ (v1 = v2))  :
+{{fun s => P s  /\ partitionDescriptorEntry s /\ In partition (s.(partitions))}}
+fenv >> env >> (getFstShadow partition) 
+{{fun (sh1 : Value) (s : state) => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
+Proof.
+unfold getFstShadow.
+eapply BindS_VHT1.
+eauto . eauto.
+eapply getSh1idxWp.
+intros.
+simpl.
+eapply BindS_VHT1.
+eauto. eauto.
+eapply succW.
+auto.
+intros.
+simpl.
+eapply weaken.
+eapply readPhysicalW.
+clear k1 k2.
+intros.
+simpl.
+intuition.
+subst.
+unfold partitionDescriptorEntry in *.
+apply H0 with partition sh1idx in H3.
+clear H0.
+intuition.
+destruct H1.
+intuition.
+exists x.
+intuition.
+unfold nextEntryIsPP in H2.
+simpl in *.
+destruct (findD (memory s) (partition, I 5) (SP (IdModA_M2_b.P 0))) in *;try contradiction.
+unfold cst in H2.
+apply inj_pairT2 in H2.
+inversion H2;subst.
+auto.
+auto.
+Qed.
+
+
+
+End Hoare_Test_state_bis.

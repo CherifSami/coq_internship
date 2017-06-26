@@ -3,6 +3,8 @@ Require Import IdModType.
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import Coq.Logic.ProofIrrelevance.
+Require Import ADT.
+Require Import Hardware.
 
 
 Lemma valTyp_irrelevance : forall (T: Type) (p1 p2: ValTyp T), p1 = p2.
@@ -11,7 +13,7 @@ eapply proof_irrelevance.
 Qed.
 
 
-Module IdMod <: IdModType.
+Module IdModA_M2_bis <: IdModType.
  
   Definition Id := string.
 
@@ -24,11 +26,22 @@ Module IdMod <: IdModType.
 
   Definition IdEq := IdEq2.
  
-  Definition W := list (Id * nat).
+  Definition W := state.
 
   Definition Loc_PI := valTyp_irrelevance.
 
-  Definition BInit := @nil (Id * nat).
+  Lemma Hpx : 0 < nbPage.
+  Proof.
+  specialize nbPageNotZero as H.
+  inversion H.
+  auto.
+  auto.
+  Qed.
+
+  Definition BInit := {|
+          currentPartition := {| p:=0 ; Hp := Hpx |} ;
+          memory:= @nil (paddr * value)
+                      |}.
 
   Instance WP2 : PState W :=
   {
@@ -39,5 +52,5 @@ Module IdMod <: IdModType.
 
   Definition WP := WP2.
 
-End IdMod.
+End IdModA_M2_bis.
 
