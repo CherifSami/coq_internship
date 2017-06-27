@@ -58,13 +58,13 @@ Definition hoareTriple_ExtendedStep
     EClosure fenv env (Conf Exp s e) (Conf Exp s' e') ->
     P s -> Q e' s'.
 
-Notation "{{ P }} fenv >> env >> e {{ Q }}" := (HoareTriple_Eval P Q fenv env e ) 
+Notation "{{ P }} fenv >> env >> e {{ Q }}" := (hoareTriple_ExtendedStep P fenv env e Q) 
 (at level 90) : state_scope.
 
 Open Scope state_scope.
 
 
-Lemma conjProp (P R : W -> Prop) (Q : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
+Lemma conjProp (P R : W -> Prop) (Q : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
 {{ P }} fenv >> env >> e  {{ Q }} 
 -> {{ R }} fenv >> env >> e {{fun _ => R}}
 -> {{fun s => P s/\ R s}} fenv >> env >> e {{fun a s => Q a s/\ R s}}.
@@ -74,29 +74,29 @@ intros s s' e'.
 intros H3 H4.
 destruct H4 as [H4 H5].
 split.
--unfold HoareTriple_Eval in H1.
+-unfold hoareTriple_ExtendedStep in H1.
  apply H1 in H3.
- auto. auto.
--unfold HoareTriple_Eval in H2.
+ assumption. assumption.
+-unfold hoareTriple_ExtendedStep in H2.
  apply H2 in H3.
- auto. auto.
+ assumption. assumption.
 Qed.
 
-Definition wp (P : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
-  W -> Prop := fun s => forall (v:Value) (s': W), 
-       EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v)) -> P v s'.
+Definition wp (P : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
+  W -> Prop := fun s => forall (e':Exp) (s': W), 
+       EClosure fenv env (Conf Exp s e) (Conf Exp s' e') -> P e' s'.
 
-Lemma wpIsPrecondition (P : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
+Lemma wpIsPrecondition (P : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
   {{ wp P fenv env e }} fenv >> env >> e {{ P }}.
 Proof.
-unfold HoareTriple_Eval.
+unfold hoareTriple_ExtendedStep.
 intros s s' e' H1 H2.
 unfold wp in H2.
 apply H2 in H1.
 auto.
 Qed.
 
-Lemma wpIsWeakestPrecondition(P : Value -> W -> Prop) (Q : W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
+Lemma wpIsWeakestPrecondition(P : Exp -> W -> Prop) (Q : W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
   {{ Q }} fenv >> env >> e {{ P }} -> forall s, Q s -> (wp P fenv env e) s.
 Proof.
 intros H1 s H2.
@@ -106,21 +106,9 @@ apply H1 in H3.
 auto.
 Qed.
 
-Lemma weaken (P Q : W -> Prop) (R : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
-  {{ Q }} fenv >> env >> e {{ R }} -> (forall s, P s -> Q s) -> {{ P }} fenv >> env >> e {{ R }}.
-Proof.
-intros.
-unfold HoareTriple_Eval in *.
-intros.
-eapply H.
-eauto.
-eapply H0.
-eauto.
-Qed.
-
 
 Lemma postAnd :
-forall (P : W -> Prop) (Q R : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
+forall (P : W -> Prop) (Q R : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
   {{ P }} fenv >> env >> e {{ Q }} 
 -> {{ P }} fenv >> env >> e {{ R }} 
 -> {{ P }} fenv >> env >> e {{ fun a s => Q a s /\ R a s }}.
@@ -129,16 +117,16 @@ intros P Q R fenv env e H1 H2.
 intros a s.
 intros e' H3 H4.
 split.
--unfold HoareTriple_Eval in H1.
+-unfold hoareTriple_ExtendedStep in H1.
  apply H1 in H3. 
- auto. auto.
+ assumption. assumption.
 -apply H2 in H3.
  auto.
 Qed.
 
 
 Lemma preOr :
-  forall (P Q : W -> Prop) (R : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
+  forall (P Q : W -> Prop) (R : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
   {{ P }} fenv >> env >> e {{ R }} 
 -> {{ Q }} fenv >> env >> e {{ R }} 
 -> {{ fun s => P s \/ Q s }} fenv >> env >> e {{ R }}.
@@ -153,7 +141,7 @@ destruct H4.
 Qed.
 
 Lemma preAndPost : 
-forall (P1 Q1 : W -> Prop) (P2  : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
+forall (P1 Q1 : W -> Prop) (P2  : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
 {{P1}} fenv >> env >> e {{P2}} -> 
 {{fun s => P1 s /\ Q1 s}} fenv >> env >> e {{fun a => Q1 }} -> 
 {{fun s => P1 s /\ Q1 s}} fenv >> env >> e {{fun a s => P2 a s /\ Q1 s}}.
@@ -169,41 +157,53 @@ split.
 Qed.
 
 Lemma andAssocHT  :
-forall (P1 P2 P3 : W -> Prop) (R  : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
+forall (P1 P2 P3 : W -> Prop) (R  : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
 {{ fun s => (P1 s /\ P2 s) /\ P3 s }} fenv >> env >> e {{ R }} 
 <-> {{ fun s => P1 s /\ P2 s /\ P3 s }} fenv >> env >> e {{ R }}.
 Proof.
 intros P1 P2 P3 R fenv env e.
 split.
 -intro H.
- unfold HoareTriple_Eval.
+ unfold hoareTriple_ExtendedStep.
  intros s s' e' H1 [H2 [H3 H4]].
  apply H in H1.
  apply H1.
  auto.
 -intro s.
- unfold HoareTriple_Eval.
+ unfold hoareTriple_ExtendedStep.
  intros s0 s' e' H1 [[H2 H3] H4].
  apply s in H1.
  auto.
 Qed.
 
 Lemma permutHT :
-forall (P1 P2 P3 : W -> Prop) (R  : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
+forall (P1 P2 P3 : W -> Prop) (R  : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
 {{ fun s => P1 s /\ P2 s /\ P3 s }} fenv >> env >> e {{ R }} 
 <-> {{ fun s => P1 s /\ P3 s /\ P2 s }} fenv >> env >> e {{ R }}.
 Proof.
 intros P1 P2 P3 R fenv env e.
+split.
+-intro s.
+ unfold hoareTriple_ExtendedStep.
+ intros s0 s' e' H1 [H2 [H3 H4]].
+ apply s in H1.
+ auto.
+-intro s.
+ unfold hoareTriple_ExtendedStep.
+ intros s0 s' e' H1 [H2 [H3 H4]].
+ apply s in H1.
+ auto.
+Qed.
+(*
 split;
 intro s;
-unfold HoareTriple_Eval;
+unfold hoareTriple_ExtendedStep;
 intros s0 s' e' H1 [H2 [H3 H4]];
 apply s in H1;
-auto.
-Qed.
+auto.*)
 
 Lemma preAnd:
- forall (P1 Q : W -> Prop) (P2  : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e: Exp),
+ forall (P1 Q : W -> Prop) (P2  : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e: Exp),
 {{P1}} fenv >> env >> e {{P2}} 
 -> {{fun s => P1 s /\ Q s}} fenv >> env >> e {{P2}}.
 Proof.
@@ -215,7 +215,7 @@ auto.
 Qed.
 
 Lemma conjPrePost :
-forall (P1 Q1 : W -> Prop) (P2 Q2 : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
+forall (P1 Q1 : W -> Prop) (P2 Q2 : Exp -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp),
 {{P1}} fenv >> env >> e {{P2}} ->
 {{Q1}} fenv >> env >> e {{Q2}} -> 
 {{fun s => P1 s /\ Q1 s}} fenv >> env >> e {{fun a s => P2 a s /\ Q2 a s}}.
