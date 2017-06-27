@@ -470,8 +470,8 @@ Open Scope state_scope.
 
 
 Definition wp (P : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
-  W -> Prop := fun s => forall (v:Value) (s': W), 
-       EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v)) -> P v s'.
+  W -> Prop := fun s => forall (v:Value) (s': W),
+EClosure fenv env (Conf Exp s e) (Conf Exp s' (Val v)) -> P v s'.
 
 Lemma wpIsPrecondition (P : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (e : Exp) :
   {{ wp P fenv env e }} fenv >> env >> e {{ P }}.
@@ -479,7 +479,7 @@ Proof.
 unfold THoareTriple_Eval.
 intros ftenv tenv k1 k2 t k3 s s' v H1 H2.
 unfold wp in H2.
-apply H2 in H1.
+eapply H2.
 auto.
 Qed.
 

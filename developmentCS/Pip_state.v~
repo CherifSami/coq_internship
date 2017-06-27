@@ -92,6 +92,7 @@ Record state : Type := {
  memory : list (paddr * value)
 }.
 
+Definition pageinit := CPage 0.
 Definition multiplexer := CPage 1.
 
 (** Fix virtual addresses positions into the partition descriptor

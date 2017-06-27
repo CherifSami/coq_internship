@@ -27,7 +27,7 @@ Module IdModP <: IdModType.
   Definition Loc_PI := valTyp_irrelevance.
 
   Definition BInit := {|
-          currentPartition :=  CPage 0;
+          currentPartition :=  defaultPage;
           memory:= @nil (paddr * value);
                       |}.
 
