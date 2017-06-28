@@ -21,7 +21,8 @@ Require Import HoareA.
 Require Import THoareA.
 Require Import Lib.
 Require Import Pip_state.
-Import List.ListNotations.
+Require Import Pip_stateLib.
+Require Import Coq.Structures.Equalities.
 
 Module Hoare_Test_FstShadow <: IdModType.
 
@@ -46,35 +47,22 @@ Definition getSh1idx : Exp := Val (cst index sh1idx). (** Return in the original
 
 (** ReadPhysical -page -index : reads physical address *)
 
-Definition readPhysicalInternal p i memory :option page := 
-match (lookup p i memory beqPage beqIndex) with
-                            | Some (PP a) => Some a
-                            | _ => None
-                       end.
-
-Definition xf_read (p: page) : XFun index (option page) := {|
-   b_mod := fun s i => (s,readPhysicalInternal p i (memory s))
-|}.                                  
+Definition xf_read (p: page) : XFun (option index) (option page) := {|
+   b_mod := fun s oi => (s,match oi with |None => None |Some i => readPhysicalInternal p i (memory s) end)
+|}.
 
 Instance VT_index : ValTyp index.
+Instance VT_option_index : ValTyp (option index).
 Instance VT_option_page : ValTyp (option page).
 
 Definition ReadPhysical (p:page) (x:Id) : Exp :=
-  Modify index (option page) VT_index VT_option_page (xf_read p) (Var x).  
+  Modify (option index) (option page) VT_option_index VT_option_page (xf_read p) (Var x).  
 
 (** Succ -index : calculates the successor of an index *)                 
-
-Definition succIndexInternal (idx:index) : option index :=
-let (i,P):=idx in 
-  if lt_dec i tableSize 
-  then Some (CIndex i) 
-  else None.
 
 Definition xf_succ : XFun index (option index) := {|
    b_mod := fun s (idx:index) =>  (s, succIndexInternal idx)
 |}.
-
-Instance VT_option_index : ValTyp (option index).
 
 Definition Succ (x:Id) : Exp :=
   Modify index (option index) VT_index VT_option_index xf_succ (Var x).
@@ -87,204 +75,6 @@ Definition getFstShadow (p:page) : Exp :=
                       (ReadPhysical p "y")
            ).
 
-(******* getPartitions from StateLib *)
-
-Fixpoint getAllIndicesAux (pos count: nat) : list index :=
-  match count with
-    | 0        => []
-    | S count1 => match lt_dec pos tableSize with
-                   | left pf => Build_index pos pf :: getAllIndicesAux (S pos) count1
-                   | _       => []
-                 end
-  end.
-
-(** The [getAllIndicesAux] function returns the list of all indices  *)
-Definition getAllIndices := getAllIndicesAux 0 tableSize.
-
-Fixpoint getAllVAddrAux (levels: nat) : list (list index) :=
-  match levels with
-    | 0         => [[]]
-    | S levels1 => let alls := getAllVAddrAux levels1 in
-                  flat_map (fun (idx : index) => map (cons idx) alls) getAllIndices
-  end.
-
-(** The [getAllVAddr] function returns the list of all virtual addresses *)
-Definition getAllVAddr := map CVaddr (getAllVAddrAux (S nbLevel)).
-
-(**  The [getPd] function returns the physical page of the page directory of
-     a given partition  *)
-Definition getPd partition memory: option page:= 
-match succIndexInternal PDidx with 
-|None => None
-|Some idx => readPhysicalInternal partition idx memory
-end. 
-
-
-(** The [getNbLevel] function returns the number of translation levels of the MMU *) 
-Definition getNbLevel : option level:=
-if gt_dec nbLevel 0
-then Some (CLevel (nbLevel-1))
-else None.
-
-(** The [filterOption] function Remove option type from list *)
-Fixpoint filterOption (l : list (option page)) := 
-match l with 
-| [] => []
-| Some a :: l1 => a:: filterOption l1
-|None :: l1 => filterOption l1
-end.
-
-Definition getIndexOfAddr (va : vaddr) (l : level) : index:=
-nth ((length va) - (l + 2))  va (CIndex 0) .
-
-Definition eqbLevel (a b : level) : bool:= a =? b.
-
-Program Definition predLevel (n : level) : option level := 
-if gt_dec n 0 then
-let ipred := n-1 in 
-Some (Build_level ipred _ )
-else  None.
-Next Obligation.
-destruct n.
-simpl.
-omega.
-Qed.
-
-(** The [readPhyEntry] function returns the physical page stored into a given table 
-    at a given position in memory. The table should contain only Physical entries 
-    (The type [PE] is already defined in [Model.ADT]) *)
-Definition readPhyEntry(paddr : page) (idx : index) memory: option page :=
-let entry :=  lookup paddr idx memory beqPage beqIndex  in 
-  match entry with
-  | Some (PE a) => Some a.(pa)
-  | Some _ => None
-  | None => None
- end. 
-
-(** The [getIndirection] function returns the configuration table entry that corresponds 
-    to the given level and virtual address *)
-Fixpoint  getIndirection (pd : page) (va : vaddr) (currentlevel : level) (stop : nat) s :=
-match stop with 
-|0 => Some pd 
-|S stop1 => 
-if (eqbLevel currentlevel fstLevel)  
-then Some pd 
-  else  
-    let idx :=  getIndexOfAddr va currentlevel in 
-       match readPhyEntry pd idx s.(memory) with 
-       | Some addr =>  if  defaultPage =? addr 
-                          then Some defaultPage 
-                          else 
-                            match predLevel currentlevel with
-                            |Some p =>  getIndirection addr va p stop1 s
-                            |None => None
-                            end
-      |None => None
-    end
-   end. 
-
-(** The [readPresent] function returns the flag value stored into a given table 
-    at a given position in memory. The table should contain only Physical entries 
-    (The type [PE] is already defined in [Model.ADT]) *)
-Definition readPresent  (paddr : page) (idx : index) memory : option bool:=
-let entry :=  lookup paddr idx memory beqPage beqIndex  in 
-  match entry with
-  | Some (PE a) => Some a.(present)
-  | Some _ => None
-  | None => None
- end. 
-
-(** The [getMappedPage] function returns the physical page stored into a leaf node, 
-   which corresponds to a given virtual address, if the present flag is equal to true **)
-Definition getMappedPage pd s va: option page :=
-match getNbLevel  with 
- |None => None
- |Some level => let idxVA := getIndexOfAddr va fstLevel  in 
-               match getIndirection pd va level (nbLevel - 1) s with 
-                | Some tbl =>  if defaultPage =? tbl
-                                   then None 
-                                   else match (readPresent tbl idxVA s.(memory)) with 
-                                         |Some true => readPhyEntry tbl idxVA s.(memory) 
-                                         | _ =>  None 
-                                        end
-                | _ => None
-               end
-end.
-
-
-(** The [getMappedPagesOption] function Return all physical pages marked as 
-    present into a partition *)
-Definition getMappedPagesOption (pd : page) (vaList : list vaddr) s : list (option page) :=
-map (getMappedPage pd s) vaList.
-
-(** The [getMappedPagesAux] function removes option type from mapped pages list *)
-Definition getMappedPagesAux (pd :page)  (vaList : list vaddr) s : list page := 
-filterOption (getMappedPagesOption pd vaList s).
-
-(** The [readPDflag] function returns the flag value stored into a given table 
-    at a given position in memory. The table should contain only virtual entries 
-    (The type [VE] is already defined in [Model.ADT])  *)
-Definition readPDflag  (paddr : page) (idx : index) memory : option bool:=
-let entry :=  lookup paddr idx memory beqPage beqIndex  in 
-  match entry with
-  | Some (VE a) => Some a.(pd)
-  | Some _ => None
-  | None => None
- end.
-
-(**  The [getFstShadow] returns the physical page of the first shadow page of
-     a given partition  *)
-Definition getFstShadowInternal partition memory: option page:= 
-match succIndexInternal sh1idx with 
-|None => None
-|Some idx => readPhysicalInternal partition idx memory
-end. 
-
-(** The [checkChild] function returns true if the given virtual address corresponds 
-    to a child of the given partition 
-    *)
-Definition checkChild partition level (s:state) va : bool :=
-let idxVA :=  getIndexOfAddr va fstLevel in 
-match getFstShadowInternal partition s.(memory)  with 
-| Some sh1  => 
-   match getIndirection sh1 va level (nbLevel -1) s with 
-    |Some tbl => if tbl =? defaultPage 
-                    then false 
-                    else match readPDflag tbl idxVA s.(memory) with 
-                          |Some true => true
-                          |_ => false
-                          end
-    |None => false 
-    end
-| _ => false
-end.
-
-(** The [getPdsVAddr] function returns the list of virtual addresses used as 
-    partition descriptor into a given partition *)
-Definition getPdsVAddr partition l1 (vaList : list vaddr) s :=
-filter (checkChild partition l1 s) vaList.
-
-
-(** The [getChildren] function Returns all children of a given partition *)
-Definition getChildren (partition : page) s := 
-let vaList := getAllVAddr in 
-match getNbLevel, getPd partition s.(memory) with 
-|Some l1,Some pd => getMappedPagesAux pd (getPdsVAddr partition l1 vaList s) s
-|_, _ => []
-end.
-
-(** The [getPartitionsAux] function returns all pages marked as descriptor partition *)
-Fixpoint getPartitionAux (partitionRoot : page) (s : W) bound {struct bound} : list page :=
-  match bound with
-    | O => []
-    | S bound1 => partitionRoot :: flat_map (fun p => getPartitionAux p s bound1) 
-                                    (getChildren partitionRoot s )
-  end.
-
-(** The [getPartitions] function fixes the sufficient timeout value to retrieve all partitions *)
-Definition getPartitions (root : page) s : list page  :=
-(getPartitionAux root s (nbPage+1)). 
-
 
 (******* State properties *)
 
@@ -296,7 +86,7 @@ Definition isVA (p:page) (i:index) (s:W): Prop := match (lookup p i (s.(memory))
 Definition nextEntryIsPP (p:page) (idx:index) (p':Value) (s:W) : Prop:= 
 match succIndexInternal idx with 
 | Some i => match lookup p i (memory s) beqPage beqIndex with 
-                  | Some (PP table) => p' = cst value (PP table)
+                  | Some (PP table) => p' = cst (option page) (Some table)
                   |_ => False 
                   end
 | _ => False 
@@ -306,7 +96,7 @@ Definition partitionDescriptorEntry (s:W) :=
 forall (p : page),  
   In p (getPartitions multiplexer s)-> forall (idx : index), 
     (idx = PDidx \/ idx = sh1idx \/ idx = sh2idx \/ idx = sh3idx \/ idx = PPRidx  \/ idx = PRidx ) ->
-    idx < tableSize - 1  /\ isVA p idx  s /\ exists (p1:page) , nextEntryIsPP p idx (cst value (PP p1)) s  /\  
+    idx < tableSize - 1  /\ isVA p idx  s /\ exists (p1:page) , nextEntryIsPP p idx (cst (option page) (Some p1)) s  /\  
     (cst page p1) <> (cst page defaultPage).
 
 
@@ -329,10 +119,10 @@ eapply getSh1idxW.
 intros. 
 unfold wp.
 intros.
-unfold getSh1idx in X2.
-inversion X2;subst.
+unfold getSh1idx in X.
+inversion X;subst.
 auto.
-inversion X3.
+inversion X0.
 Qed.
 
 (** about Succ *)
@@ -341,7 +131,8 @@ Require Import Coq.Logic.Eqdep.
 
 Lemma succW  (x : Id) (P: Value -> W -> Prop) (v:Value) (fenv: funEnv) (env: valEnv) :
 forall (idx:index), {{fun s => idx < (tableSize -1) /\ forall  l : idx + 1 < tableSize , 
-    P (cst (option index) (succIndexInternal idx)) s /\ v = cst index idx }}  fenv >> (x,v)::env >> Succ x {{ P }}.
+    P (cst (option index) (succIndexInternal idx)) s /\ v = cst index idx }}  
+fenv >> (x,v)::env >> Succ x {{ P }}.
 Proof.
 intros.
 unfold THoareTriple_Eval.
@@ -363,10 +154,7 @@ inversion X3;subst.
 repeat apply inj_pair2 in H7.
 repeat apply inj_pair2 in H9.
 subst.
-unfold b_exec in *.
-unfold b_eval in *.
-unfold xf_succ in *.
-unfold b_mod in *.
+unfold b_exec,b_eval,xf_succ,b_mod in *.
 simpl in *.
 inversion X4;subst.
 apply H1.
@@ -377,7 +165,7 @@ Qed.
 
 Lemma succWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
 forall (idx:index), {{fun s => P s  /\ idx < tableSize - 1 /\ v=cst index idx}} fenv >> (x,v)::env >> Succ x 
-{{fun (idxsuc : Value) (s : state) => P s  /\ cst (option index) (succIndexInternal idx) = idxsuc }}.
+{{fun (idxsuc : Value) (s : state) => P s  /\ exists i, idxsuc = cst (option index) (Some i)}}.
 Proof.
 intros.
 eapply weakenEval.
@@ -388,9 +176,66 @@ split.
 instantiate (1:=idx).  
 intuition.
 intros.
-split. 
 intuition.
+destruct idx.
+exists (CIndex (i + 1)).
+f_equal.
+unfold succIndexInternal.
+case_eq (lt_dec i tableSize).
+intros.
+auto.
+intros.
+contradiction.
+Qed.
+
+(******* about readPhysical *)
+
+Lemma readPhysicalW (y:Id) table (v:Value) (P' : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) :
+ {{fun s =>  exists idxsucc p1, v = cst (option index) (Some idxsucc)
+              /\ readPhysicalInternal table idxsucc (memory s) = Some p1 
+              /\ P' (cst (option page) (Some p1)) s}} 
+fenv >> (y,v)::env >> ReadPhysical table y {{P'}}.
+Proof.
+intros.
+unfold THoareTriple_Eval.
+intros.
 intuition.
+destruct H.
+destruct H.
+intuition.
+inversion H0;subst.
+clear k3 t k2 k1 ftenv tenv H1.
+inversion X;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+subst.
+inversion X2;subst.
+inversion X3;subst.
+inversion H0;subst.
+destruct IdEqDec in H3.
+inversion H3;subst.
+clear H3 e X3 H0 XF1. 
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H11.
+subst.
+inversion X1;subst.
+inversion X4;subst.
+repeat apply inj_pair2 in H7.
+apply inj_pair2 in H9.
+subst.
+unfold xf_read at 2 in X4.
+unfold b_eval,b_exec,b_mod in X4.
+simpl in *.
+rewrite H in X4.
+unfold xf_read,b_eval,b_exec,b_mod in X5.
+simpl in *.
+rewrite H in X5.
+inversion X5;subst.
+auto.
+inversion X6.
+inversion X6.
+contradiction.
 Qed.
 
 
@@ -404,11 +249,72 @@ Proof.
 unfold getFstShadow.
 eapply BindS_VHTT1.
 eapply getSh1idxWp.
-intros; simpl.
+simpl; intros.
 eapply BindS_VHTT1.
 eapply weakenEval.
-eapply succW.
-Admitted.
+eapply succW. simpl.
+simpl; intros; intuition.
+instantiate (1:=sh1idx).
+eapply H0 in H3.
+specialize H3 with sh1idx.
+eapply H3.
+auto.
+instantiate (1:=(fun v0 s => P s /\ partitionDescriptorEntry s /\ 
+                          In partition (getPartitions multiplexer s) /\ 
+                          exists i, succIndexInternal sh1idx = Some i /\ v0 = cst (option index) (Some i) )).
+simpl.
+intuition.
+exists (CIndex (sh1idx+1)).
+f_equal.
+unfold succIndexInternal.
+unfold sh1idx.
+unfold CIndex.
+case_eq (lt_dec 4 tableSize).
+intros.
+simpl.
+case_eq (lt_dec 4 tableSize).
+intros.
+case_eq (lt_dec 5 tableSize).
+intros.
+auto.
+intros.
+auto.
+contradiction.
+intros.
+destruct index_d.
+case_eq (lt_dec i tableSize).
+intros.
+simpl.
+auto.
+contradiction.
+auto. 
+simpl; intros.
+eapply weakenEval.
+eapply readPhysicalW.
+simpl;intros.
+intuition.
+destruct H3.
+exists x.
+unfold partitionDescriptorEntry in H.
+apply H with partition sh1idx in H1.
+clear H.
+intuition.
+destruct H5.
+exists x0.
+intuition.
+unfold nextEntryIsPP in H5.
+unfold readPhysicalInternal.
+rewrite H1 in H5.
+destruct (lookup partition x (memory s) beqPage beqIndex).
+unfold cst in H5.
+destruct v1;try contradiction.
+apply inj_pairT2 in H5.
+inversion H5.
+auto.
+unfold isVA in H2.
+destruct (lookup partition sh1idx (memory s) beqPage beqIndex) in H2;try contradiction.
+auto.
+Qed.
 
 
 End Hoare_Test_FstShadow.
