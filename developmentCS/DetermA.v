@@ -1231,6 +1231,16 @@ Definition extractPRunValue (ftenv: funTC) (tenv: valTC) (fenv: funEnv)
    (s: W) : list Value := projT1 (sigT_of_sigT2
                     (projT2 (PrmsEval ftenv tenv fenv ps pt k m1 env m2 s))). 
 
+
+Definition extractPRunEValue (ftenv: funTC) (tenv: valTC) (fenv: funEnv)
+   (ps: Prms) (pt: PTyp)
+   (k: PrmsTyping ftenv tenv fenv ps pt)
+   (m1: MatchEnvsT FunTyping fenv ftenv)
+   (env: valEnv)                      
+   (m2: MatchEnvsT ValueTyping env tenv)
+   (s: W) : list Exp :=
+                    (projT1 (PrmsEval ftenv tenv fenv ps pt k m1 env m2 s)). 
+
 Definition extractPRunState (ftenv: funTC) (tenv: valTC) (fenv: funEnv)
    (ps: Prms) (pt: PTyp)
    (k: PrmsTyping ftenv tenv fenv ps pt)
@@ -1251,6 +1261,26 @@ Definition extractPRunTyping (ftenv: funTC) (tenv: valTC) (fenv: funEnv)
     (PS (projT1 (PrmsEval ftenv tenv fenv ps pt k m1 env m2 s))) pt :=
          fst (projT3  
                  (projT2 (PrmsEval ftenv tenv fenv ps pt k m1 env m2 s))). 
+
+
+(*************************************************************************)
+
+Lemma extractPRunCons  (ftenv: funTC) (tenv: valTC) (fenv: funEnv)
+   (ps: Prms) (pt: PTyp)
+   (k: PrmsTyping ftenv tenv fenv ps pt)
+   (m1: MatchEnvsT FunTyping fenv ftenv)
+   (env: valEnv)                      
+   (m2: MatchEnvsT ValueTyping env tenv)
+   (s: W) :
+  extractPRunEValue ftenv tenv fenv ps pt k m1 env m2 s =
+  map Val (extractPRunValue ftenv tenv fenv ps pt k m1 env m2 s).
+  generalize (projT2 (sigT_of_sigT2 
+                (projT2 (PrmsEval ftenv tenv fenv ps pt k m1 env m2 s)))).
+  intros.
+  inversion H; subst.
+  unfold extractPRunEValue, extractPRunValue.
+  auto.
+Defined.  
 
 
 (***********************************************************************)
@@ -1348,5 +1378,56 @@ Lemma PEvalElim
   eapply PEvalIntro.
 Defined.
   
+(***********************************************************************)
+
+Lemma prmsTyping_aux4 (ftenv: funTC) (tenv: valTC)
+        (fenv: funEnv) (env: valEnv) (es: list Exp) (vs: list Value)
+        (ts: list VTyp) (s0 s1: W) :
+    MatchEnvsT FunTyping fenv ftenv ->
+    MatchEnvsT ValueTyping env tenv ->
+    PrmsTyping ftenv tenv fenv (PS es) (PT ts) -> 
+    PrmsClosure fenv env (Conf Prms s0 (PS es))
+        (Conf Prms s1 (PS (map Val vs))) -> 
+    vlsTyping vs ts.
+  intros.
+  assert (vs = extractPRunValue ftenv tenv fenv (PS es) (PT ts)
+                                X1 X env X0 s0).
+  eapply (proj2 (PEvalElim ftenv tenv fenv (PS es) (PT ts)
+                                X1 X env X0 s0 s1 vs _)).
+  rewrite H.
+  assert (PrmsTyping emptyE emptyE emptyE
+    (PS
+       (projT1
+          (PrmsEval ftenv tenv fenv (PS es) (PT ts) X1 X env X0 s0)))
+    (PT ts)).
+  exact (extractPRunTyping ftenv tenv fenv (PS es) (PT ts)
+                                X1 X env X0 s0).
+  assert (PrmsTyping ftenv tenv fenv
+    (PS
+       (projT1
+          (PrmsEval ftenv tenv fenv (PS es) (PT ts) X1 X env X0 s0)))
+    (PT ts)).
+  eapply weakenPrmsTyping in X3. 
+  exact X3.
+  constructor.
+  auto.
+  clear X3.
+  simpl in *.
+  generalize (extractPRunCons ftenv tenv fenv (PS es)
+                              (PT ts) X1 X env X0 s0).
+  intros.
+  unfold extractPRunEValue in H0.
+  rewrite H0 in X4.
+  eapply matchListsAux02_T.
+  instantiate (1:= map Val vs).
+  rewrite <- H.
+  constructor.
+  auto.
+  rewrite <- H in X4.
+  exact X4.
+  Unshelve.
+  auto.
+Defined.  
+
 
 End Determ.

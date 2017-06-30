@@ -911,6 +911,17 @@ Proof.
 Defined.  
 
 
+Lemma mkEnvTyping_aux0 (fps: valTC) (vs: list Value):
+  length fps = length vs ->
+  vlsTyping vs (map snd fps) ->
+    EnvTyping (mkVEnv fps vs) fps.
+  intros.
+  eapply prmsTypingAux_T.
+  auto.
+  auto.
+Defined.
+
+
 End Static.
 
 

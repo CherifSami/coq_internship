@@ -510,6 +510,32 @@ Definition THoarePrmsTriple_Eval
                                                (PS (map Val vs))) ->
     P s -> Q vs s'.
 
+Definition wpPrms (P : list Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (ps: Prms):
+  W -> Prop := fun s => forall (vs: list Value) (s': W),
+PrmsClosure fenv env (Conf Prms s ps) (Conf Prms s' (PS (map Val vs))) -> P vs s'.
+
+Lemma wpIsPreconditionPrms (P : list Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (ps: Prms):
+  THoarePrmsTriple_Eval (wpPrms P fenv env ps) P fenv env ps.
+Proof.
+unfold THoarePrmsTriple_Eval.
+intros ftenv tenv k1 k2 t k3 s s' v H1 H2.
+unfold wpPrms in H2.
+eapply H2.
+auto.
+Qed.
+
+Lemma weakenPrms (P Q : W -> Prop) (R : list Value -> W -> Prop) (fenv: funEnv) (env: valEnv) (ps: Prms):
+  THoarePrmsTriple_Eval Q R fenv env ps ->
+ (forall s, P s -> Q s) -> THoarePrmsTriple_Eval P R fenv env ps .
+Proof.
+intros.
+unfold THoarePrmsTriple_Eval in *.
+intros.
+eapply H;
+eauto.
+Qed.
+
+(**************************************************************************)
 
 Definition IHoareTriple_Eval
            (P : W -> Prop) (Q : Value -> W -> Prop)
@@ -607,7 +633,6 @@ Qed.
   
 
 
-(*
 Lemma Apply_VHTT1 (P0: W -> Prop) (P1: list Value -> W -> Prop)
                  (P2: Value -> W -> Prop)  
    (fenv: funEnv) (env: valEnv) (f: Fun) (es: list Exp) : 
@@ -637,72 +662,53 @@ Proof.
   inversion k3; subst.
   inversion X1; subst.
   specialize (H ftenv tenv k1 k2 (PT (map snd fps)) X2 s s1 vs P H1).
-  
+
+  assert (tenv0 = fps).
+  inversion X3; subst.
+  auto.
+  auto.
+  inversion H3; subst.
+  clear H4.
+
   assert (length es = length (map Val vs)) as W.
   eapply PrmsClos_aux0.
   eauto.
   rewrite map_length with (f:=Val) in W. 
   
-  destruct n.
-  
-  inversion X3; subst.  
   assert (EnvTyping (mkVEnv fps vs) fps) as Q.
-  eapply prmsTypingAux_T.
+  eapply mkEnvTyping_aux0.
   rewrite <- W.
   auto.
-  eapply matchListsAux02_T with (es:= map Val vs). 
+
+  eapply prmsTyping_aux4.
+  eauto.
+  eauto.
+  eauto.
+  eauto.
+  
+  destruct n.
+
+  inversion X3; subst.  
+  eapply H2.
+  eauto.
+  eauto.
+  eauto.
+  eauto.
+  auto.
+
+  inversion X3; subst.
+  eapply H2.
+  eauto.
+  instantiate (1:= (x, FT fps t) :: ftenv0).
   econstructor.
   auto.
-  instantiate (1:= fenv).
-  instantiate (1:= tenv).
-  instantiate (1:= ftenv).
-
-  assert (vs = extractPRunValue ftenv tenv fenv (PS es) (PT (map snd fps))
-                                X2 k1 env k2 s).
-  eapply (proj2 (PEvalElim ftenv tenv fenv (PS es) (PT (map snd fps))
-                                X2 k1 env k2 s s1 vs _)).
-  rewrite H3.
-  assert (PrmsTyping emptyE emptyE emptyE
-    (PS
-       (projT1
-          (PrmsEval ftenv tenv fenv (PS es) (PT (map snd fps)) X2 k1 env k2 s)))
-    (PT (map snd fps))).
-  exact (extractPRunTyping ftenv tenv fenv (PS es) (PT (map snd fps))
-                                X2 k1 env k2 s).
-  assert (PrmsTyping ftenv tenv fenv
-    (PS
-       (projT1
-          (PrmsEval ftenv tenv fenv (PS es) (PT (map snd fps)) X2 k1 env k2 s)))
-    (PT (map snd fps))).
-  eapply weakenPrmsTyping in X6. 
-  exact X6.
-  constructor.
   auto.
-  clear X6.
-  simpl in *.
-  assert ((projT1
-               (PrmsEval ftenv tenv fenv (PS es) (PT (map snd fps)) X2 k1 env
-                  k2 s)) = (map Val
-          (extractPRunValue ftenv tenv fenv (PS es) 
-                            (PT (map snd fps)) X2 k1 env k2 s)) ).
-  unfold extractPRunValue.
-  simpl.
-  reflexivity.  (* !!! *)
-  
-*)
-  
-(*  
-  inversion X3; subst.
-  specialize (H2 vs ftenv0 fps X4 Q).
-  
+  eauto.
+  eauto.
+  auto.
+  eauto.
+  auto.
+Qed.
 
-  
-
-  specialize (H2 s1 s' v y H).
-  exact H2.
-  specialize (H2 vs s1 s' v y H).
-  exact H2.
-Qed.  
-*)  
 
 End THoare.

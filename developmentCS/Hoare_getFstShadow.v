@@ -23,6 +23,8 @@ Require Import Lib.
 Require Import Pip_state.
 Require Import Pip_stateLib.
 Require Import Coq.Structures.Equalities.
+Require Import Coq.Logic.Eqdep.
+Import ListNotations.
 
 Module Hoare_Test_FstShadow <: IdModType.
 
@@ -69,11 +71,30 @@ Definition Succ (x:Id) : Exp :=
 
 (** getFstShadow -page : returns the adress of the 1st shadow *)
 
-Definition getFstShadow (p:page) : Exp :=
+(* Bind Approach *)
+
+Definition getFstShadowBind (p:page) : Exp :=
  BindS "x" getSh1idx 
            (BindS "y" (Succ "x") 
                       (ReadPhysical p "y")
            ).
+
+(* Apply Approch *)
+
+Definition indexType := vtyp index. 
+Definition optionIndexType := vtyp (option index). 
+
+Definition ReadPhysicalQF (p:page) := QF 
+(FC emptyE [("x",optionIndexType)] (ReadPhysical p "x") (Val (cst (option page) None)) "ReadPhysical" 0).
+
+Definition SuccQF := QF 
+(FC emptyE [("y",indexType)] (Succ "y") (Val (cst (option index) None)) "Succ" 0).
+
+Definition getFstShadowApply (p:page) :Exp :=
+Apply (ReadPhysicalQF p) (PS [
+                         Apply SuccQF (PS [getSh1idx])
+                      ]). 
+
 
 
 (******* State properties *)
@@ -111,7 +132,7 @@ apply wpIsPrecondition.
 Qed.
 
 Lemma getSh1idxWp P fenv env :
-{{fun s => P s }} fenv >> env >> getSh1idx 
+{{P}} fenv >> env >> getSh1idx 
 {{fun (idxSh1 : Value) (s : state) => P s  /\ idxSh1 = cst index sh1idx }}.
 Proof.
 eapply weakenEval.
@@ -125,9 +146,31 @@ auto.
 inversion X0.
 Qed.
 
-(** about Succ *)
+Lemma getSh1idxWp' P fenv env :
+HoarePrmsTriple_Eval P 
+(fun (idxSh1 : list Value) (s : state) => P s  /\ idxSh1 = [cst index sh1idx]) fenv env [getSh1idx].
+Proof.
+unfold HoarePrmsTriple_Eval.
+intros.
+inversion X;subst.
+intuition.
+unfold map in H5.
+induction vs.
+inversion X;subst.
+inversion X0;subst.
+inversion X2.
+inversion X2.
+inversion H5;subst.
+simpl in *.
+destruct vs.
+auto.
+inversion H2.
+inversion X0;subst.
+inversion X2.
+inversion X2.
+Qed.
 
-Require Import Coq.Logic.Eqdep.
+(** about Succ *)
 
 Lemma succW  (x : Id) (P: Value -> W -> Prop) (v:Value) (fenv: funEnv) (env: valEnv) :
 forall (idx:index), {{fun s => idx < (tableSize -1) /\ forall  l : idx + 1 < tableSize , 
@@ -188,6 +231,132 @@ intros.
 contradiction.
 Qed.
 
+Lemma succW' (P: list Value -> W -> Prop)(fenv: funEnv) (env: valEnv) :
+forall (idx:index), 
+THoarePrmsTriple_Eval (fun s => idx < tableSize -1 /\ forall  l : idx + 1 < tableSize , 
+    P ([cst (option index) (succIndexInternal idx)]) s ) P
+fenv env (PS [Apply SuccQF (PS [Val (cst index idx)])]).
+Proof.
+intros.
+unfold THoarePrmsTriple_Eval.
+intros.
+clear k3 pt k2 k1 ftenv tenv.
+intuition.
+inversion X;subst.
+destruct vs.
+inversion H6.
+inversion H6.
+inversion X0;subst.
+inversion X2;subst.
+simpl in *.
+inversion H6;subst.
+destruct vs0.
+inversion H.
+inversion H.
+induction vs0.
+simpl in *.
+subst.
+clear H13 H H4 H6.
+unfold mkVEnv in *.
+simpl in *.
+inversion X1; subst.
+destruct vs.
+inversion H6.
+inversion H6.
+inversion X3; subst.
+inversion X5; subst.
+simpl in *.
+inversion X6; subst.
+repeat apply inj_pair2 in H7.
+subst.
+inversion X7; subst.
+inversion X8; subst.
+inversion H; subst.
+clear X8 H XF1.
+inversion X6; subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H11.
+subst.
+inversion X4; subst.
+induction vs.
+inversion H6.
+inversion H6.
+inversion X9; subst.
+inversion X11; subst.
+simpl in *.
+inversion X12; subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H9.
+subst.
+unfold xf_succ at 2 3 in X12.
+unfold b_exec, b_eval, b_mod in X12.
+simpl in *.
+inversion X10; subst.
+destruct vs.
+inversion H6.
+inversion H6.
+inversion X13; subst.
+unfold xf_succ, b_exec, b_eval, b_mod in X15.
+simpl in *.
+inversion X15; subst.
+inversion X14; subst.
+destruct vs.
+inversion H6.
+inversion H6;subst.
+destruct vs.
+apply H1.
+omega.
+inversion H3.
+inversion X16; subst.
+inversion X18.
+inversion X18.
+inversion X16.
+inversion X13.
+inversion H4.
+inversion X3;subst.
+inversion X4.
+inversion X4.
+inversion X3.
+Qed.
+
+
+Lemma succWp' partition P fenv env :
+forall vs (idx:index), THoarePrmsTriple_Eval 
+  (fun (s:W) => P s  /\ partitionDescriptorEntry s /\ 
+                          In partition (getPartitions multiplexer s) /\  
+      idx < tableSize - 1 /\ vs=[cst index idx])
+  (fun vs s =>  P s /\ partitionDescriptorEntry s /\ 
+                          In partition (getPartitions multiplexer s) /\ 
+   (exists i : index, succIndexInternal idx = Some i /\ vs = [cst (option index) (Some i)]))
+  fenv env (PS [Apply SuccQF (PS [Val (cst index idx)])]).
+Proof.
+intros.
+eapply weakenPrms.
+eapply succW'.
+intros.
+simpl.
+intuition.
+exists (CIndex (idx + 1)).
+intuition.
+unfold succIndexInternal.
+destruct idx.
+case_eq (lt_dec i tableSize).
+intros.
+auto.
+intros.
+contradiction.
+f_equal.
+f_equal.
+unfold succIndexInternal.
+destruct idx.
+case_eq (lt_dec i tableSize).
+intros.
+auto.
+intros.
+contradiction.
+Qed.
+
+
 (******* about readPhysical *)
 
 Lemma readPhysicalW (y:Id) table (v:Value) (P' : Value -> W -> Prop) (fenv: funEnv) (env: valEnv) :
@@ -239,14 +408,67 @@ contradiction.
 Qed.
 
 
+Lemma readPhysicalW' (y:Id) table (vs: list Value) (P' : Value -> W -> Prop) (fenv: funEnv) :
+ {{fun s =>  exists idxsucc p1, vs = [cst (option index) (Some idxsucc)]
+              /\ readPhysicalInternal table idxsucc (memory s) = Some p1 
+              /\ P' (cst (option page) (Some p1)) s}} 
+fenv >> (mkVEnv [(y, optionIndexType)] vs) >> ReadPhysical table y {{P'}}.
+Proof.
+intros.
+unfold THoareTriple_Eval.
+intros.
+intuition.
+destruct H.
+destruct H.
+intuition.
+inversion H0;subst.
+unfold mkVEnv in *.
+simpl in *.
+clear k3 t k2 k1 ftenv tenv H1.
+inversion X;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+subst.
+inversion X2;subst.
+inversion X3;subst.
+inversion H0;subst.
+destruct IdEqDec in H3.
+inversion H3;subst.
+clear H3 e X3 H0 XF1. 
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H11.
+subst.
+inversion X1;subst.
+inversion X4;subst.
+repeat apply inj_pair2 in H7.
+apply inj_pair2 in H9.
+subst.
+unfold xf_read at 2 in X4.
+unfold b_eval,b_exec,b_mod in X4.
+simpl in *.
+rewrite H in X4.
+unfold xf_read,b_eval,b_exec,b_mod in X5.
+simpl in *.
+rewrite H in X5.
+inversion X5;subst.
+auto.
+inversion X6.
+inversion X6.
+contradiction.
+Qed.
+
+
 (** Hoare Triple *)
 
-Lemma getFstShadow1 (partition : page) (P : W -> Prop) (fenv: funEnv) (env: valEnv) :
+(* For Bind Approach *)
+
+Lemma getFstShadowBindH (partition : page) (P : W -> Prop) (fenv: funEnv) (env: valEnv) :
 {{fun s => P s  /\ partitionDescriptorEntry s /\ In partition (getPartitions multiplexer s)}}
-fenv >> env >> (getFstShadow partition) 
+fenv >> env >> (getFstShadowBind partition) 
 {{fun (sh1 : Value) (s : state) => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
 Proof.
-unfold getFstShadow.
+unfold getFstShadowBind.
 eapply BindS_VHTT1.
 eapply getSh1idxWp.
 simpl; intros.
@@ -265,7 +487,6 @@ instantiate (1:=(fun v0 s => P s /\ partitionDescriptorEntry s /\
 simpl.
 intuition.
 exists (CIndex (sh1idx+1)).
-f_equal.
 unfold succIndexInternal.
 unfold sh1idx.
 unfold CIndex.
@@ -316,5 +537,53 @@ destruct (lookup partition sh1idx (memory s) beqPage beqIndex) in H2;try contrad
 auto.
 Qed.
 
+(* For Apply Approach *)
+
+Lemma getFstShadowApplyH (partition : page) (P : W -> Prop) (fenv: funEnv) (env: valEnv) :
+{{fun s => P s  /\ partitionDescriptorEntry s /\ In partition (getPartitions multiplexer s)}}
+fenv >> env >> (getFstShadowApply partition) 
+{{fun (sh1 : Value) (s : state) => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
+Proof.
+unfold getFstShadowApply.
+eapply Apply_VHTT1.
+eapply weakenPrms.
+unfold getSh1idx.
+eapply succWp'.
+simpl; intros.
+intuition.
+instantiate (1:=P).
+auto.
+eauto.
+eapply H in H2.
+specialize H2 with sh1idx.
+eapply H2.
+auto.
+intuition.
+eapply weakenEval.
+eapply readPhysicalW'.
+simpl; intros.
+intuition.
+destruct H3.
+exists x.
+unfold partitionDescriptorEntry in H.
+apply H with partition sh1idx in H1.
+clear H.
+intuition.
+destruct H5.
+exists x0.
+intuition.
+unfold nextEntryIsPP in H5.
+unfold readPhysicalInternal.
+rewrite H1 in H5.
+destruct (lookup partition x (memory s) beqPage beqIndex).
+unfold cst in H5.
+destruct v;try contradiction.
+apply inj_pairT2 in H5.
+inversion H5.
+auto.
+unfold isVA in H2.
+destruct (lookup partition sh1idx (memory s) beqPage beqIndex) in H2;try contradiction.
+auto.
+Qed.
 
 End Hoare_Test_FstShadow.
