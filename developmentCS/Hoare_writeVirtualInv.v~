@@ -459,14 +459,14 @@ contradiction.
 Qed.
 
 
-(******* Hoare Triple *)
+(** Hoare Triple *)
 
 (* For Bind Approach *)
 
 Lemma getFstShadowBindH (partition : page) (P : W -> Prop) (fenv: funEnv) (env: valEnv) :
 {{fun s => P s  /\ partitionDescriptorEntry s /\ In partition (getPartitions multiplexer s)}}
 fenv >> env >> (getFstShadowBind partition) 
-{{fun sh1 s => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
+{{fun (sh1 : Value) (s : state) => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
 Proof.
 unfold getFstShadowBind.
 eapply BindS_VHTT1.
@@ -542,7 +542,7 @@ Qed.
 Lemma getFstShadowApplyH (partition : page) (P : W -> Prop) (fenv: funEnv) (env: valEnv) :
 {{fun s => P s  /\ partitionDescriptorEntry s /\ In partition (getPartitions multiplexer s)}}
 fenv >> env >> (getFstShadowApply partition) 
-{{fun sh1 s => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
+{{fun (sh1 : Value) (s : state) => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
 Proof.
 unfold getFstShadowApply.
 eapply Apply_VHTT1.

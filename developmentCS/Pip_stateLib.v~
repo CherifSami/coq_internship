@@ -16,7 +16,7 @@ match (lookup p i memory beqPage beqIndex) with
                             | _ => None
                        end.
 
-Definition readVirtualInternal p i memory : option vaddr:=
+Definition readVirtualInternal p i memory : vaddr:=
   match (lookup p i memory beqPage beqIndex) with
   | Some (VA a) => Some a
   | _ => None
