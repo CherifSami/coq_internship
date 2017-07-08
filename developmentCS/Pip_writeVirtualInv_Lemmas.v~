@@ -1,0 +1,177 @@
+Require Import Lib Pip_state Pip_stateLib Pip_Prop  Pip_DependentTypeLemmas Pip_InternalLemmas.
+Require Import List Coq.Logic.ProofIrrelevance Omega List Bool Classical_Prop.
+Import List.ListNotations. 
+
+Lemma beqPairsTrue : 
+forall table1 idx1 table2 idx2 , table1 = table2 /\ idx1 = idx2 <->   
+beqPairs (table1, idx1) (table2, idx2) beqPage beqIndex = true.
+Proof.
+intros.
+split.
+ -unfold  beqPairs.
+  simpl.
+  intuition.
+  subst.
+  unfold beqPage, beqIndex.
+  specialize beq_nat_refl with table2.
+  specialize beq_nat_refl with idx2.
+  intros.
+  symmetry in H,H0.
+  rewrite H,H0.
+  auto.
+ -intros.
+  unfold beqPairs,beqPage,beqIndex in H.
+  simpl in *.
+  case_eq ((table1 =? table2) && (idx1 =? idx2)).
+  intros. 
+  rewrite H0 in H.
+  apply andb_true_iff in H0.
+  intuition.
+  eapply beq_nat_true in H1.
+  destruct table1, table2. simpl in *. subst.
+  assert (Hp = Hp0).
+  apply proof_irrelevance. subst. trivial.
+  eapply beq_nat_true in H2. 
+  destruct idx1, idx2. simpl in *. subst.
+  assert (Hi = Hi0).
+  apply proof_irrelevance. subst. trivial. 
+  intros.
+  rewrite H0 in H.
+  inversion H.
+Qed.
+
+Lemma beqPairsFalse : 
+forall table1 idx1 table2 idx2 , 
+table1 <> table2 \/ idx1 <> idx2 <-> 
+beqPairs (table1, idx1) (table2, idx2) beqPage beqIndex = false.
+Proof.
+intros.
+unfold beqPairs.
+cbn.  
+unfold beqPage , beqIndex .
+intuition.
+case_eq (table1 =? table2) ; case_eq(idx1 =? idx2);intuition.
+contradict H0.
+apply beq_nat_true in H1.
+destruct table1, table2. simpl in *. subst.
+assert (Hp = Hp0).
+apply proof_irrelevance. subst. trivial. 
+assert((idx1 =? idx2) = false).
+apply Nat.eqb_neq. unfold not.
+intros.
+destruct idx1; destruct idx2.
+simpl in *.
+subst.
+apply H0.
+f_equal.
+apply proof_irrelevance.
+rewrite H.
+case_eq ((table1 =? table2) && false).
+intros.
+apply andb_true_iff in H1.
+intuition.
+trivial.
+case_eq (table1 =? table2) ; case_eq(idx1 =? idx2);intuition.
++ rewrite H1 in H.
+  rewrite H0 in H.
+  intuition.
++ apply beq_nat_false in H0.
+  right.
+  intros. 
+  destruct idx1; destruct idx2.
+  simpl in *.
+  inversion H2.
+  subst.
+  now contradict H0.
++ apply beq_nat_false in H1.
+  left.
+  intros. 
+  destruct table1; destruct table2.
+  simpl in *.
+  inversion H2.
+  subst.
+  now contradict H1.
++ apply beq_nat_false in H1.
+  left.
+  intros. 
+  destruct table1; destruct table2.
+  simpl in *.
+  inversion H2.
+  subst.
+  now contradict H1.
+Qed.
+
+Lemma removeDupIdentity  (l :  list (paddr * value)) : 
+forall table1 idx1 table2 idx2 , table1 <> table2 \/ idx1 <> idx2 -> 
+lookup table1 idx1 (removeDup table2 idx2 l  beqPage beqIndex) beqPage beqIndex = 
+lookup table1 idx1 l beqPage beqIndex.
+Proof.
+intros.
+induction l.
+simpl. trivial.
+simpl.
+destruct a.
+destruct p.
+apply beqPairsFalse in H.
++ case_eq (beqPairs (p, i) (table2, idx2) beqPage beqIndex).
+  - intros.
+    unfold beqPairs in H0. cbn in H0.
+    case_eq (beqPage p table2 && beqIndex i idx2 ).
+    * intros.
+      rewrite H1 in H0.
+      unfold beqPage , beqIndex in H1.
+      apply andb_true_iff in H1.
+      destruct H1.
+      apply beq_nat_true in H1.
+      apply beq_nat_true in H2.
+      assert (beqPairs (p, i) (table1, idx1) beqPage beqIndex = false).
+      { destruct p, i, table2, table1, idx2, idx1. simpl in *.
+      subst.
+      assert (Hp = Hp0). apply proof_irrelevance. subst. 
+      assert(Hi = Hi0).  apply proof_irrelevance. subst.
+      unfold beqPairs in *. cbn in *.
+      rewrite NPeano.Nat.eqb_sym.
+      replace (i0 =? i1) with (i1 =? i0). assumption.
+      rewrite NPeano.Nat.eqb_sym . trivial. }
+      rewrite H3. assumption.
+    * intros. rewrite H1 in H0.
+      contradict H0. auto.
+  - intros. simpl. 
+    case_eq (beqPairs (p, i) (table1, idx1) beqPage beqIndex).
+    intros. trivial.
+    intros. assumption.   
+Qed.
+
+
+Lemma pageDecOrNot :
+forall p1 p2 : page, p1 = p2 \/ p1<>p2.
+Proof.
+destruct p1;simpl in *;subst;destruct p2;simpl in *;subst.
+assert (Heq :p=p0 \/ p<> p0) by omega.
+destruct Heq as [Heq|Heq].
+subst.
+left;f_equal;apply proof_irrelevance.
+right. unfold not;intros.
+inversion H.
+subst.
+now contradict Heq.
+Qed.
+
+Lemma getPdNextEntryIsPPEq partition pd1 pd2 s :
+nextEntryIsPP partition PDidx pd1 s -> 
+getPd partition (memory s) = Some pd2 -> 
+pd1 = pd2.
+Proof.
+intros.
+unfold nextEntryIsPP in *.
+unfold  getPd in *.
+destruct(succIndexInternal PDidx); [| now contradict H0].
+unfold  readPhysical in *.
+destruct (lookup partition i (memory s) beqPage beqIndex); [| now contradict H0].
+destruct v ; try now contradict H0.
+inversion H0; subst; trivial.
+Qed.
+
+(*** DependantTypeLemmas.v*)
+
+(*** InternalLemmas.v*)

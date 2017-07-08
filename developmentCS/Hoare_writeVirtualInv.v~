@@ -25,9 +25,8 @@ Require Import Lib.
 Require Import Pip_state.
 Require Import Pip_stateLib.
 Require Import Pip_Prop.
-Require Import Pip_DependentTypeLemmas.
-Require Import Pip_InternalLemmas.
-Require Import Pip_writeVirtualInv_Lemmas.
+Require Import Coq.Structures.Equalities.
+Require Import Coq.Logic.Eqdep.
 Import ListNotations.
 
 Module Hoare_writeVirtualInv <: IdModType.
@@ -126,7 +125,7 @@ Qed.
 
 (******* Hoare Triple *)
 
-Lemma writeVirtualInvNewProp (p : page) (i:index) (v:vaddr) (fenv: funEnv) (env: valEnv) :
+Lemma writeVirtualInvHSimpl (p : page) (i:index) (v:vaddr) (fenv: funEnv) (env: valEnv) :
 {{fun _ => True}}
 fenv >> env >> WriteVirtual p i v
 {{fun _ s => readVirtualInternal p i s.(memory) =  Some v}}.
@@ -155,6 +154,7 @@ reflexivity.
 inversion X2.
 inversion X2.
 Qed.
+
 
 Lemma writeVirtualInv (vaInCurrentPartition vaChild: vaddr)  currentPart
 currentShadow descChild idxDescChild ptDescChild ptVaInCurPart idxvaInCurPart
@@ -248,13 +248,15 @@ intuition try assumption.
 + apply isVAUpdateSh2 with entry;trivial.
 + apply getTableAddrRootUpdateSh2 with entry;trivial.
 (** new property **)
-+ unfold readVirtualInternal.
++ unfold StateLib.readVirtual.
   cbn.
   assert (Htrue : beqPairs (ptVaChildsh2, idxvaChild) (ptVaChildsh2, idxvaChild) beqPage
       beqIndex = true). 
   apply beqPairsTrue;split;trivial.
   rewrite Htrue.
   trivial.
-Qed.
+
+Admitted.
+
 
 End Hoare_writeVirtualInv.
