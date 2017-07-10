@@ -81,49 +81,6 @@ inversion X2.
 inversion X2.
 Qed.
 
-(*
-
-Lemma getPdUpdateSh2 partition (vaInParent : vaddr) 
-table idx (s : state) entry :
-lookup table idx (memory s) beqPage beqIndex = Some (VA entry) ->
-getPd partition
-  (add table idx (VA vaInParent) (memory s) beqPage beqIndex) =
-getPd partition (memory s).
-Proof.
-simpl.
-intros Hentry.
-unfold getPd.
-case_eq ( succIndexInternal PDidx ); intros; trivial.
-unfold readPhysical. 
-case_eq (beqPairs (table, idx) (partition, i) beqPage beqIndex);trivial;intros Hpairs.
- + apply beqPairsTrue in Hpairs.
-   destruct Hpairs as (Htable & Hidx).  subst.
-   rewrite Hentry.
-   unfold add.
-   simpl.
-   specialize beqPairsTrue with partition i partition i.
-   intros.
-   intuition.
-   rewrite H0.
-   auto.
- + apply beqPairsFalse in Hpairs.
-   assert (lookup  partition i (removeDup table idx (memory s) beqPage beqIndex)
-           beqPage beqIndex = lookup  partition i   (memory s) beqPage beqIndex) as Hmemory.
-   { apply removeDupIdentity. intuition. }
-   unfold add.
-   simpl.
-   specialize beqPairsFalse with table idx partition i.
-   intros.
-   destruct H0.
-   clear H1.
-   destruct (beqPairs (table, idx) (partition, i) beqPage beqIndex ).
-   apply H0 in Hpairs.
-   inversion Hpairs.
-   rewrite Hmemory. reflexivity.
-Qed.
-
-*)
-
 (******* Hoare Triple *)
 
 Lemma writeVirtualInvNewProp (p : page) (i:index) (v:vaddr) (fenv: funEnv) (env: valEnv) :
