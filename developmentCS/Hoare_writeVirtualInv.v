@@ -28,20 +28,15 @@ Require Import Pip_Prop.
 Require Import Pip_DependentTypeLemmas.
 Require Import Pip_InternalLemmas.
 Require Import Pip_writeVirtualInv_Lemmas.
+Require Import Hoare_getFstShadow.
 Import ListNotations.
 
-Module Hoare_writeVirtualInv <: IdModType.
+Module Hoare_Test_VirtualInv.
 
-Module VirtualInv := THoare IdModP.
+Module VirtualInv := Hoare_Test_FstShadow.
 Export VirtualInv.
 
-Definition Id := VirtualInv.Id.
-Definition IdEqDec := VirtualInv.IdEqDec.
-Definition IdEq := VirtualInv.IdEq.
-Definition W := VirtualInv.W.
-Definition Loc_PI := VirtualInv.Loc_PI.
-Definition BInit := VirtualInv.BInit.
-Definition WP := VirtualInv.WP.
+
 
 (**************************************************)
 
@@ -214,4 +209,4 @@ intuition try assumption.
   trivial.
 Qed.
 
-End Hoare_writeVirtualInv.
+End Hoare_Test_VirtualInv.
