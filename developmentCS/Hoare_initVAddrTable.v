@@ -46,6 +46,8 @@ Instance VT_nat : ValTyp nat.
 Instance VT_bool : ValTyp bool.
 Instance PageVT : ValTyp page.
 Definition Page := vtyp page.
+Instance indexVT : ValTyp index.
+Definition Index := vtyp index.
 
 Definition maxIndex : index := CIndex(tableSize-1). 
 
@@ -85,7 +87,7 @@ BindN (WriteVirtual' p i defaultVAddr)
 
 Definition initVAddrTable (p:page) (i:index) := 
 Apply
-(QF  (FC emptyE [("x",Nat)] (Val (cst unit tt)) (initVAddrTableAux "initVAddrTable" "x" p) "initVAddrTable" tableSize))
+(QF  (FC emptyE [("x",Index)] (Val (cst unit tt)) (initVAddrTableAux "initVAddrTable" "x" p) "initVAddrTable" tableSize))
 (PS[Val (cst index i)]).
 
 (******* Useful Lemmas *)
@@ -175,8 +177,7 @@ Definition THoareFunTriple_Eval
       | 0 =>       
         THoareTriple_Eval P Q fenv' env e0
       | S n' =>       
-        THoareTriple_Eval P Q ((x,FC fenv' tenv' e0 e1 x n')::fenv')
-                           env e1
+        forall env', THoareTriple_Eval P Q ((x,FC fenv' tenv' e0 e1 x (S n'))::fenv') env' (BindMS ((x,FC fenv' tenv' e0 e1 x n')::fenv') env e1)
     end
   end.
 
@@ -186,8 +187,15 @@ Lemma Apply_VHTT2 (P0: W -> Prop) (P1: list Value -> W -> Prop)
    (fenv: funEnv) (env: valEnv) (qf: QFun) (es: list Exp) :
   THoarePrmsTriple_Eval P0 P1 fenv env (PS es) ->
   (forall env, THoareFunTriple_Eval (P1 (map snd env)) P2 fenv env qf) -> 
-  THoareTriple_Eval P0 P2 fenv env (Apply qf (PS es)).
+   THoareTriple_Eval P0 P2 fenv env (Apply qf (PS es)).
 Proof.
+Admitted.
+
+Lemma BindMS_VHTT1 (P1: W -> Prop)
+                 (P2: Value -> W -> Prop)  
+   (fenv: funEnv) (env: valEnv) e : 
+          THoareTriple_Eval P1 P2 fenv env e ->
+          forall fenv' env', THoareTriple_Eval P1 P2 fenv' env' (BindMS fenv env e).
 Admitted.
 
 
@@ -245,6 +253,7 @@ destruct p.
 simpl in *.
 inversion X0;subst.
 clear X1 H1.
+eapply BindMS_VHTT1.
 eapply BindN_VHTT1.
 (** Begin write Virtual *)
 unfold THoareTriple_Eval.
@@ -415,17 +424,20 @@ inversion X5.
 (** end *)
 intros; simpl.
 clear X.
-(** ending calls *)
+(** recursive call *)
 unfold THoareTriple_Eval.
 intros.
-admit.
-(*destruct curidx.
+intuition.
+subst.
+unfold succIndexInternal in *.
+destruct curidx.
 simpl in *.
+case_eq (lt_dec i tableSize);intros; try contradiction.
+rewrite H2 in *. 
 specialize (IHn (CIndex(i+1))).
-simpl in *.
 unfold CIndex in *.
 case_eq (lt_dec (i + 1) tableSize);intros.
-rewrite H1 in *.
+rewrite H4 in *.
 simpl in *.
 assert (Z : n+(i+1) = S(n+i)) by omega.
 rewrite Z in *.
@@ -434,74 +446,71 @@ clear IHn.
 destruct n eqn:B.
 omega.
 eapply H5.
-admit.
 eauto.
+instantiate(2:=[("y",
+         cst index
+           {| i := i + 1; Hi := Pip_state.CIndex_obligation_1 (i + 1) l0 |});
+        ("x", cst index {| i := i; Hi := Hi |})]).
+eauto.
+instantiate(2:=[("x",
+               cst index
+                 {|
+                 i := i + 1;
+                 Hi := Pip_state.CIndex_obligation_1 (i + 1) l0 |})]).
+(*try repeat econstructor;simpl;eauto.*)
 admit.
-admit.
-admit.
-instantiate (1:=v0).
+clear  H4 H3 H2 H5 H0 k4 k3 k2 k1 k0.
+instantiate (1:=v1).
+inversion X;subst.
 inversion X1;subst.
+inversion X3;subst.
+inversion X4;subst.
+inversion H0;subst.
+clear X4 H0.
 inversion X2;subst.
 inversion X4;subst.
-inversion X5;subst.
-inversion H1;subst.
-clear X5 H1.
-inversion X3;subst.
-inversion X5;subst.
 inversion H12;subst.
-destruct vs; inversion H1.
+destruct vs; inversion H0.
+inversion X6;subst.
 inversion X7;subst.
 inversion X8;subst.
 inversion X9;subst.
-inversion X10;subst.
-inversion H1;subst.
-clear X10 H1.
-inversion X6;subst.
-inversion X10;subst.
+inversion H0;subst.
+clear X9 H0.
+inversion X5;subst.
+inversion X9;subst.
 inversion H12;subst.
-destruct vs; inversion H1.
-inversion X12;subst.
-inversion X13;subst.
+destruct vs; inversion H0.
 inversion X11;subst.
-inversion X14;subst.
+inversion X12;subst.
+inversion X10;subst.
+inversion X13;subst.
 inversion H12;subst.
-destruct vs; inversion H1;subst.
+destruct vs; inversion H0;subst.
 destruct vs; inversion H4;subst.
-clear H4 H1 H13.
+clear H4 H0 H13.
 unfold mkVEnv in *.
 simpl in *.
+eauto.
 inversion X15;subst.
-inversion X16;subst.
-inversion X18;subst.
-inversion X19;subst.
-inversion X20;subst.
-inversion X21;subst.
-inversion H1;subst.
-repeat apply inj_pair2 in H7.
-subst.
-inversion X15;subst.
-inversion X22;subst.
-
-
-clear X15 X14 X12 X11 X10 X9 X8 X7 X6 X5 X4 X3 X2 X1 X X0 H H1 H2 H3 H4 k4 k3 k2 k1 k0.
-intuition.
-case_eq (lt_dec i tableSize);intros; try contradiction.
-rewrite H3 in *.
-subst.
-
-clear X0 X1 X H k4 k3 k2 k1 k0 t ft ftenv ftenv0 tenv env idx.
-intros idx Hidx.
+inversion X16.
+inversion X16.
+inversion X15.
+inversion X13.
+inversion X11.
+inversion X6.
+clear X0 X H5 H k4 k3 k2 k1 k0 t ft ftenv ftenv0 tenv env idx.
 intuition; simpl in *.
  assert (Hor : idx = {| i := i; Hi := Hi |} \/ idx < {| i := i; Hi := Hi |}).
     { simpl in *.
-      unfold CIndex in Hidx.
+      unfold CIndex in H.
       destruct (lt_dec (i + 1) tableSize).
       subst.
       simpl in *.
-      rewrite NPeano.Nat.add_1_r in Hidx.
-      apply lt_n_Sm_le in Hidx.
-      apply le_lt_or_eq in Hidx.
-      destruct Hidx.
+      rewrite NPeano.Nat.add_1_r in H.
+      apply lt_n_Sm_le in H.
+      apply le_lt_or_eq in H.
+      destruct H.
       right. assumption.
       left. subst.
       destruct idx. simpl in *.
@@ -509,11 +518,14 @@ intuition; simpl in *.
       assert (Hi = Hi0).
       apply proof_irrelevance.
       subst. reflexivity. omega. }
-instantiate (1:=s).
 destruct Hor.
 subst.
 assumption.
-apply H;trivial..*)
+apply H1;trivial.
+do 3 econstructor; simpl; auto.
+induction n; simpl in *;
+assert (i+1<tableSize) by omega;
+contradiction.
 (** false case*)
 revert H.
 clear;intros.
@@ -558,7 +570,7 @@ apply indexBoundEq in H3.
 subst.
 assumption.
 (** end *)
-Admitted.
+Qed.
 
 
 

@@ -1,0 +1,222 @@
+DIGEST f04e0155b4b3fe9b8eddd934208acb43
+FAbbrevA
+R15:34 Coq.Program.Equality <> <> lib
+R52:66 Coq.Init.Specif <> <> lib
+R84:101 Coq.Arith.PeanoNat <> <> lib
+R119:136 Coq.Strings.String <> <> lib
+R154:158 Coq.omega.Omega <> <> lib
+R176:189 Coq.Lists.List <> <> lib
+R208:214 EnvLibA <> <> lib
+R232:238 RelLibA <> <> lib
+R256:263 PRelLibA <> <> lib
+R282:291 StaticSemA <> <> lib
+R309:319 DynamicSemA <> <> lib
+R337:345 TRInductA <> <> lib
+R363:369 WeakenA <> <> lib
+R387:397 TSoundnessA <> <> lib
+R415:424 IdModTypeA <> <> lib
+R442:448 DetermA <> <> lib
+R472:480 IdModTypeA IdModType <> mod
+R486:494 IdModTypeA IdModType <> mod
+mod 459:464 <> Abbrev
+def 509:510 Abbrev Id
+R515:520 AbbrevA IdT Id defax
+def 534:540 Abbrev IdEqDec
+R545:555 AbbrevA IdT IdEqDec defax
+def 569:572 Abbrev IdEq
+R577:584 AbbrevA IdT IdEq inst
+def 598:598 Abbrev W
+R603:607 AbbrevA IdT W defax
+def 621:626 Abbrev Loc_PI
+R631:640 AbbrevA IdT Loc_PI defax
+def 654:658 Abbrev BInit
+R663:671 AbbrevA IdT BInit defax
+def 685:686 Abbrev WP
+R691:696 AbbrevA IdT WP inst
+R717:722 DetermA Determ <> modtype
+R724:726 AbbrevA IdT <> modtype
+mod 707:712 <> Abbrev.Determ
+def 840:845 Abbrev NatCst
+R851:853 Coq.Init.Datatypes <> nat ind
+R858:862 AbbrevA Abbrev Value def
+R867:869 AbbrevA Abbrev cst def
+R875:875 AbbrevA <> v var
+R871:873 Coq.Init.Datatypes <> nat ind
+def 890:896 Abbrev UnitCst
+R902:905 Coq.Init.Datatypes <> unit ind
+R910:914 AbbrevA Abbrev Value def
+R919:921 AbbrevA Abbrev cst def
+R928:928 AbbrevA <> v var
+R923:926 Coq.Init.Datatypes <> unit ind
+def 943:949 Abbrev BoolCst
+R955:958 Coq.Init.Datatypes <> bool ind
+R963:967 AbbrevA Abbrev Value def
+R972:974 AbbrevA Abbrev cst def
+R981:981 AbbrevA <> v var
+R976:979 Coq.Init.Datatypes <> bool ind
+def 997:1001 Abbrev TrueV
+R1005:1007 AbbrevA Abbrev Exp ind
+R1012:1014 AbbrevA Abbrev Val constr
+R1017:1019 AbbrevA Abbrev cst def
+R1026:1029 Coq.Init.Datatypes <> true constr
+R1021:1024 Coq.Init.Datatypes <> bool ind
+def 1045:1050 Abbrev FalseV
+R1054:1056 AbbrevA Abbrev Exp ind
+R1061:1063 AbbrevA Abbrev Val constr
+R1066:1068 AbbrevA Abbrev cst def
+R1075:1079 Coq.Init.Datatypes <> false constr
+R1070:1073 Coq.Init.Datatypes <> bool ind
+def 1095:1099 Abbrev UnitV
+R1103:1105 AbbrevA Abbrev Exp ind
+R1110:1112 AbbrevA Abbrev Val constr
+R1115:1117 AbbrevA Abbrev cst def
+R1124:1125 Coq.Init.Datatypes <> tt constr
+R1119:1122 Coq.Init.Datatypes <> unit ind
+def 1141:1145 Abbrev VLift
+R1150:1155 AbbrevA Abbrev Return constr
+R1157:1158 AbbrevA Abbrev LL constr
+def 1173:1176 Abbrev Skip
+R1180:1182 AbbrevA Abbrev Exp ind
+R1187:1191 AbbrevA Abbrev VLift def
+R1194:1195 AbbrevA Abbrev QV constr
+R1198:1200 AbbrevA Abbrev cst def
+R1207:1208 Coq.Init.Datatypes <> tt constr
+R1202:1205 Coq.Init.Datatypes <> unit ind
+def 1225:1229 Abbrev NoRet
+R1235:1237 AbbrevA Abbrev Exp ind
+R1242:1244 AbbrevA Abbrev Exp ind
+R1249:1253 AbbrevA Abbrev BindN constr
+R1257:1260 AbbrevA Abbrev Skip def
+R1255:1255 AbbrevA <> e var
+inst 1353:1365 Abbrev PState_ValTyp
+R1369:1374 EnvLibA <> ValTyp class
+R1377:1382 EnvLibA <> PState class
+R1384:1384 AbbrevA Abbrev W def
+def 1401:1407 Abbrev xf_read
+R1424:1427 Coq.Init.Logic <> :type_scope:x_'->'_x not
+R1428:1428 AbbrevA <> T var
+R1423:1423 AbbrevA Abbrev W def
+R1433:1436 AbbrevA Abbrev XFun rec
+R1443:1443 AbbrevA <> T var
+R1438:1441 Coq.Init.Datatypes <> unit ind
+R1454:1481 AbbrevA Abbrev Build_XFun constr
+R1474:1474 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1476:1477 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1481:1481 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1475:1475 AbbrevA <> x var
+R1478:1478 AbbrevA <> f var
+R1480:1480 AbbrevA <> x var
+def 1557:1564 Abbrev xf_write
+R1581:1584 Coq.Init.Logic <> :type_scope:x_'->'_x not
+R1585:1585 AbbrevA Abbrev W def
+R1580:1580 AbbrevA <> T var
+R1590:1593 AbbrevA Abbrev XFun rec
+R1597:1600 Coq.Init.Datatypes <> unit ind
+R1595:1595 AbbrevA <> T var
+R1611:1639 AbbrevA Abbrev Build_XFun constr
+R1631:1631 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1635:1636 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1639:1639 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1632:1632 AbbrevA <> f var
+R1634:1634 AbbrevA <> x var
+R1637:1638 Coq.Init.Datatypes <> tt constr
+def 1715:1722 Abbrev xf_reset
+R1726:1729 AbbrevA Abbrev XFun rec
+R1742:1745 Coq.Init.Datatypes <> unit ind
+R1732:1737 EnvLibA <> PState class
+R1739:1739 AbbrevA Abbrev W def
+R1756:1787 AbbrevA Abbrev Build_XFun constr
+R1776:1776 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1783:1784 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1787:1787 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1777:1782 EnvLibA <> b_init meth
+R1785:1786 Coq.Init.Datatypes <> tt constr
+def 1864:1867 Abbrev Read
+R1884:1889 EnvLibA <> ValTyp class
+R1891:1891 AbbrevA <> T var
+R1899:1902 Coq.Init.Logic <> :type_scope:x_'->'_x not
+R1903:1903 AbbrevA <> T var
+R1898:1898 AbbrevA Abbrev W def
+R1908:1910 AbbrevA Abbrev Exp ind
+R1917:1922 AbbrevA Abbrev Modify constr
+R1954:1955 AbbrevA Abbrev QV constr
+R1958:1960 AbbrevA Abbrev cst def
+R1967:1968 Coq.Init.Datatypes <> tt constr
+R1962:1965 Coq.Init.Datatypes <> unit ind
+R1942:1948 AbbrevA Abbrev xf_read def
+R1950:1950 AbbrevA <> f var
+R1938:1939 AbbrevA <> VT var
+R1931:1936 AbbrevA Abbrev UnitVT inst
+R1929:1929 AbbrevA <> T var
+R1924:1927 Coq.Init.Datatypes <> unit ind
+def 1985:1989 Abbrev Write
+R2006:2011 EnvLibA <> ValTyp class
+R2013:2013 AbbrevA <> T var
+R2021:2024 Coq.Init.Logic <> :type_scope:x_'->'_x not
+R2025:2025 AbbrevA Abbrev W def
+R2020:2020 AbbrevA <> T var
+R2032:2032 AbbrevA <> T var
+R2037:2039 AbbrevA Abbrev Exp ind
+R2046:2051 AbbrevA Abbrev Modify constr
+R2084:2085 AbbrevA Abbrev QV constr
+R2088:2090 AbbrevA Abbrev cst def
+R2094:2094 AbbrevA <> x var
+R2092:2092 AbbrevA <> T var
+R2071:2078 AbbrevA Abbrev xf_write def
+R2080:2080 AbbrevA <> f var
+R2063:2068 AbbrevA Abbrev UnitVT inst
+R2060:2061 AbbrevA <> VT var
+R2055:2058 Coq.Init.Datatypes <> unit ind
+R2053:2053 AbbrevA <> T var
+def 2111:2115 Abbrev Reset
+R2119:2121 AbbrevA Abbrev Exp ind
+R2128:2133 AbbrevA Abbrev Modify constr
+R2191:2192 AbbrevA Abbrev QV constr
+R2195:2197 AbbrevA Abbrev cst def
+R2210:2211 AbbrevA Abbrev WP def
+R2200:2205 EnvLibA <> PState class
+R2207:2207 AbbrevA Abbrev W def
+R2172:2179 AbbrevA Abbrev xf_reset def
+R2165:2170 AbbrevA Abbrev UnitVT inst
+R2151:2163 AbbrevA Abbrev PState_ValTyp inst
+R2146:2149 Coq.Init.Datatypes <> unit ind
+R2136:2141 EnvLibA <> PState class
+R2143:2143 AbbrevA Abbrev W def
+prf 2745:2756 Abbrev emptyFTyping
+R2760:2769 AbbrevA Abbrev FEnvTyping def
+R2778:2783 EnvLibA <> emptyE def
+R2771:2776 EnvLibA <> emptyE def
+prf 2817:2828 Abbrev emptyVTyping
+R2832:2840 AbbrevA Abbrev EnvTyping def
+R2849:2854 EnvLibA <> emptyE def
+R2842:2847 EnvLibA <> emptyE def
+def 2894:2906 Abbrev expTypingTest
+R2912:2914 AbbrevA Abbrev Exp ind
+R2921:2924 AbbrevA Abbrev VTyp def
+R2938:2946 AbbrevA Abbrev ExpTyping ind
+R2971:2971 AbbrevA <> t var
+R2969:2969 AbbrevA <> e var
+R2962:2967 EnvLibA <> emptyE def
+R2955:2960 EnvLibA <> emptyE def
+R2948:2953 EnvLibA <> emptyE def
+def 2986:2992 Abbrev runTest
+R2998:3000 AbbrevA Abbrev Exp ind
+R3007:3010 AbbrevA Abbrev VTyp def
+R3018:3030 AbbrevA Abbrev expTypingTest def
+R3034:3034 AbbrevA <> t var
+R3032:3032 AbbrevA <> e var
+R3041:3041 AbbrevA Abbrev W def
+R3048:3053 Coq.Init.Specif <> projT1 def
+R3056:3068 Coq.Init.Specif <> sigT_of_sigT2 def
+R3073:3079 AbbrevA Abbrev ExpEval thm
+R3141:3141 AbbrevA <> s var
+R3128:3139 AbbrevA Abbrev emptyVTyping thm
+R3121:3126 EnvLibA <> emptyE def
+R3108:3119 AbbrevA Abbrev emptyFTyping thm
+R3106:3106 AbbrevA <> k var
+R3104:3104 AbbrevA <> t var
+R3102:3102 AbbrevA <> e var
+R3095:3100 EnvLibA <> emptyE def
+R3088:3093 EnvLibA <> emptyE def
+R3081:3086 EnvLibA <> emptyE def
+R3152:3157 AbbrevA Abbrev <> mod

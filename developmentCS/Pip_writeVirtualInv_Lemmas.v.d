@@ -1,0 +1,2 @@
+Pip_writeVirtualInv_Lemmas.vo Pip_writeVirtualInv_Lemmas.glob Pip_writeVirtualInv_Lemmas.v.beautified: Pip_writeVirtualInv_Lemmas.v ./Lib.vo ./Pip_state.vo ./Pip_stateLib.vo ./Pip_Prop.vo ./Pip_DependentTypeLemmas.vo ./Pip_InternalLemmas.vo
+Pip_writeVirtualInv_Lemmas.vio: Pip_writeVirtualInv_Lemmas.v ./Lib.vio ./Pip_state.vio ./Pip_stateLib.vio ./Pip_Prop.vio ./Pip_DependentTypeLemmas.vio ./Pip_InternalLemmas.vio

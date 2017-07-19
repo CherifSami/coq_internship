@@ -1,0 +1,38 @@
+DIGEST b0c0ac5949349a21ed6bb2fb60334393
+FIdModTypeA
+R15:21 EnvLibA <> <> lib
+modtype 38:46 <> IdModType
+ax 60:61 IdModType Id
+ax 82:88 IdModType IdEqDec
+R106:107 IdModTypeA IdModType Id defax
+R111:111 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R117:121 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R128:128 Coq.Init.Specif <> :type_scope:'{'_x_'}'_'+'_'{'_x_'}' not
+R113:115 Coq.Init.Logic <> :type_scope:x_'='_x not
+R112:112 IdModTypeA <> x var
+R116:116 IdModTypeA <> y var
+R123:126 Coq.Init.Logic <> :type_scope:x_'<>'_x not
+R122:122 IdModTypeA <> x var
+R127:127 IdModTypeA <> y var
+inst 141:144 IdModType IdEq
+R148:150 EnvLibA <> DEq class
+R152:153 IdModTypeA IdModType Id defax
+R162:164 EnvLibA <> dEq meth
+R169:175 IdModTypeA IdModType IdEqDec defax
+ax 191:191 IdModType W
+ax 212:217 IdModType Loc_PI
+R246:251 EnvLibA <> ValTyp class
+R253:253 IdModTypeA <> T var
+R259:261 Coq.Init.Logic <> :type_scope:x_'='_x not
+R257:258 IdModTypeA <> p1 var
+R262:263 IdModTypeA <> p2 var
+ax 277:281 IdModType BInit
+R285:285 IdModTypeA IdModType W defax
+inst 298:299 IdModType WP
+R303:308 EnvLibA <> PState class
+R310:310 IdModTypeA IdModType W defax
+R342:347 EnvLibA <> b_init meth
+R319:324 EnvLibA <> loc_pi meth
+R329:334 IdModTypeA IdModType Loc_PI defax
+R352:356 IdModTypeA IdModType BInit defax
+R382:390 IdModTypeA IdModType <> modtype
