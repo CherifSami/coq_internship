@@ -177,7 +177,8 @@ Definition THoareFunTriple_Eval
       | 0 =>       
         THoareTriple_Eval P Q fenv' env e0
       | S n' =>       
-        forall env', THoareTriple_Eval P Q ((x,FC fenv' tenv' e0 e1 x (S n'))::fenv') env' (BindMS ((x,FC fenv' tenv' e0 e1 x n')::fenv') env e1)
+          THoareTriple_Eval P Q ((x,FC fenv' tenv' e0 e1 x n')::fenv') env e1
+       (*forall envG, THoareTriple_Eval P Q fenv envG (BindMS ((x,FC fenv' tenv' e0 e1 x (S n'))::fenv') env e1)*)
     end
   end.
 
@@ -188,15 +189,22 @@ Lemma Apply_VHTT2 (P0: W -> Prop) (P1: list Value -> W -> Prop)
   THoarePrmsTriple_Eval P0 P1 fenv env (PS es) ->
   (forall env, THoareFunTriple_Eval (P1 (map snd env)) P2 fenv env qf) -> 
    THoareTriple_Eval P0 P2 fenv env (Apply qf (PS es)).
-Proof.
 Admitted.
 
 Lemma BindMS_VHTT1 (P1: W -> Prop)
+                 (P2: Value -> W -> Prop) 
+   (fenv fenv': funEnv) (env env': valEnv) e :
+          THoareTriple_Eval P1 P2 (fenv'++fenv) (env'++env) e ->
+          THoareTriple_Eval P1 P2 fenv env (BindMS fenv' env' e).
+Admitted.
+
+Lemma BindMS_VHTT2 (P1: W -> Prop)
                  (P2: Value -> W -> Prop)  
    (fenv: funEnv) (env: valEnv) e : 
           THoareTriple_Eval P1 P2 fenv env e ->
           forall fenv' env', THoareTriple_Eval P1 P2 fenv' env' (BindMS fenv env e).
 Admitted.
+
 
 
 
@@ -231,9 +239,9 @@ inversion X;subst.
 Focus 2. inversion X0.
 revert vs.
 assert(H : tableSize + curidx >= tableSize) by omega.
-revert H.
+revert H k2.
 revert curidx.
-generalize tableSize at 1 3. 
+generalize tableSize at 1 3 4. 
 induction n.  simpl. 
 (** begin case n=0 *)
 intros.
@@ -253,7 +261,7 @@ destruct p.
 simpl in *.
 inversion X0;subst.
 clear X1 H1.
-eapply BindMS_VHTT1.
+(*eapply BindMS_VHTT1.*)
 eapply BindN_VHTT1.
 (** Begin write Virtual *)
 unfold THoareTriple_Eval.
@@ -446,18 +454,11 @@ clear IHn.
 destruct n eqn:B.
 omega.
 eapply H5.
-eauto.
-instantiate(2:=[("y",
-         cst index
-           {| i := i + 1; Hi := Pip_state.CIndex_obligation_1 (i + 1) l0 |});
-        ("x", cst index {| i := i; Hi := Hi |})]).
-eauto.
-instantiate(2:=[("x",
-               cst index
-                 {|
-                 i := i + 1;
-                 Hi := Pip_state.CIndex_obligation_1 (i + 1) l0 |})]).
-(*try repeat econstructor;simpl;eauto.*)
+(*eapply k0.
+eapply k3.
+repeat (try econstructor; simpl; eauto).*)
+admit.
+admit.
 admit.
 clear  H4 H3 H2 H5 H0 k4 k3 k2 k1 k0.
 instantiate (1:=v1).
@@ -491,6 +492,7 @@ destruct vs; inversion H4;subst.
 clear H4 H0 H13.
 unfold mkVEnv in *.
 simpl in *.
+admit.
 eauto.
 inversion X15;subst.
 inversion X16.
