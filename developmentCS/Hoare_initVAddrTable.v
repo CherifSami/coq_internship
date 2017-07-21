@@ -160,52 +160,15 @@ intros.
 contradiction.
 Qed.
 
-Definition THoareFunTriple_Eval
-      (P: W -> Prop) (Q: Value -> W -> Prop) 
-      (fenv: funEnv) (env: valEnv)
-      (qf: QFun) : Prop :=
-  forall (ftenv: funTC)
-         (k1: FEnvTyping fenv ftenv)
-         (ft: FTyp)
-         (k2: QFunTyping ftenv fenv qf ft)
-         (s s': W) (f: Fun),
-  QFClosure fenv (Conf QFun s qf) (Conf QFun s' (QF f)) ->
-  match f with
-    | FC fenv' tenv' e0 e1 x n => 
-    EnvTyping env tenv' ->  
-    match n with
-      | 0 =>       
-        THoareTriple_Eval P Q fenv' env e0
-      | S n' =>       
-          THoareTriple_Eval P Q ((x,FC fenv' tenv' e0 e1 x n')::fenv') env e1
-       (*forall envG, THoareTriple_Eval P Q fenv envG (BindMS ((x,FC fenv' tenv' e0 e1 x (S n'))::fenv') env e1)*)
-    end
-  end.
-
-
 Lemma Apply_VHTT2 (P0: W -> Prop) (P1: list Value -> W -> Prop)
                  (P2: Value -> W -> Prop) 
-   (fenv: funEnv) (env: valEnv) (qf: QFun) (es: list Exp) :
-  THoarePrmsTriple_Eval P0 P1 fenv env (PS es) ->
-  (forall env, THoareFunTriple_Eval (P1 (map snd env)) P2 fenv env qf) -> 
-   THoareTriple_Eval P0 P2 fenv env (Apply qf (PS es)).
+   (fenv: funEnv) (env: valEnv) fname f (es: list Exp)  :
+   THoarePrmsTriple_Eval P0 P1 fenv env (PS es) ->
+   findET fenv fname f->
+   forall vs , THoareTriple_Eval (P1 vs) P2 fenv env (Apply (QF f) (PS (map Val vs)))  -> 
+   THoareTriple_Eval P0 P2 fenv env (Apply (FVar fname) (PS es)).
+Proof.
 Admitted.
-
-Lemma BindMS_VHTT1 (P1: W -> Prop)
-                 (P2: Value -> W -> Prop) 
-   (fenv fenv': funEnv) (env env': valEnv) e :
-          THoareTriple_Eval P1 P2 (fenv'++fenv) (env'++env) e ->
-          THoareTriple_Eval P1 P2 fenv env (BindMS fenv' env' e).
-Admitted.
-
-Lemma BindMS_VHTT2 (P1: W -> Prop)
-                 (P2: Value -> W -> Prop)  
-   (fenv: funEnv) (env: valEnv) e : 
-          THoareTriple_Eval P1 P2 fenv env e ->
-          forall fenv' env', THoareTriple_Eval P1 P2 fenv' env' (BindMS fenv env e).
-Admitted.
-
-
 
 
 (******* Hoare Triple *)
@@ -218,30 +181,10 @@ fenv >> env >> initVAddrTable table curidx
 Proof.
 unfold initVAddrTable.
 unfold initVAddrTableAux.
-eapply Apply_VHTT2.
-(** begin PS [Val (cst index curidx)] *)
-instantiate (1:= fun vs s => (forall idx : index,
-   idx < curidx -> readVirtual table idx (memory s) = Some defaultVAddr) 
-      /\ vs = [cst index curidx] ).
-unfold THoarePrmsTriple_Eval.
-intros.
-inversion X;subst.
-destruct vs; inversion H5.
-destruct vs ; inversion H2 ; subst.
-intuition.
-inversion X0;subst.
-inversion X2.
-inversion X2.
-(** end *)
-intros vs ; simpl.
-unfold THoareFunTriple_Eval;intros.
-inversion X;subst.
-Focus 2. inversion X0.
-revert vs.
 assert(H : tableSize + curidx >= tableSize) by omega.
-revert H k2.
+revert fenv env H.
 revert curidx.
-generalize tableSize at 1 3 4. 
+generalize tableSize at 1 3. 
 induction n.  simpl. 
 (** begin case n=0 *)
 intros.
@@ -250,6 +193,22 @@ simpl in *.
 omega.
 (** end *)
 intros;simpl.
+eapply Apply_VHTT1.
+(** begin PS [Val (cst index curidx)] *)
+instantiate (1:= fun vs s => (forall idx : index,
+   idx < curidx -> readVirtual table idx (memory s) = Some defaultVAddr) 
+      /\ vs = [cst index curidx] ).
+unfold THoarePrmsTriple_Eval.
+intros.
+inversion X;subst.
+destruct vs; inversion H6.
+destruct vs ; inversion H3 ; subst.
+intuition.
+inversion X0;subst.
+inversion X2.
+inversion X2.
+(** end *)
+intuition; intros; simpl.
 destruct vs.
 unfold THoareTriple_Eval;intros.
 intuition; inversion H2.
@@ -257,17 +216,13 @@ destruct vs.
 Focus 2.
 unfold THoareTriple_Eval;intros.
 intuition; inversion H2.
-destruct p.
 simpl in *.
-inversion X0;subst.
-clear X1 H1.
 (*eapply BindMS_VHTT1.*)
 eapply BindN_VHTT1.
 (** Begin write Virtual *)
 unfold THoareTriple_Eval.
 intros.
-clear X0 X IHn k4 k3 k2 k1 k0 t ft ftenv ftenv0 tenv env.
-rename X1 into X.
+clear IHn k3 k2 k1 t ftenv tenv env.
 intuition.
 inversion H2;subst.
 inversion X;subst.
@@ -332,7 +287,6 @@ inversion X5.
 eapply IfTheElse_VHTT1.
 (** begin LtLtb *)
 unfold THoareTriple_Eval.
-clear X IHn k2 k1 ft env ftenv X0.
 intros.
 clear k3 k2 k1 t tenv ftenv.
 intuition.
@@ -365,7 +319,6 @@ inversion X5.
 simpl.
 eapply BindS_VHTT1.
 eapply BindS_VHTT1.
-clear IHn X k2 k1 ft env ftenv X0.
 (** begin SuccD *)
 eapply weakenEval.
 instantiate (2:= fun s => (fun s' => (forall idx : index,
@@ -391,7 +344,6 @@ omega.
 (** end *) 
 (** begin ExtractIndex *)
 intros;simpl.
-clear IHn X k2 k1 ft env ftenv X0.
 instantiate (1:= fun v' s => (forall idx : index,
    idx < curidx -> readVirtual table idx (memory s) = Some defaultVAddr) /\
    readVirtual table curidx (memory s) = Some defaultVAddr /\
@@ -431,7 +383,50 @@ inversion X5.
 inversion X5.
 (** end *)
 intros; simpl.
-clear X.
+eapply Apply_VHTT2.
+instantiate(1:=fun vs s => (forall idx : index,
+    idx < curidx -> readVirtual table idx (memory s) = Some defaultVAddr) /\
+   readVirtual table curidx (memory s) = Some defaultVAddr /\
+   v = cst index curidx /\
+   curidx < tableSize - 1 /\
+   v0 =
+   cst index
+     match succIndexInternal curidx with
+     | Some i => i
+     | None => index_d
+     end /\ vs = [v0]).
+unfold THoarePrmsTriple_Eval;intros.
+inversion X;subst.
+destruct vs;inversion H6.
+inversion X0;subst.
+inversion X2;subst.
+inversion X3;subst.
+inversion X4;subst.
+inversion H1;subst.
+inversion X1;subst.
+destruct vs; inversion H7.
+inversion X5;subst.
+inversion X7;subst.
+inversion X6;subst.
+destruct vs;inversion H7;subst.
+destruct vs;inversion H4.
+intuition.
+inversion X8;subst.
+inversion X10.
+inversion X10.
+inversion X8.
+instantiate (1:=
+   FC emptyE [("x", Index)] (Val (cst unit tt))
+     (BindN (WriteVirtual' table "x" defaultVAddr)
+        (IfThenElse (LtLtb "x" maxIndex)
+           (BindS "y" (BindS "idx" (SuccD "x") (ExtractIndex "idx"))
+              (Apply (FVar "initVAddrTable") (PS [VLift (Var "y")])))
+           (Val (cst unit tt)))) "initVAddrTable" n).
+econstructor.
+econstructor.
+simpl;auto.
+unfold mkVEnv in *; simpl in *.
+instantiate (1:= [v0]);simpl.
 (** recursive call *)
 unfold THoareTriple_Eval.
 intros.
@@ -441,7 +436,7 @@ unfold succIndexInternal in *.
 destruct curidx.
 simpl in *.
 case_eq (lt_dec i tableSize);intros; try contradiction.
-rewrite H2 in *. 
+rewrite H2 in *.
 specialize (IHn (CIndex(i+1))).
 unfold CIndex in *.
 case_eq (lt_dec (i + 1) tableSize);intros.
@@ -451,57 +446,12 @@ assert (Z : n+(i+1) = S(n+i)) by omega.
 rewrite Z in *.
 eapply IHn in H as H5.
 clear IHn.
-destruct n eqn:B.
-omega.
 eapply H5.
-(*eapply k0.
-eapply k3.
-repeat (try econstructor; simpl; eauto).*)
-admit.
-admit.
-admit.
-clear  H4 H3 H2 H5 H0 k4 k3 k2 k1 k0.
-instantiate (1:=v1).
-inversion X;subst.
-inversion X1;subst.
-inversion X3;subst.
-inversion X4;subst.
-inversion H0;subst.
-clear X4 H0.
-inversion X2;subst.
-inversion X4;subst.
-inversion H12;subst.
-destruct vs; inversion H0.
-inversion X6;subst.
-inversion X7;subst.
-inversion X8;subst.
-inversion X9;subst.
-inversion H0;subst.
-clear X9 H0.
-inversion X5;subst.
-inversion X9;subst.
-inversion H12;subst.
-destruct vs; inversion H0.
-inversion X11;subst.
-inversion X12;subst.
-inversion X10;subst.
-inversion X13;subst.
-inversion H12;subst.
-destruct vs; inversion H0;subst.
-destruct vs; inversion H4;subst.
-clear H4 H0 H13.
-unfold mkVEnv in *.
-simpl in *.
-admit.
 eauto.
-inversion X15;subst.
-inversion X16.
-inversion X16.
-inversion X15.
-inversion X13.
-inversion X11.
-inversion X6.
-clear X0 X H5 H k4 k3 k2 k1 k0 t ft ftenv ftenv0 tenv env idx.
+eauto.
+eauto.
+eauto.
+clear H5 H k3 k2 k1 t ftenv tenv env idx.
 intuition; simpl in *.
  assert (Hor : idx = {| i := i; Hi := Hi |} \/ idx < {| i := i; Hi := Hi |}).
     { simpl in *.
@@ -522,10 +472,8 @@ intuition; simpl in *.
       subst. reflexivity. omega. }
 destruct Hor.
 subst.
-assumption.
+eassumption.
 apply H1;trivial.
-do 3 econstructor; simpl; auto.
-induction n; simpl in *;
 assert (i+1<tableSize) by omega;
 contradiction.
 (** false case*)
