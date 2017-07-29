@@ -1,0 +1,76 @@
+% Document Type
+\documentclass[a4paper,12pt]{report}
+
+% Packages 
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{xspace}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[export]{adjustbox}
+\usepackage{wrapfig}
+
+% header & footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[C]{} 
+\fancyhead[R]{}
+\fancyhead[L]{\leftmark}
+\fancyfoot[C]{\thepage}
+
+% Commands
+
+\makeatletter
+\def\@makechapterhead#1{
+  {\parindent \z@ \raggedright \normalfont
+    \interlinepenalty\@M
+    \Huge\bfseries  \thechapter.\quad #1\par\nobreak
+    \vskip 20\p@
+  }}
+\makeatother
+
+\newcommand\st{\textsuperscript{st}\xspace}
+
+\renewcommand{\lstlistingname}{\textbf{Script}}
+\renewcommand{\lstlistlistingname}{List of \lstlistingname s}
+
+\begin{document}
+ 
+%\input{./title.tex}
+
+\newpage
+~
+\thispagestyle{empty}
+\newpage
+
+%\input{./abstract.tex}
+
+%\input{./acknowledgement.tex}
+
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\thispagestyle{empty}
+\setcounter{page}{1}
+\newpage
+
+%\input{./introduction.tex}
+
+\input{./cristal.tex}
+
+\input{./about_internship.tex}
+ 
+\input{./PIP.tex}
+
+%\input{./deep_invariants.tex}
+
+%\input{./conclusion.tex}
+
+%\input{./annexes.tex}
+
+%\bibliography{bibliographie.bib}
+
+\end{document}
