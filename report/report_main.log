@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  29 JUL 2017 09:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  31 JUL 2017 15:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -189,48 +189,132 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \WF@everypar=\toks24
 Package: wrapfig 2003/01/31  v 3.6
 )
-(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-\fancy@headwidth=\skip45
-\f@ncyO@elh=\skip46
-\f@ncyO@erh=\skip47
-\f@ncyO@olh=\skip48
-\f@ncyO@orh=\skip49
-\f@ncyO@elf=\skip50
-\f@ncyO@erf=\skip51
-\f@ncyO@olf=\skip52
-\f@ncyO@orf=\skip53
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip45
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks25
+\ex@=\dimen127
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen128
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count103
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count104
+\leftroot@=\count105
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count106
+\DOTSCASE@=\count107
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box32
+\strutbox@=\box33
+\big@size=\dimen129
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count108
+\c@MaxMatrixCols=\count109
+\dotsspace@=\muskip10
+\c@parentequation=\count110
+\dspbrk@lvl=\count111
+\tag@help=\toks26
+\row@=\count112
+\column@=\count113
+\maxfields@=\count114
+\andhelp@=\toks27
+\eqnshift@=\dimen130
+\alignsep@=\dimen131
+\tagshift@=\dimen132
+\tagwidth@=\dimen133
+\totwidth@=\dimen134
+\lineht@=\dimen135
+\@envbody=\toks28
+\multlinegap=\skip46
+\multlinetaggap=\skip47
+\mathdisplay@stack=\toks29
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/bussproofs/bussproofs.sty
+Proof Tree (bussproofs) style macros. Version 1.1.
+\theLevel=\count115
+\myMaxLevel=\count116
+\myBoxA=\box34
+\myBoxB=\box35
+\myBoxC=\box36
+\myBoxD=\box37
+\myBoxLL=\box38
+\myBoxRL=\box39
+\thisAboveSkip=\dimen136
+\thisBelowSkip=\dimen137
+\newScoreStart=\dimen138
+\newScoreEnd=\dimen139
+\newCenter=\dimen140
+\displace=\dimen141
+\leftLowerAmt=\dimen142
+\rightLowerAmt=\dimen143
+\scoreHeight=\dimen144
+\scoreDepth=\dimen145
+\htLbox=\dimen146
+\htRbox=\dimen147
+\htRRbox=\dimen148
+\htRRRbox=\dimen149
+\htAbox=\dimen150
+\htCbox=\dimen151
+) (/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+\fancy@headwidth=\skip48
+\f@ncyO@elh=\skip49
+\f@ncyO@erh=\skip50
+\f@ncyO@olh=\skip51
+\f@ncyO@orh=\skip52
+\f@ncyO@elf=\skip53
+\f@ncyO@erf=\skip54
+\f@ncyO@olf=\skip55
+\f@ncyO@orf=\skip56
 )
 (./report_main.aux)
 \openout1 = `report_main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
  (/usr/share/texlive/texmf-dist/tex/latex/ucs/ucsencs.def
 File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count103
-\scratchdimen=\dimen127
-\scratchbox=\box32
-\nofMPsegments=\count104
-\nofMParguments=\count105
-\everyMPshowfont=\toks25
-\MPscratchCnt=\count106
-\MPscratchDim=\dimen128
-\MPnumerator=\count107
-\makeMPintoPDFobject=\count108
-\everyMPtoPDFconversion=\toks26
+\scratchcounter=\count117
+\scratchdimen=\dimen152
+\scratchbox=\box40
+\nofMPsegments=\count118
+\nofMParguments=\count119
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count120
+\MPscratchDim=\dimen153
+\MPnumerator=\count121
+\makeMPintoPDFobject=\count122
+\everyMPtoPDFconversion=\toks31
 ) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -279,39 +363,34 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count109
+\c@lstlisting=\count123
 
 [1
 
-] (./report_main.toc
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 3.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 3.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 3.
-)
+] (./report_main.toc)
 \tf@toc=\write3
 \openout3 = `report_main.toc'.
 
  [2
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-(./cristal.tex
+(./report_main.lol)
+\tf@lol=\write4
+\openout4 = `report_main.lol'.
+
+ [3
+
+] (./cristal.tex
 Chapter 1.
 
 Underfull \hbox (badness 10000) in paragraph at lines 5--6
 
  []
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 7.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 7.
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 )
-<img/cristalLocation.png, id=11, 536.0025pt x 320.19624pt>
+<img/cristalLocation.png, id=14, 536.0025pt x 320.19624pt>
 File: img/cristalLocation.png Graphic file (type png)
 
 <use img/cristalLocation.png>
@@ -324,7 +403,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
 
-<img/2XS.png, id=19, 745.78625pt x 292.09125pt>
+<img/2XS.png, id=22, 745.78625pt x 292.09125pt>
 File: img/2XS.png Graphic file (type png)
  <use img/2XS.png>
 Package pdftex.def Info: img/2XS.png used on input line 39.
@@ -334,7 +413,7 @@ Overfull \hbox (0.79999pt too wide) in paragraph at lines 39--40
  [][] 
  []
 
-) (./about_internship.tex
+) (./PIP.tex
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 14.49998pt.
@@ -343,30 +422,6 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [2 <./img/2XS.png>]
 Chapter 2.
-<img/CoqLogo.png, id=25, 49.68562pt x 75.28125pt>
-File: img/CoqLogo.png Graphic file (type png)
- <use img/CoqLogo.png>
-Package pdftex.def Info: img/CoqLogo.png used on input line 9.
-(pdftex.def)             Requested size: 49.6855pt x 75.28105pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 11--13
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 14--15
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-
- []
-
-) (./PIP.tex [3
-
- <./img/CoqLogo.png>] [4]
-Chapter 3.
 
 Underfull \hbox (badness 10000) in paragraph at lines 6--7
 
@@ -383,14 +438,14 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 12.
- [5
+ [3
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 22--23
 
  []
 
-<img/OSLayersPIP.png, id=38, 561.09625pt x 369.38pt>
+<img/OSLayersPIP.png, id=32, 561.09625pt x 369.38pt>
 File: img/OSLayersPIP.png Graphic file (type png)
  <use img/OSLayersPIP.png>
 Package pdftex.def Info: img/OSLayersPIP.png used on input line 28.
@@ -400,111 +455,167 @@ Overfull \hbox (0.79999pt too wide) in paragraph at lines 28--29
  [][] 
  []
 
-[6 <./img/OSLayersPIP.png>]
-<img/memoryIsolShare.png, id=42, 812.03375pt x 539.01375pt>
+[4 <./img/OSLayersPIP.png>]
+<img/memoryIsolShare.png, id=37, 812.03375pt x 539.01375pt>
 File: img/memoryIsolShare.png Graphic file (type png)
 
 <use img/memoryIsolShare.png>
 Package pdftex.def Info: img/memoryIsolShare.png used on input line 38.
 (pdftex.def)             Requested size: 312.00119pt x 207.09735pt.
 
-<img/FreeRTOSEx.png, id=43, 404.51125pt x 180.675pt>
+<img/FreeRTOSEx.png, id=38, 404.51125pt x 180.675pt>
 File: img/FreeRTOSEx.png Graphic file (type png)
  <use img/FreeRTOSEx.png>
 Package pdftex.def Info: img/FreeRTOSEx.png used on input line 46.
 (pdftex.def)             Requested size: 202.25513pt x 90.33727pt.
 
-[7 <./img/memoryIsolShare.png> <./img/FreeRTOSEx.png>]
-<img/PIPDesign.png, id=47, 846.16125pt x 423.5825pt>
+[5 <./img/memoryIsolShare.png> <./img/FreeRTOSEx.png>]
+<img/PIPDesign.png, id=42, 846.16125pt x 423.5825pt>
 File: img/PIPDesign.png Graphic file (type png)
  <use img/PIPDesign.png>
-Package pdftex.def Info: img/PIPDesign.png used on input line 61.
+Package pdftex.def Info: img/PIPDesign.png used on input line 63.
 (pdftex.def)             Requested size: 312.00119pt x 156.18015pt.
 
-[8 <./img/PIPDesign.png>] <img/HAL.png, id=51, 758.835pt x 338.26375pt>
+[6 <./img/PIPDesign.png>] <img/HAL.png, id=46, 765.86125pt x 343.2825pt>
 File: img/HAL.png Graphic file (type png)
 
 <use img/HAL.png>
-Package pdftex.def Info: img/HAL.png used on input line 90.
-(pdftex.def)             Requested size: 312.00119pt x 139.0813pt.
+Package pdftex.def Info: img/HAL.png used on input line 92.
+(pdftex.def)             Requested size: 226.20071pt x 101.38792pt.
+ <img/CoqLogo.png, id=47, 49.68562pt x 75.28125pt>
+File: img/CoqLogo.png Graphic file (type png)
 
-Overfull \hbox (6.55302pt too wide) in paragraph at lines 95--95
- |[]\OT1/cmr/bx/n/14.4 More In depth un-der-stand-ing of PIP's Data struc-
+<use img/CoqLogo.png>
+Package pdftex.def Info: img/CoqLogo.png used on input line 101.
+(pdftex.def)             Requested size: 49.6855pt x 75.28105pt.
+ [7 <./img/HAL.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 103--105
+
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 99--100
-
- []
-
-[9 <./img/HAL.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 106--107
 
  []
 
-<img/memoryEx.png, id=56, 1405.25pt x 1465.475pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 110--111
+
+ []
+
+[8 <./img/CoqLogo.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+
+ []
+
+[9]
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+
+ []
+
+<img/memoryEx.png, id=60, 1405.25pt x 1465.475pt>
 File: img/memoryEx.png Graphic file (type png)
  <use img/memoryEx.png>
-Package pdftex.def Info: img/memoryEx.png used on input line 114.
+Package pdftex.def Info: img/memoryEx.png used on input line 150.
 (pdftex.def)             Requested size: 389.99365pt x 355.1872pt.
 
-Overfull \hbox (0.79364pt too wide) in paragraph at lines 114--115
+Overfull \hbox (0.79364pt too wide) in paragraph at lines 150--151
  [][] 
  []
 
 
-Overfull \hbox (18.89929pt too wide) in paragraph at lines 124--125
+Overfull \hbox (18.89929pt too wide) in paragraph at lines 160--161
 [][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [10] [11 <./img/memoryEx.png (PNG copy)>]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 132.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 168.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 132.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 168.
 
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
 )
-Underfull \hbox (badness 10000) in paragraph at lines 167--169
+Underfull \hbox (badness 10000) in paragraph at lines 203--205
 
  []
 
 [12]
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 170.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 206.
 
-Underfull \hbox (badness 10000) in paragraph at lines 170--171
+Underfull \hbox (badness 10000) in paragraph at lines 206--207
 
  []
 
-[13]) [14] [15] (./report_main.aux) ) 
+[13]
+\myBox1=\box41
+\myScoreStart1=\dimen154
+\myCenter1=\dimen155
+\myScoreEnd1=\dimen156
+\myBox2=\box42
+\myScoreStart2=\dimen157
+\myCenter2=\dimen158
+\myScoreEnd2=\dimen159
+ [14] [15]
+Overfull \hbox (11.8493pt too wide) in paragraph at lines 299--300
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[16] [17] [18]
+Overfull \hbox (13.02405pt too wide) in paragraph at lines 356--357
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (5.64941pt too wide) in paragraph at lines 370--371
+[][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (26.79938pt too wide) in paragraph at lines 373--374
+[][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[19]) [20] (./report_main.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 5848 strings out of 494985
- 80149 string characters out of 6180356
- 159034 words of memory out of 5000000
- 8940 multiletter control sequences out of 15000+600000
- 11309 words of font info for 39 fonts, out of 8000000 for 9000
+ 6628 strings out of 494985
+ 89043 string characters out of 6180356
+ 179187 words of memory out of 5000000
+ 9697 multiletter control sequences out of 15000+600000
+ 13096 words of font info for 46 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 38i,10n,43p,1205b,1269s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmbsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on report_main.pdf (17 pages, 593221 bytes).
+ 38i,11n,43p,1240b,1773s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on report_main.pdf (23 pages, 648173 bytes).
 PDF statistics:
- 112 PDF objects out of 1000 (max. 8388607)
- 70 compressed objects within 1 object stream
+ 142 PDF objects out of 1000 (max. 8388607)
+ 92 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -11,6 +11,8 @@
 \usepackage{listings}
 \usepackage[export]{adjustbox}
 \usepackage{wrapfig}
+\usepackage{amsmath} 
+\usepackage{bussproofs}
 
 % header & footer
 \usepackage{fancyhdr}
@@ -49,9 +51,16 @@
 
 %\input{./acknowledgement.tex}
 
+%Table of contents
 \tableofcontents
 \thispagestyle{empty}
 
+%Table of scripts
+\newpage
+\lstlistoflistings
+\thispagestyle{empty}
+
+%empty page
 \newpage
 \thispagestyle{empty}
 \setcounter{page}{1}
@@ -60,8 +69,6 @@
 %\input{./introduction.tex}
 
 \input{./cristal.tex}
-
-\input{./about_internship.tex}
  
 \input{./PIP.tex}
 
