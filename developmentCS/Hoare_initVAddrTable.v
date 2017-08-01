@@ -160,17 +160,6 @@ intros.
 contradiction.
 Qed.
 
-Lemma Apply_VHTT2 (P0: W -> Prop) (P1: list Value -> W -> Prop)
-                 (P2: Value -> W -> Prop) 
-   (fenv: funEnv) (env: valEnv) fname f (es: list Exp)  :
-   THoarePrmsTriple_Eval P0 P1 fenv env (PS es) ->
-   findET fenv fname f->
-   forall vs , THoareTriple_Eval (P1 vs) P2 fenv env (Apply (QF f) (PS (map Val vs)))  -> 
-   THoareTriple_Eval P0 P2 fenv env (Apply (FVar fname) (PS es)).
-Proof.
-Admitted.
-
-
 (******* Hoare Triple *)
 
 Lemma initVAddrTableNewProperty table (curidx : index) (fenv: funEnv) (env: valEnv) :
@@ -382,7 +371,11 @@ intuition.
 inversion X5.
 inversion X5.
 (** end *)
+(* evaluating FVar and Prms*)
 intros; simpl.
+eapply QFun_VHTT.
+econstructor.
+econstructor.
 eapply Apply_VHTT2.
 instantiate(1:=fun vs s => (forall idx : index,
     idx < curidx -> readVirtual table idx (memory s) = Some defaultVAddr) /\
@@ -415,23 +408,21 @@ inversion X8;subst.
 inversion X10.
 inversion X10.
 inversion X8.
-instantiate (1:=
-   FC emptyE [("x", Index)] (Val (cst unit tt))
-     (BindN (WriteVirtual' table "x" defaultVAddr)
-        (IfThenElse (LtLtb "x" maxIndex)
-           (BindS "y" (BindS "idx" (SuccD "x") (ExtractIndex "idx"))
-              (Apply (FVar "initVAddrTable") (PS [VLift (Var "y")])))
-           (Val (cst unit tt)))) "initVAddrTable" n).
-econstructor.
-econstructor.
-simpl;auto.
 unfold mkVEnv in *; simpl in *.
-instantiate (1:= [v0]);simpl.
+intros ;simpl.
+destruct vs.
+unfold THoareTriple_Eval;intros;intuition.
+inversion H6.
+destruct vs.
+Focus 2.
+unfold THoareTriple_Eval;intros;intuition.
+inversion H6.
+simpl.
 (** recursive call *)
 unfold THoareTriple_Eval.
 intros.
 intuition.
-subst.
+inversion H6;subst.
 unfold succIndexInternal in *.
 destruct curidx.
 simpl in *.
@@ -451,7 +442,7 @@ eauto.
 eauto.
 eauto.
 eauto.
-clear H5 H k3 k2 k1 t ftenv tenv env idx.
+clear H6 H5 H k3 k2 k1 t ftenv tenv env idx.
 intuition; simpl in *.
  assert (Hor : idx = {| i := i; Hi := Hi |} \/ idx < {| i := i; Hi := Hi |}).
     { simpl in *.

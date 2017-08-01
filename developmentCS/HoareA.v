@@ -70,8 +70,6 @@ Definition HoarePrmsTriple_Eval
                                                      (PS (map Val vs))) ->
     P s -> Q vs s'.
 
-
-
 (************************************************************************)
 
 Lemma write_T_1 {T: Type} (VT: ValTyp T) (f: T -> W)
