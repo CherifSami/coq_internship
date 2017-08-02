@@ -3,9 +3,9 @@
 \section{PIP protokernel}
 
 \subsection{A minimal OS kernel with proovable isolation} \label{PIP}
-An operating system is organized as a hierarchy  of layers, each one constructed  upon  the one  below  it. Each layer focuses on an essential role of the operating system such as memory management, multiprogramming, input/output \dots Generally speaking, while developping a kernel for an operating system based on the layered  approach,  the designers have a choice where to draw the kernel-user boundary. Traditionally, all the layers went in the kernel, but that is not necessary. In fact, putting as little as possible in kernel mode is safer because kernel bugs can bring down the system instantly. In contrast, user processes/layers are set up to have less power so that a bug there may not be fatal.\\
+An operating system is organized as a hierarchy  of layers, each one constructed  upon  the one  below  it. Each layer focuses on an essential role of the operating system such as memory management, multiprogramming, input/output \dots Generally speaking, while developing a kernel for an operating system based on the layered  approach,  the designers have a choice where to draw the kernel-user boundary. Traditionally, all the layers went in the kernel, but that is not necessary. In fact, putting as little as possible in kernel mode is safer because kernel bugs can bring down the system instantly. In contrast, user processes/layers are set up to have less power so that a bug there may not be fatal.\\
 
-Various studies on bug density, relatively to the developped module size, age as well as other factors, have been conducted (e.g.  Basilli  and  Perricone in 1984;  and Ostrand  and  Weyuker in 2002). A  ballpark  figure  for  serious industrial systems is ten  bugs per thousand  lines  of code. Operating  systems  are  sufficiently  buggy  that  computer  manufacturers  put  reset  buttons  on  them, something  the  manufacturers of cars, TV sets and stereos do  not do,  despite  the  large  amount  of software in these devices. Furthermore, Operating systems generally present hardware resources to applications through high-level abstractions such as (virtual) file systems.\\
+Various studies on bug density, relatively to the developed module size, age as well as other factors, have been conducted (e.g.  Basilli  and  Perricone in 1984;  and Ostrand  and  Weyuker in 2002). A  ballpark  figure  for  serious industrial systems is ten  bugs per a thousand  lines  of code. Operating  systems  are  sufficiently  buggy  that  computer  manufacturers  put  reset  buttons  on  them, something  the  manufacturers of cars, TV sets and stereos do  not do,  despite  the  large  amount  of software in these devices. Furthermore, Operating systems generally present hardware resources to applications through high-level abstractions such as (virtual) file systems.\\
 
 \noindent Therfore, we can distinguish several OS kernel families such as : 
 \begin{itemize}
@@ -19,7 +19,7 @@ Various studies on bug density, relatively to the developped module size, age as
 	\item Multiplexing is also done in user mode unlike an exokernel.
 \end{itemize}
 
-\noindent whereas the kernel mode is only for \textbf{multi-level MMU conguration} (virtual memory) and \textbf{context switching}. This not only ensures less bugs density but also more feasibility of formal proof that will warrant the memory isolation property of the protkernel. \\
+\noindent whereas the kernel mode is only for \textbf{multi-level MMU control and configuration} (virtual memory) and \textbf{context switching}. This not only ensures less bugs density but also more feasibility of formal proof that will warrant the memory isolation property of the protkernel. \\
 
 As a \textbf{minimal OS Kernel with provable isolation}, PIP focuses more on security and safety without sacrificing efficency and ensures memory isolation between different tasks running on the same device.PIP's algorithmic part is written in Gallina, the language of the Coq proof assistant, in a monadic style that allows direct translation into freestanding C. We will refer to this implementation in Gallina as the shallow embedding in contrast to the deep embedding introduced in section \ref{deep} p.\pageref{deep}. 
 
@@ -31,7 +31,7 @@ As a \textbf{minimal OS Kernel with provable isolation}, PIP focuses more on sec
 
 \subsection{Horizontal isolation \& vertical sharing} \label{properties}
 
-PIP can be used to partition the available memory which will be initially allocated to the root partition on top of PIP. Any partition can read and write in the memory of its children. However, partitions in diffrent branches of the partition tree are disjoint. The former is referred to as \textbf{vertical sharing} and the latter as \textbf{horizontal isolation}. Needless to say, all memory lended to PIP for storing kernel data, when creating partitions for exemple, are inaccessible for all partitions to prevent messing up PIP data structures which means that the kernel data is totally isolated.
+PIP can be used to partition the available memory which will be initially allocated to the root partition on top of PIP. Any partition can read and write in the memory of its children. However, partitions in different branches of the partition tree are disjoint. The former is referred to as \textbf{vertical sharing} and the latter as \textbf{horizontal isolation}. Needless to say, all memory lent to PIP for storing kernel data,such as when creating partitions, is inaccessible for all partitions to prevent messing up PIP data structures which means that the kernel data is totally isolated.
    
 \begin{figure}[!ht]
 	\centering 
@@ -39,7 +39,7 @@ PIP can be used to partition the available memory which will be initially alloca
 	\caption{Horizontal isolation \& vertical sharing in PIP}
 \end{figure}
 
-\noindent If we consider a more realistic partition tree as shown in figure \ref{FreeRTOS} in which we consider Linux and FreeRTOS as sub-partitions of a root partition, multiplexer. Knowing that FreeRTOS is a real-time OS that does not isolate its tasks, we easily secured it with task isolation by porting it on PIP.
+\noindent Let us consider a more realistic partition tree, as shown in figure \ref{FreeRTOS}, in which we consider Linux and FreeRTOS as sub-partitions of a root partition, multiplexer. Knowing that FreeRTOS is a real-time OS that does not isolate its tasks, we have easily secured it with task isolation by porting it on PIP.
 
 \begin{figure}[!ht] \label{FreeRTOS}
 	\centering 
@@ -47,10 +47,10 @@ PIP can be used to partition the available memory which will be initially alloca
 	\caption{FreeRTOS task isolation using PIP}
 \end{figure}
 
-\subsection{Proof oriented design}
+\subsection{Proof\-oriented design}
 
 \subsubsection{PIP's design} 
-PIP's isolation properties are meant to be formally prooved independently of the platform it's running onto. Consequently, the algorithm and the architecture dependant part were separated. Indeed, as shown in figure \ref{design}, PIP is splitted into two distinct layers  :
+PIP's isolation properties are meant to be formally proven independently from the platform it's running onto. Consequently, the algorithm and the architecture dependant part were separated. Indeed, as shown in figure \ref{design}, PIP is split into two distinct layers  :
 \begin{itemize}
 	\item \textbf{HAL :} gives direct access to the architecture and hardware;
 	\item \textbf{API :} implements the algorithmic part to configure the virtual memory and the hardware.
@@ -72,7 +72,7 @@ PIP's isolation properties are meant to be formally prooved independently of the
 	\item \textbf{Bootstrap :} contains the low-level code required to boot the system.
 \end{itemize}
 
-\noindent PIP only provides system calls for management of partitions and for context switching, thus reducing the TCB to its bare minimum as explained in section \ref{PIP} p.\pageref{PIP}. This user exposed API can be called by any partition using a platform dependant call :
+\noindent PIP only provides system calls for management of the partitions and for context switching, thus reducing the TCB to its bare minimum as explained in section \ref{PIP} p.\pageref{PIP}. This user exposed API can be called by any partition using a platform dependant call :
 \begin{itemize}
 	\item \textbf{createPartition :} creates a new child (sub-partition) into the current partition;
 	\item \textbf{deletePartition :} removes a child partition and puts all its used pages back in the current partition;
@@ -82,7 +82,7 @@ PIP's isolation properties are meant to be formally prooved independently of the
 	\item \textbf{addVaddr :} maps a virtual address into the given child;
 	\item \textbf{removeVAddr :} removes a given mapping from a given child.
 \end{itemize} 
-This API is sufficient as far as memory requirements are concerned but it lacks a way to handle interrupts. Hardware interrupts are implicitly handled by PIP and automatically dispatched to the root partition, while software interrupts, such as system calls, are notified to the partent partition of the caller and can be managed by these two additional services of PIP :
+This API is sufficient as far as memory requirements are concerned but it lacks a way to handle interrupts. Hardware interrupts are implicitly handled by PIP and automatically dispatched to the root partition, while software interrupts, such as system calls, are notified to the parent partition of the caller and can be managed by these two additional services of PIP :
 \begin{itemize}
 	\item \textbf{dispatch :} notifies an interrupt to a given partition, interrpting its current control flow and backing it up for a further resume call;
 	\item \textbf{resume :} restores a previously interrupted context.
@@ -119,13 +119,13 @@ The Coq proof assistant provides us with powerful tactics to perform proofs. Her
 	\item \textbf{auto :} tries to solve the current goal automatically by using a collection of tactics;
 	\item \textbf{rewrite H :} uses an equality hypothesis H to replace a term in the current goal;	
 	\item \textbf{induction t:} applies the induction principle for the type of t, generates subgoals as many as there are constructors, and adds the inductive hypotheses in the contexts;
-	\item \textbf{inversion H :} resembles the induction tactic, but pays attention to the particular form of the type of H, and will only consider the cases that could have been used, so it discards quickly and efficiently some impossible cases;
+	\item \textbf{inversion H :} resembles the induction tactic, but pays attention to the particular form of the type of H, and will only consider the cases that could have been used, so it discards some impossible cases quickly and efficiently;
 	\item \textbf{omega :} carries out an automatic decision procedure for Presburger arithmetic;
-	\item \textbf{apply H :} mainly tries to unify the current goal with the conclusion of the type of H. If it succeeds, then the tactic returns as many subgoals as the number of non-dependent premises of the type of H;
+	\item \textbf{apply H :} mainly tries to unify the current goal with the conclusion of the type of H. If it succeeds, then the tactic returns as many subgoals as non-dependent premises of the type of H;
 	\item \textbf{f\_equal :} applies to a goal of the form $f$ a{\tiny 1} \dots a{\tiny n} = $g$ b{\tiny 1} \dots b{\tiny n} and leads to subgoals $f = g$ and a{\tiny 1} = b{\tiny 1} and so on up to a{\tiny n} = b{\tiny n}. Amongst these subgoals, the simple ones are automatically solved;
 	\item \textbf{contradiction :} tries to find a contradiction amongst the hypotheses.	
 \end{itemize}
-Coq also provides several tactics to deal with first order logic, particularly targeting binary connectives and quantifiers such as \textbf{split}, \textbf{left} and \textbf{right}, \textbf{intros}, \textbf{exists} and \textbf{apply} respectively devised tactics for conjunction, disjunction, implication and existential quantifiers. Futhermore, many tactics can be preceded with the letter \textit{e} like \textbf{eauto}, \textbf{eassumption} and \textbf{eapply} to deal with existential variables. Some tactics can also be applied on hypotheses if we use the reserved clause \textit{in} with the name of the hypothesis such as unfold, apply and simpl. 
+Coq also provides several tactics to deal with first-order logic, particularly targeting binary connectives and quantifiers such as \textbf{split}, \textbf{left} and \textbf{right}, \textbf{intros}, \textbf{exists} and \textbf{apply} respectively devised for conjunction, disjunction, implication, existential quantifiers and universal quantifiers. Futhermore, many tactics can be preceded with the letter \textit{e} like \textbf{eauto}, \textbf{eassumption} and \textbf{eapply} to deal with existential variables. Some tactics can also be applied on hypotheses if we use the reserved clause \textit{in} with the name of the hypothesis such as unfold, apply and simpl. 
 %ref Curry , In throry, \textbf{proving is the same as programming}. 
 
 \subsection{In-depth understanding of PIP's Data structures} \label{structures}
@@ -134,14 +134,14 @@ Coq also provides several tactics to deal with first order logic, particularly t
 
 PIP uses several data stuctures per partition, which will represent the global state of the partition's memory state. This is necessary as it has to keep track of pages allocated to partitions in order to allow or deny derivation and partition creation while preserving the required properties. \\
 
-Figure \ref{partitionEx} shows a partition tree example consisting of a  partition, Parent, that has a single child, Child1. A partition is identified by a partition descriptor which is a page number essentiel to access the whole data structure of a partition. In our case, the partition descriptors of Parent and Child1 are respectively 1 and 12. The pages lent to PIP to manage a partition are organized in a tree with three branches : the MMU tables, the first shadow and the second shadow. The aim of this organization is to keep additional information about each page lent to a partition. Moreover these structures have multiple goals :
+Figure \ref{partitionEx} shows a partition tree example consisting of a  partition, Parent, that has a single child, Child1. A partition is identified by a partition descriptor which is a page number essential to access the whole data structure of a partition. In our case, the partition descriptors of Parent and Child1 are respectively 1 and 12. The pages lent to PIP to manage a partition are organized in a tree with three branches : the MMU tables, the first shadow and the second shadow. The aim of this organization is to keep additional information about each page lent to a partition. Moreover these structures have multiple goals :
 \begin{itemize}
-	\item \textbf{Access control :} the first shadow is used to avoid derivating the same page multiple times;
+	\item \textbf{Access control :} the first shadow is used to avoid deriving the same page multiple times;
 	\item \textbf{Performance :} the second shadow and the configuration list are used to quickly find the virtual address of a page without having to parse the whole virtual space when the parent partition reclaims it.
 \end{itemize} 
-As such, adding an indirection table in the MMU configuration requires two additional pages for the shadows. Therefore, this model is estimated to require roughly three times the amount of memory a simple virtual environment would need, but it provides nevertheless a both secure and efficient API. \\
+As such, adding an indirection table in the MMU configuration requires two additional pages for the shadows. Therefore, this model is estimated to require roughly three times the amount of memory a simple virtual environment would need, nevertheless it provides a  secure and an efficient API. \\
 
-To proove the isolation properties on this memory structure it is essentiel to assure it's consistency relative to the partition tree, the well typedness as well as some other consistency properties that will be detailed in section \ref{Hoare} p.\pageref{Hoare}.
+To prove the isolation properties on this memory structure it is essential to assure its consistency relative to the partition tree, the well-typedness as well as some other consistency properties that will be detailed in section \ref{Hoare} p.\pageref{Hoare}.
 
 \vfill 
 
@@ -168,7 +168,7 @@ where pages and indexes are positive integers bounded respectively by the overal
 Record page := { p :> nat ; Hp : p < nbPage }. 
 Record index := { i :> nat ;  Hi : i < tableSize }.
 \end{lstlisting}
-Different types of values could be stored into the physical memory by Pip so the type value is an inductive type defined as follows :
+Different types of values could be stored in the physical memory by Pip. So, the type value is an inductive type defined as follows :
 \begin{lstlisting}[caption = {value type definition}, mathescape=true]
 		Inductive value : Type:=
 		| PE: Pentry $\rightarrow$ value
@@ -177,7 +177,7 @@ Different types of values could be stored into the physical memory by Pip so the
 		| VA: vaddr  $\rightarrow$ value
 		| I:  index  $\rightarrow$ value.
 \end{lstlisting}
-The type Pentry which represents a physical entry consists of a physical page number along with several flags :
+The type Pentry, which represents a physical entry, consists of a physical page number along with several flags :
 \begin{lstlisting}[caption = {Pentry type definition}]
 		Record Pentry : Type:= {
   		 read:    bool ;
@@ -187,7 +187,7 @@ The type Pentry which represents a physical entry consists of a physical page nu
    		 user:    bool ;
    		 pa:      page }.
 \end{lstlisting}
-Finally, the \textit{Ventry} type consists of a virtual address with a unique bolean flag :
+Finally, the \textit{Ventry} type consists of a virtual address with a unique boolean flag :
 \begin{lstlisting}[caption = {Ventry type definition}]
 Record Ventry : Type:= { pd: bool ; va: vaddr }.
 \end{lstlisting}
@@ -201,13 +201,13 @@ Record vaddr : Type :=
 
 \subsection{Introduction to Hoare logic theory} 
 \textit{How can we argue that a program is correct ?}
-Nowadays, Building reliable software is becoming more and more difficult considering the growing scale, specifications and complexity of modern systems. Therefore, tests alone can no longer ascertain the reliability of programs especially if we're talking about critical systems. Logicians, computer scientists and software engineers have responded to these challenges by developing different kinds of techniques some of which are based on formal reasoning about properties of software and tools for helping validate these properties. One of these reasoning techniques that was used to proove PIP's properties is \textit{Floyd–Hoare logic}, often shortened to just \textbf{Hoare Logic}. It was proposed in 1969 by the British computer scientist and logician Tony Hoare and it continues to be the subject of intensive research right up to the present day. It is not only a natural way of \textbf{writing down specifications of programs} but also a technique for \textbf{proving that programs are correct} with respect to such specifications.\\ % other technique : Model checking
+Nowadays, Building reliable software is becoming more and more difficult considering the growing scale, specifications and complexity of modern systems. Therefore, tests alone can no longer ascertain the reliability of programs especially if we're talking about critical systems. Logicians, computer scientists and software engineers have responded to these challenges by developing different kinds of techniques some of which are based on formal reasoning about properties of software and tools for helping validate these properties. One of these reasoning techniques that was used to prove PIP's properties is \textit{Floyd–Hoare logic}, often shortened to just \textbf{Hoare Logic}. It was proposed in 1969 by the British computer scientist and logician Tony Hoare and it continues to be the subject of intensive research right up to the present day. It is not only a natural way of \textbf{writing down specifications of programs} but also a technique for \textbf{proving that programs are correct} with respect to such specifications.\\ % other technique : Model checking
 
-Let S be a program that we want to execute starting from a certain state s, P a predicate on the state describing the condition S relies on for correct operation and Q a predicate on the resulting state after the execution of S describing the condition S establishes after correctly running. Knowing that P is verified on s, if we proove that Q is verified after the execution of s, we can ascertain that S is partially correct. And by partial correctness of S we mean that S is correct if it terminates. Using standard Hoare logic, only partial correctness can be proven, while termination needs to be proved separately. This triple S, P and Q, written as \textbf{ \{P\} S \{Q\} }, is referred to as a \textbf{Hoare triple}. The assertions P and Q are respectively referred to as the \textbf{precondiction} and the \textbf{postcondition}. \\
+Let S be a program that we want to execute starting from a certain state s, P a predicate on the state describing the condition S relies on for correct execution and Q a predicate on the resulting state after the execution of S describing the condition S establishes after correctly running. Knowing that P is verified on s, if we prove that Q is verified after the execution of s, we can ascertain that S is partially correct. And by partial correctness of S we mean that S is correct if it terminates. Using standard Hoare logic, only partial correctness can be proven, while termination needs to be proven separately. This triple S, P and Q, written as \textbf{ \{P\} S \{Q\} }, is referred to as a \textbf{Hoare triple}. The assertions P and Q are respectively referred to as the \textbf{precondiction} and the \textbf{postcondition}. \\
 
 \noindent For example let's consider simple Hoare triples about an assignment command :
 \begin{itemize}
-	\item \boldmath$\{X=2\} X:=X+1 \{X=3\}$ : is a valid Hoare triple, that can be easily formally prooved in Coq, since the postcondiction is verified after the execution of the assign command relatively to the precondition;
+	\item \boldmath$\{X=2\} X:=X+1 \{X=3\}$ : is a valid Hoare triple, that can be easily formally proved in Coq, since the postcondiction is verified after the execution of the assign command relatively to the precondition;
 	\item \boldmath$\{X=2\} X:=X*2 \{X=3\}$ : is not a valid Hoare triple since the postcondition would not be verified after the execution of the command.
 \end{itemize} 
 \pagebreak
@@ -221,7 +221,7 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \RightLabel{\small{Hoare\_weaken}}
 \BinaryInfC{\{P\} S \{Q\}}
 \end{prooftree}
-\item If we can weaken a Hoare triple, we expect it to have a \textbf{weakest precondition}. This notion was introduced by Dijkstra in 1976 and is very important since it enables us to proove total correctness and in particular program termination. Indeed, if a program doesn't terminate, its weakest precondition would be \textit{True} and it would verify any postcondition.
+\item If we can weaken a Hoare triple, we expect it to have a \textbf{weakest precondition}. This notion was introduced by Dijkstra in 1976 and is very important since it enables us to prove total correctness and in particular program termination. Indeed, if a program doesn't terminate, its weakest precondition would be \textit{True} and it would verify any postcondition.
 \item If we consider a language containing a \textbf{SKIP instruction} which practically does nothing, we can affirm that this command preserves any property which means :
 \vspace{-15pt}
 \begin{prooftree}
@@ -236,7 +236,7 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \RightLabel{\small{Hoare\_assign}}
 \UnaryInfC{\{Q[X$\rightarrow$a]\} X:= a \{Q\}}
 \end{prooftree}
-\item Generally speaking, every Program is built using \textbf{sequencing} of commands that we will write as C1\textbf{;}C2. Our aim is to proove a Hoare triple on this sequence with P and Q respectively as the precondition and the postcondition. This requires prooving that C1 takes any state where P holds to a state where an intermediate assertion I holds and C2 takes any state where I holds to one where Q holds which could be formally stated as :
+\item Generally speaking, every Program is built using \textbf{sequencing} of commands that we will write as C1\textbf{;}C2. Our aim is to prove a Hoare triple on this sequence with P and Q respectively as the precondition and the postcondition. This requires prooving that C1 takes any state where P holds to a state where an intermediate assertion I holds and C2 takes any state where I holds to one where Q holds which could be formally stated as :
 \vspace{-10pt}
 \begin{prooftree}
 \AxiomC{\{P\} C1 \{I\}}
@@ -253,14 +253,14 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \BinaryInfC{\{P\} IF B THEN C1 ELSE C2 \{Q\}}
 \end{prooftree}
 \end{enumerate}
-The rules defined above are in their simplest form and we need to adapt them to the language or semantics we're working on. Also, This list isn't exhaustive. For example, we didn't define a rule for loops because PIP doesn't actually use them and uses recursion instead. Likewise, We're sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
+The rules defined above are in their simplest form and we need to adapt them to the language or semantics we're working on. Also, This list isn't exhaustive. For example, we didn't define a rule for \textit{While} loops because the Coq model of PIP doesn't actually use them and uses recursion instead. Likewise, We're sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
 
 \subsection{Hoare logic in the shallow embedding} \label{Hoare}
-The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section. A program in the shallow embedding is defined in a monadic style that returns a couple of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare}, \textbf{the postcondition must not only reason on the resulting state but also on the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in coq.
+The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section. A program in the shallow embedding is defined in a monadic style that returns a pair of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare}, \textbf{the postcondition must not only reason on the resulting state but also on the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in coq.
 \begin{lstlisting}[caption = {Hoare triple in the shallow embedding},label = {shallow_Hoare}, mathescape=true]
 Definition hoareTriple {A : Type} (P : state $\rightarrow$ Prop) 
 (m : LLI A) (Q : A $\rightarrow$ state $\rightarrow$ Prop) : Prop :=
-  $\forall$ s, P s $\rightarrow$ match m s with
+  $\forall$ s, P s $\rightarrow$ match (m s) with
     | val (a, s') => Q a s'
     | undef _ _=> False
     end.
@@ -269,7 +269,7 @@ Notation "{{ P }} m {{ Q }}" := (hoareTriple P m Q)
   (at level 90, format "'[' '[' {{  P  }}  ']' '/  '
   '[' m ']' '['  {{  Q  }} ']' ']'") : state_scope.
 \end{lstlisting}
-The weaking lemma on Hoare triples was also defined and prooved as shown in script \ref{shallow_weaken}. This Lemma is extensively used in PIP's proofs.
+The weaking lemma on Hoare triples was also defined and proven as shown in script \ref{shallow_weaken}. This Lemma is extensively used in PIP's proofs.
 \begin{lstlisting}[caption = {Weakening Hoare triples in the shallow embedding},label = {shallow_weaken}, mathescape=true]
 Lemma weaken (A : Type) (m : LLI A) 
 (P Q : state $\rightarrow$ Prop) (R : A $\rightarrow$ state $\rightarrow$ Prop) :
@@ -284,7 +284,7 @@ try rewrite H4 in H3; trivial.
 intros. rewrite H in H3. assumption. 
 Qed.
 \end{lstlisting}
-Some simple instructions were considered as primitive like conditional structures while some others were explicitly defined like assignments in the form of \linebreak \textit{\textbf{perform x := m in e}} where the value of the program m gets assigned to x in the evaluation of the program e. Furthermore, a Hoare triple rule was devised for assignments.
+Some simple instructions were considered as primitive like conditional structures while some others were explicitly defined, like assignments in the form of \linebreak \textit{\textbf{perform x := m in e}} where the value of the program m gets assigned to x in the evaluation of the program e. Furthermore, a Hoare triple rule was devised for assignments.
 \begin{lstlisting}[caption = {Hoare triples assignment rule in the shallow embedding},label = {shallow_assign},mathescape=true]
 Lemma bind  (A B : Type) (m : LLI A) (f : A $\rightarrow$ LLI B) 
 (P : state $\rightarrow$ Prop) ( Q : A $\rightarrow$ state $\rightarrow$ Prop) 
@@ -301,15 +301,16 @@ apply H1 in H3; rewrite H5 in H3; trivial.
 Qed. 
 \end{lstlisting}
 
-Finally, to reason with Hoare logic we need to formally  specify the properties we want to proove, the most important being partitions memory isolation,
+Finally, to reason with Hoare logic we need to formally  specify the properties we want to prove, the most important being partition memory isolation,
 kernel data isolation, vertical sharing and consistency mentioned in \ref{properties} p.\pageref{properties}. To that end, the following necessary functions on PIP's data structures were defined : 
 \begin{itemize}
 	\item \textbf{getChildren :} returns the list of all children of a given parent partition in the partition tree of a given state;
 	\item \textbf{getAncestors :} returns the list of all ancestors of a given partition in the partition tree of a given state;
 	\item \textbf{getMappedPages :} returns the list of mapped pages of a given partition;
 	\item \textbf{getAccessibleMappedPages :} returns the list of all mapped pages, of a given partition, marked as accessible;
-	\item \textbf{getUsedPages :} returns the list of all the pages that are used by a given partition. The list also includes the pages lent to PIP along with all the mapped pages of the partition;
-	\item \textbf{getPatitions :} returns the list of all existing partitions of a given state which is naturally obtained by a search on the partition tree.
+	\item \textbf{getUsedPages :} returns the list of all the pages that are used by a given partition including the pages lent to PIP;
+		\item \textbf{getConfigPages :} returns the list of configuration pages lent to PIP to manage a given partition;
+	\item \textbf{getPartitions :} returns the list of all existing partitions of a given state which is naturally obtained by a search on the partition tree.
 \end{itemize} 
 The first property defines horizontal isolation between children i.e., for any state s of the system, all memory pages owned by two different children of a given parent partition in the partition tree must be distinct. This property is formally defined in the Coq proof assistant as follows :
 \begin{lstlisting}[caption = {Horizontal isolation}, mathescape=true]
@@ -338,33 +339,33 @@ partition2 $\in$ getPartitions s $\rightarrow$
 (getAccessibleMappedPages partition1 s) $\cap$
 (getConfigPages partition2 s) = $\emptyset$.
 \end{lstlisting}
-The last property of consistency is mandatory to proove the previously detailed properties. Consistency encompasses different subproperties that were divided into four categories. As the definition of this property is quite cumbersome, we will only disclose these categories and illustrate each one with an example :
+The last property of consistency is mandatory to prove the previously detailed properties. Consistency encompasses different subproperties that were divided into four categories. As the definition of this property is quite cumbersome, we will only disclose these categories and illustrate each one with an example :
 \begin{itemize}
 	\item \textbf{Partition tree structure :} the properties in this category ensure that the partition tree of a given state is consistent relatively to its awaited structure preset in section \ref{structures} p.\pageref{structures}. For example, one of the properties defined in this category and called noCycleInPartitionTree ensures that there is no cycle in the partition tree of a given system i.e. each partition is different from all its ancestors in the partition tree. This property is formally defined as follows :
-\begin{lstlisting}[caption = {Example of partition tree consistency properties}, mathescape=true]
+\begin{lstlisting}[caption = {Example of partition-tree-consistency property}, mathescape=true]
 Definition noCycleInPartitionTree s :=
 $\forall$ ancestor partition,
 partition $\in$ getPartitions s $\rightarrow$
 ancestor $\in$ getAncestors partition s $\rightarrow$
-ancestor $\subseteq$ partition.
+ancestor $\neq$ partition.
 \end{lstlisting}
-	\item \textbf{Flag semantics :} This category focuses on the signification of flags used in the data structures. For instance, a property called isPresentNotDefaultIff states that the associated page number of a physical entry whose \textit{present} flag is set to \textit{false}, corresponds to the predefined default page value. This property is formally defined as shown in script \ref{flags} where \textit{readPhyEntry} and \textit{readPresent} are predefined functions that respectively read, for a given table, index and state memory, the present flag of a a physical entry and its' value  :
-\begin{lstlisting}[caption = {Example of flags semantics consistency properties}, mathescape=true , label={flags}]
+	\item \textbf{Flag semantics :} This category focuses on the signification of flags used in the data structures. For instance, a property called isPresentNotDefaultIff states that the associated page number of a physical entry whose \textit{present} flag is set to \textit{false}, corresponds to the predefined default page value. This property is formally defined as shown in script \ref{flags} where \textit{readPhyEntry} and \textit{readPresent} are predefined functions that respectively read, for a given table, index and memory state, the present flag of a physical entry and its value  :
+\begin{lstlisting}[caption = {Example of a flags-semantics-consistency property}, mathescape=true , label={flags}]
 Definition isPresentNotDefaultIff s :=
 $\forall$ table idx,
 readPresent table idx (s.memory) = Some false $\leftrightarrow$
 readPhyEntry table idx (s.memory) = Some defaultPage.
 \end{lstlisting}	 
-	\item \textbf{Pages properties :} This category concerns several properties about the partitions' mapped pages, the pages lent to the kernel as well as the relations between them. For example, the noDupMappedPagesList requires that the mapped pages of partitions be different, using the function NoDup which verifies whether a list contains duplicates or not. This property is formally defined as follows  :
-\begin{lstlisting}[caption = {Example of pages consistency properties}, mathescape=true]
+	\item \textbf{Pages properties :} This category concerns several properties about the partitions' mapped pages, the pages lent to the kernel as well as the relations between them. For example, the noDupMappedPagesList requires that the mapped pages of partitions be distinct from each other, using the function NoDup which verifies whether a list contains duplicates or not. This property is formally defined as follows  :
+\begin{lstlisting}[caption = {Example of a pages-consistency property}, mathescape=true]
 Definition noDupMappedPagesList s :=
 $\forall$ partition, partition $\in$ getPartitions s $\rightarrow$
 NoDup (getMappedPages partition s).
 \end{lstlisting}	
 	\item \textbf{Well-typedness :} This last category concerns kernel data types and ensures that PIP doesn't contain any type confusion. For instance, when PIP writes a virtual address in the memory, it should be read later as a virtual address which is ensured by a property called \textit{dataStructurePdSh1Sh2asRoot}. Otherwise, it is considered as an undefined behaviour in the model.
 \end{itemize}
-The only Hoare triple that was sucessfully prooved to this date\footnotemark[1] is the one about the create partition call that required about 60000 lines of code to proove and which is defined as follows :
-\begin{lstlisting}[caption = {Hoare triple of createPartition}, mathescape=true]
+The only Hoare triple that was sucessfully proven to this date\footnotemark[1] is the one about the create partition call that required about 60000 lines of code to prove and which is defined as follows :
+\begin{lstlisting}[caption = {createPartition Hoare triple}, mathescape=true]
 Lemma createPartition (descChild pdChild
            shadow1 shadow2 list : vaddr) :
 {{fun s $\Rightarrow$ partitionsIsolation s  $\bigwedge$ kernelDataIsolation s 
@@ -375,6 +376,86 @@ createPartition descChild pdChild shadow1 shadow2 list
 \end{lstlisting}	
 \footnotetext[1]{\today}
 \pagebreak
+
 \section{The deep embedding} \label{deep}
 
-%\subsection{Hoare logic in the deep embedding}
+\subsection{Deep versus shallow embedding}
+A deep embedding is mainly an \textbf{abstract repesentation of a language by modeling its expressions as data}. Strictly speaking, The main difference between a shallow and deep embedding is that the former is \textbf{ extensible with regards to adding language constructs} while the latter is \textbf{extensible with regards to adding interpretations of its preset constructs}. A typical approach in PIP's case would have been reasoning on a predefined deep embedding as structural abstraction enables us to perform cost-effective software verification by inversion on formulas' structure. However, defining such an abstract language, at the begining, is quite tedious and rather intricate since we need to worry about the wingspan of such language and expression soundness among others. Therefore, the tasks of proof engineering and developping the deep embedding were separated. At first, a formal reasoning system based on Hoare logic was built on the shallow embedding as shown in section \ref{Hoare} p.\pageref{Hoare}. Then, an abstract representation of the shallow model was written in Gallina which corresponds to the deep embedding. Needless to say, at some point later on, we need to worry about the preservation of proven properties between both embeddings either by proving that there is a bijection between them or by rewriting all the proofs in the deep embedding. By and large, we need to \textbf{ascertain the feasability of such proofs in the deep embedding} as well as \textbf{compare examples of conducted proofs in both embeddings}.
+
+\subsection{Deep embedding constructs}
+Before we move on to the main constructs of the deep embedding, we need to introduce essantial background types and structures :
+\begin{itemize}
+	\item \textbf{ Id type :} represents the identifiers' type in the deep embedding. Typically, identifiers of variables are strings but we can use any other type;
+	\item \textbf{Value type :} represents the actual values the programs will be manipulating. They can be built using the constuctor \textit{cst} followed by a shallow type and a value that should be of that type. The value type and its constructor are defined as follows :
+\vfill
+\begin{lstlisting}[caption = {Value type and  its constructor} ]
+(** the internal type of values,
+	 parametrised by a semantic type *)
+Inductive ValueI (T: Type) : Type := Cst (v: T).
+
+(** the external type of values,
+	 hiding the semantic type *)
+Definition Value : Type := sigT ValueI.
+
+(** smart value constructor *)
+Definition cst (T: Type) (v: T) : Value :=
+           @existT Type ValueI T (Cst T v).
+\end{lstlisting}
+	\item \textbf{ QValue type :} represents quasi-values in the deep embedding which can be either actual values lifted to quasi-values using the constructor \textit{QV} or identifiers of variables in the variable environment that we lift to quasi-functions using the constructor \textit{Var}, as shown in the following script :
+\begin{lstlisting}[caption = {Quasi-values in the deep embedding}]
+	  QValue : Type := Var (x: Id) 
+	                 | QV (v: Value).
+\end{lstlisting}
+	\item \textbf{ Fun type :} represents functions in the deep embedding. The definition of this type is detailed in script \ref{Fun} where :
+	\begin{itemize}
+		\item \textbf{\textit{fenv}} corresponds to the function environment which maps identifers to functions;
+		\item \textbf{\textit{tenv}} corresponds to the typing environment which maps identifers to value types;
+		\item \textbf{\textit{e0}} and \textbf{\textit{e1}} are expressions in the deep embedding corresponding to the first and second inductive cases;
+		\item \textbf{\textit{x}} corresponds to the name of the function;
+		\item \textbf{\textit{n}} is the bound. If its value is 0, the the first expression \textit{e0} is evaluated else the second expression \textit{e1} gets evaluated. This enables us to define terminating recursive functions.
+\vfill
+\begin{lstlisting}[caption = {Functions in the deep embedding},label={Fun}]
+	Inductive Fun : Type :=
+	 FC (fenv: Envr Id Fun) 
+	    (tenv: valTC)
+	    (e0 e1: Exp)
+	    (x: Id)
+	    (n: nat)
+	with ...
+\end{lstlisting}
+	\end{itemize}
+	\item \textbf{ QFun type :} represents quasi-functions in the deep embedding which can be either actual functions that we lift to quasi-functions using the constructor \textit{QF} or identifiers of functions in the function environment that we lift to quasi-functions using the constructor \textit{FVar}, as shown in the following script :
+\begin{lstlisting}[caption = {Quasi-functions in the deep embedding}]
+	  QFun : Type := FVar (x: Id) 
+	               | QF (f: Fun).
+\end{lstlisting}
+	\item \textbf{ XFun type :} represents effect handlers in the deep embedding used to define prospective operations on the state and/or on an input. Therefore, it will be used by a construct of the deep embedding called Modify defined in script \ref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non recursive functions. As shown in script \ref{QFun}, it requires an input type T1 as well as an output type T2. Thus, to define state operations, we will mainly need an effect handler with unit as the input and output type. Also when defining an effect handler, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value :
+\begin{lstlisting}[caption = {effect handlers in the deep embedding}, label={QFun}, mathescape=true]
+Record XFun (T1 T2: Type) : Type := {
+    b_mod : W $\rightarrow$ T1 $\rightarrow$ prod W T2 ;
+    b_exec : W $\rightarrow$ T1 $\rightarrow$ W := 
+     fun state input $\Rightarrow$ fst (b_mod state input) ;
+    b_eval : W $\rightarrow$ T1 $\rightarrow$ T2 := 
+     fun state input $\Rightarrow$ snd (b_mod state input)        
+}.       
+\end{lstlisting}
+\end{itemize}
+\pagebreak
+
+As shown in script \ref{DeepEmb}, The deep embedding provides us with 8 constructs to build expressions :
+\begin{itemize}
+	\item \textbf{ Val} \textit{v} \textbf{:} ;
+	\item \textbf{ BindN} \textit{e1 e2} \textbf{:} ;
+	\item \textbf{ BindS} \textit{x e1 e2} \textbf{:} ;
+	\item \textbf{ BindMS} \textit{fenv venv e} \textbf{:} ;
+	\item \textbf{ IfThenElse} \textit{e1 e2 e3} \textbf{:} ;
+	\item \textbf{ Return} \textit{tg qv} \textbf{:} ;
+	\item \textbf{ Apply} \textit{qf ps} \textbf{:} ;
+	\item \textbf{ Modify} \textit{T1 T2 VT1 VT2 XF qv} \textbf{:} ;
+\end{itemize}
+
+
+% definition of values, Fun, QFun
+% constructs definition
+
+\subsection{Hoare logic in the deep embedding}

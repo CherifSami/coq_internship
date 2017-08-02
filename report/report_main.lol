@@ -11,7 +11,12 @@
 \contentsline {lstlisting}{\numberline {2.11}Horizontal isolation}{17}
 \contentsline {lstlisting}{\numberline {2.12}Vertical sharing}{17}
 \contentsline {lstlisting}{\numberline {2.13}Kernel data isolation}{18}
-\contentsline {lstlisting}{\numberline {2.14}Example of partition tree consistency properties}{18}
-\contentsline {lstlisting}{\numberline {2.15}Example of flags semantics consistency properties}{19}
-\contentsline {lstlisting}{\numberline {2.16}Example of pages consistency properties}{19}
-\contentsline {lstlisting}{\numberline {2.17}Hoare triple of createPartition}{19}
+\contentsline {lstlisting}{\numberline {2.14}Example of partition-tree-consistency property}{18}
+\contentsline {lstlisting}{\numberline {2.15}Example of a flags-semantics-consistency property}{19}
+\contentsline {lstlisting}{\numberline {2.16}Example of a pages-consistency property}{19}
+\contentsline {lstlisting}{\numberline {2.17}createPartition Hoare triple}{19}
+\contentsline {lstlisting}{\numberline {2.18}Value type and its constructor}{21}
+\contentsline {lstlisting}{\numberline {2.19}Quasi-values in the deep embedding}{21}
+\contentsline {lstlisting}{\numberline {2.20}Functions in the deep embedding}{22}
+\contentsline {lstlisting}{\numberline {2.21}Quasi-functions in the deep embedding}{22}
+\contentsline {lstlisting}{\numberline {2.22}effect handlers in the deep embedding}{22}
