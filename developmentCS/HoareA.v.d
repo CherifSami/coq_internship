@@ -1,2 +1,0 @@
-HoareA.vo HoareA.glob HoareA.v.beautified: HoareA.v ./EnvLibA.vo ./RelLibA.vo ./PRelLibA.vo ./StaticSemA.vo ./DynamicSemA.vo ./TRInductA.vo ./WeakenA.vo ./TSoundnessA.vo ./IdModTypeA.vo ./DetermA.vo ./AbbrevA.vo
-HoareA.vio: HoareA.v ./EnvLibA.vio ./RelLibA.vio ./PRelLibA.vio ./StaticSemA.vio ./DynamicSemA.vio ./TRInductA.vio ./WeakenA.vio ./TSoundnessA.vio ./IdModTypeA.vio ./DetermA.vio ./AbbrevA.vio
