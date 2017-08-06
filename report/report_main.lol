@@ -15,8 +15,15 @@
 \contentsline {lstlisting}{\numberline {2.15}Example of a flags-semantics-consistency property}{19}
 \contentsline {lstlisting}{\numberline {2.16}Example of a pages-consistency property}{19}
 \contentsline {lstlisting}{\numberline {2.17}createPartition Hoare triple}{19}
-\contentsline {lstlisting}{\numberline {2.18}Value type and its constructor}{21}
+\contentsline {lstlisting}{\numberline {2.18}Values in the deep embedding}{21}
 \contentsline {lstlisting}{\numberline {2.19}Quasi-values in the deep embedding}{21}
 \contentsline {lstlisting}{\numberline {2.20}Functions in the deep embedding}{22}
 \contentsline {lstlisting}{\numberline {2.21}Quasi-functions in the deep embedding}{22}
 \contentsline {lstlisting}{\numberline {2.22}effect handlers in the deep embedding}{22}
+\contentsline {lstlisting}{\numberline {2.23}Tag type in the deep embedding}{23}
+\contentsline {lstlisting}{\numberline {2.24}Function parameters in the deep embedding}{23}
+\contentsline {lstlisting}{\numberline {2.25}SKIP instruction in the deep embedding}{24}
+\contentsline {lstlisting}{\numberline {2.26}Deep embedding expressions}{24}
+\contentsline {lstlisting}{\numberline {2.27}Hoare triple for expressions in the deep embedding}{26}
+\contentsline {lstlisting}{\numberline {2.28}Hoare triple for parameters in the deep embedding}{26}
+\contentsline {lstlisting}{\numberline {2.29}Main Hoare triple rule for the Apply construct}{28}

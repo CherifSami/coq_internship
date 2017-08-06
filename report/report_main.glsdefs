@@ -1,0 +1,240 @@
+\ifglsentryexists{OS}{}%
+{%
+\gls@defglossaryentry{OS}%
+{%
+name={OS},%
+sort={OS},%
+type={main},%
+first={Operating System (OS)},%
+firstplural={Operating Systems(OSs)},%
+text={OS},%
+plural={OSs},%
+description={Operating System},%
+descriptionplural={Operating System\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Operating System},%
+longplural={Operating Systems},%
+short={OS},%
+shortplural={OSs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{tCB}{}%
+{%
+\gls@defglossaryentry{tCB}%
+{%
+name={TCB},%
+sort={TCB},%
+type={main},%
+first={Trusted Computing Base (TCB)},%
+firstplural={Trusted Computing Bases(TCBs)},%
+text={TCB},%
+plural={TCBs},%
+description={Trusted Computing Base},%
+descriptionplural={Trusted Computing Base\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Trusted Computing Base},%
+longplural={Trusted Computing Bases},%
+short={TCB},%
+shortplural={TCBs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{IPC}{}%
+{%
+\gls@defglossaryentry{IPC}%
+{%
+name={IPC},%
+sort={IPC},%
+type={main},%
+first={Inter-Process Communication (IPC)},%
+firstplural={Inter-Process Communications(IPCs)},%
+text={IPC},%
+plural={IPCs},%
+description={Inter-Process Communication},%
+descriptionplural={Inter-Process Communication\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Inter-Process Communication},%
+longplural={Inter-Process Communications},%
+short={IPC},%
+shortplural={IPCs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{MMU}{}%
+{%
+\gls@defglossaryentry{MMU}%
+{%
+name={MMU},%
+sort={MMU},%
+type={main},%
+first={Memory Management Unit (MMU)},%
+firstplural={Memory Management Units(MMUs)},%
+text={MMU},%
+plural={MMUs},%
+description={Memory Management Unit},%
+descriptionplural={Memory Management Unit\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Memory Management Unit},%
+longplural={Memory Management Units},%
+short={MMU},%
+shortplural={MMUs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{API}{}%
+{%
+\gls@defglossaryentry{API}%
+{%
+name={API},%
+sort={API},%
+type={main},%
+first={Application Programming Interface (API)},%
+firstplural={Application Programming Interfaces(APIs)},%
+text={API},%
+plural={APIs},%
+description={Application Programming Interface},%
+descriptionplural={Application Programming Interface\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Application Programming Interface},%
+longplural={Application Programming Interfaces},%
+short={API},%
+shortplural={APIs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{HAL}{}%
+{%
+\gls@defglossaryentry{HAL}%
+{%
+name={HAL},%
+sort={HAL},%
+type={main},%
+first={Hardware Abstraction Layer (HAL)},%
+firstplural={Hardware Abstraction Layers(HALs)},%
+text={HAL},%
+plural={HALs},%
+description={Hardware Abstraction Layer},%
+descriptionplural={Hardware Abstraction Layer\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Hardware Abstraction Layer},%
+longplural={Hardware Abstraction Layers},%
+short={HAL},%
+shortplural={HALs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{MAL}{}%
+{%
+\gls@defglossaryentry{MAL}%
+{%
+name={MAL},%
+sort={MAL},%
+type={main},%
+first={Memory Abstraction Layer (MAL)},%
+firstplural={Memory Abstraction Layer\acrpluralsuffix  (MAL\acrpluralsuffix )},%
+text={MAL},%
+plural={MAL\acrpluralsuffix },%
+description={Memory Abstraction Layer},%
+descriptionplural={Memory Abstraction Layer\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Memory Abstraction Layer},%
+longplural={Memory Abstraction Layers},%
+short={MAL},%
+shortplural={MALs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{IAL}{}%
+{%
+\gls@defglossaryentry{IAL}%
+{%
+name={IAL},%
+sort={IAL},%
+type={main},%
+first={Interrupt Abstraction Layer (IAL)},%
+firstplural={Interrupt Abstraction Layer\acrpluralsuffix  (IAL\acrpluralsuffix )},%
+text={IAL},%
+plural={IAL\acrpluralsuffix },%
+description={Interrupt Abstraction Layer},%
+descriptionplural={Interrupt Abstraction Layer\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Interrupt Abstraction Layer},%
+longplural={Interrupt Abstraction Layers},%
+short={IAL},%
+shortplural={IALs},%
+counter={page},%
+parent={},%
+%
+}%
+}%

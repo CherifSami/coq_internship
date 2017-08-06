@@ -13,7 +13,8 @@
 \usepackage{wrapfig}
 \usepackage{amsmath} 
 \usepackage{bussproofs}
-\usepackage{outlines}
+\usepackage[nonumberlist]{glossaries}
+\usepackage{color}
 
 % header & footer
 \usepackage{fancyhdr}
@@ -39,6 +40,57 @@
 \renewcommand{\lstlistingname}{\textbf{Script}}
 \renewcommand{\lstlistlistingname}{List of \lstlistingname s}
 
+\makeglossaries
+
+% Coq language for lstlisting
+	% Define Language
+\lstdefinelanguage{Coq}
+{
+  % list of keywords
+  morekeywords={
+    Definition,Lemma,Instance,
+    Axiom,Record,Parameter,Inductive
+  },
+  sensitive=true,
+  morecomment=[s]{(*}{*)}, % comments
+  morestring=[b]" % strings
+}
+ % Define Colors
+\definecolor{coqOrange}{RGB}{255,69,0}
+\definecolor{coqPurple}{RGB}{148,0,211}
+\definecolor{coqRed}{RGB}{189,92,61}
+\definecolor{coqPink}{RGB}{255,41,254}
+\definecolor{coqBg}{RGB}{255,248,220}
+\definecolor{coqSep}{RGB}{0,128,128}
+
+% Set Language
+\lstset{
+  language={Coq},
+  frame=trbl,
+  basicstyle=\small\ttfamily, 
+  captionpos=t, 
+  extendedchars=true,
+  showstringspaces=false,
+  commentstyle=\color{coqRed},
+  keywordstyle=\bf\color{coqOrange},
+  keywordstyle=[2]\bf\color{coqPurple},
+  keywordstyle=[2]\bf\color{coqSep}
+  keywords=[2]{Proof,Qed,*,-,Import,Module,Export,Notation,Require},
+  stringstyle=\color{coqPink}, 
+  backgroundcolor=\color{coqBg}
+}
+
+% abbreviations:
+\newacronym{OS}{OS}{Operating System}
+\newacronym{TCB}{TCB}{Trusted Computing Base}
+\newacronym{IPC}{IPC}{Inter-Process Communication}
+\newacronym{MMU}{MMU}{Memory Management Unit}
+\newacronym{API}{API}{Application Programming Interface}
+\newacronym{HAL}{HAL}{Hardware Abstraction Layer}
+\newacronym{MAL}{MAL}{Memory Abstraction Layer}
+\newacronym{IAL}{IAL}{Interrupt Abstraction Layer}
+\glsaddall
+
 \begin{document}
  
 %\input{./title.tex}
@@ -60,6 +112,24 @@
 \newpage
 \lstlistoflistings
 \thispagestyle{empty}
+\newpage
+
+%Table of FIGURES
+\listoffigures
+\thispagestyle{empty}
+\newpage
+
+%Abreviations
+\printglossary[title={Acronyms}]
+\thispagestyle{empty}
+
+\iffalse
+\begingroup
+\let\clearpage\relax
+\printglossary[title={Acronyms}]
+\endgroup
+\thispagestyle{empty}
+\fi
 
 %empty page
 \newpage
