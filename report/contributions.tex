@@ -83,7 +83,7 @@ In the next sections we will rewrite the \textit{getFstShadow} function as well 
 
 We worked on several possible definitions for this function in the deep embedding, each corresponding to a certain approach we wanted to further look into. 
 First, let's define \textit{getSh1idx} which returns the value of \textit{sh1idx}. In the deep embedding, we defined it as a deep index value of the predefined first shadow index :
-\begin{lstlisting}[caption = {Index of the first shadow in the deep embedding},xleftmargin=.02\textwidth,
+\begin{lstlisting}[caption = {getSh1idx definition  in the deep embedding},xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition getSh1idx : Exp := Val (cst index sh1idx).
 \end{lstlisting} \vspace{4pt}
@@ -99,7 +99,7 @@ Program Definition succ (n : index) : LLI index :=
 \end{lstlisting} \vspace{4pt}
 We rewrote this function so that we could use it in a \textit{Modify} construct replacing the output type by \textit{option index}. We used the index constructor \textit{CIndex} to build the new index : 
 \begin{lstlisting}[caption = {Rewritten shallow index successor function},xleftmargin=-.01\textwidth,
-xrightmargin=-.01\textwidth,label{succInt}]
+xrightmargin=-.01\textwidth,label={succInt}]
 Definition succIndexInternal (idx:index) : option index :=
  let (i,_) := idx in 
  if lt_dec i tableSize 
@@ -180,7 +180,7 @@ Definition plusR (n:nat) := QF
 \end{lstlisting}  
 \pagebreak 
 \begin{lstlisting}[caption = {Definition of SuccRec} ,xleftmargin=-.04\textwidth,
-xrightmargin=-.04\textwidth, mathescape=true]
+xrightmargin=-.04\textwidth, mathescape=true,label={SuccRec}]
 Definition SuccRec (x:Id) :Exp :=
 BindS "i" (prj1 x) 
           (IfThenElse (LtDec "i" tableSize) 
@@ -243,7 +243,7 @@ Definition getFstShadowBind (p:page) : Exp :=
  
 \subsection{Invariant in the deep embedding}
 To model this invariant in the deep embedding we will use the Hoare triple we defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}. However, we need to adapt some of the properties mentioned in section \ref{getFstInv} p.\pageref{getFstInv}. In particular, the property \textit{nextEntryIsPP}, defined in script \ref{nextEnt} p.\pageref{nextEnt}, needs to be parametrised by the resulting deep value. So the page we need to compare is of type \textit{Value} instead of \textit{page}. the comparison between the fetched and given value now becomes a comparison between two deep values and not shallow ones. Also, to calculate the successor of the given index we use the rewritten successor function \textit{succIndexInternal}, defined in script \ref{succInt} p.\pageref{succInt}. Also, when we call this property in \textit{partitionDescriptorEntry}, defined in script \ref{descrip} p.\pageref{descrip}, we need to lift the page to an \textit{option page} typed deep value. This property is now defined as follows : 
-\begin{lstlisting}[caption = {Definition of getFstShadowBind} ,mathescape=true,xleftmargin=-.08\textwidth,
+\begin{lstlisting}[caption = {Rewritten nextEntryIsPP property} ,mathescape=true,xleftmargin=-.08\textwidth,
 xrightmargin=-.08\textwidth]
 Definition nextEntryIsPP (p:page) (idx:index) (p':Value) (s:W) := 
 match succIndexInternal idx with 
@@ -257,7 +257,7 @@ end.
 \end{lstlisting} \vspace{4pt}
 
 Finally, we can write the deep Hoare triple which is not only parametrised by the partition and the propagated property but also by the function environment as well as the variable environment we want to evaluate the \textit{getFstShadow} function in. It is formally defined in Coq as follows : 
-\begin{lstlisting}[caption = {Definition of getFstShadowBind} ,mathescape=true,xleftmargin=-.08\textwidth,
+\begin{lstlisting}[caption = { getFstShadow invariant definition} ,mathescape=true,xleftmargin=-.08\textwidth,
 xrightmargin=-.08\textwidth]
 Lemma getFstShadowBindH (partition : page) (P : W -> Prop) 
 	                (fenv: funEnv) (env: valEnv) :
@@ -350,7 +350,7 @@ Qed.
 \end{lstlisting} \vspace{4pt}
 
 In script \ref{getFstInv}, two lines change in the the proof for the different \textit{getFstShadow} functions. Indeed, in the first line, we need to adapt the name of the unfolded function according to the one we call in the Hoare triple definition. Later, we call the assignment rule again and we need to evaluate the successor function which is different in each \textit{getFstShadow} definition. Therefore, we need to define a lemma for each version and call it when needed in the 8\rth line. The version which corresponds to our case is defined and proven as follows : \pagebreak
-\begin{lstlisting}[caption = {getSh1idxWp lemma definition and proof},numbers=left, xleftmargin=-.06\textwidth,
+\begin{lstlisting}[caption = {succWp lemma definition and proof},numbers=left, xleftmargin=-.06\textwidth,
 xrightmargin=-.06\textwidth,mathescape=true]
 Lemma succWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
  $\forall$ (idx:index), 
@@ -477,6 +477,8 @@ inversion X6.
 contradiction.
 Qed.
 \end{lstlisting} \vspace{4pt}
+
+\subsection{The Apply approach}
 
 \section{2\nd invariant and proof}
 
