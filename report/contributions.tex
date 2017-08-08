@@ -1,0 +1,485 @@
+\chapter{Proving invariants in the deep embedding} \label{Work}
+
+%\section{Preliminary experiments with the deep embedding}
+ 
+\section{Modelling the PIP state in the deep embedding}
+To prove invariants of PIP in the deep embedding, it is essential to replicate the PIP state. To that end, all type definitions mentioned in section \ref{PIPstateSection} p.\pageref{PIPstateSection} are replicated in the file \textit{PIP\_state.v}. All the axioms, constructors, comparison functions as well as predefined values were also replicated in this file as shown in annex \ref{stateFile} p.\pageref{stateFile}. Then, we need to define a module where the type parameter \textit{W} corresponds to the \textit{state} record type defined in script \ref{PIPstate} p.\pageref{PIPstate}. Furthermore, We have to to define the initial value of this type parameter which will correspond to an empty memory. This module, called \textit{IdModP}, will be passed as a parameter to the modules we're going to work on later. It is defined in the the file \textit{IdModPip.v} as follows :
+\begin{lstlisting}[caption = {Replicating the PIP state in the deep embedding}, xleftmargin=.1\textwidth,
+xrightmargin=.1\textwidth]
+Require Import Pip_state.
+
+Module IdModP <: IdModType.
+ 
+  Definition Id := string.
+  
+  Definition W := state.
+
+  Definition Loc_PI := valTyp_irrelevance.
+
+  Definition BInit := {|
+          currentPartition :=  defaultPage;
+          memory:= @nil (paddr * value);
+                      |}.
+
+End IdModP.
+\end{lstlisting}
+
+\section{1\st invariant and proof} 
+
+\subsection{Invariant in the shallow embedding} \label{getFstInv}
+This invariant concerns a function named \textit{getFstSadow}. We want to prove that if the necessary properties for the correct execution of this function are verified then any precondition on the state persists after its execution since this function doesn't change it. We also need to ascertain the validity of the returned value. This invariant is defined as follows :  
+\begin{lstlisting}[caption = {getFstShadow invariant in the shallow embedding}, xleftmargin=-.02\textwidth,
+xrightmargin=-.02\textwidth,mathescape=true]
+Lemma getFstShadow (partition : page) (P : state $\rightarrow$ Prop) :
+{{fun s $\Rightarrow$ P s  $\bigwedge$ partitionDescriptorEntry s $\bigwedge$ 
+	   partition $\in$ (getPartitions multiplexer s)  }} 
+Internal.getFstShadow partition
+{{fun (sh1 : page) (s : state) $\Rightarrow$ P s $\bigwedge$ 
+	   nextEntryIsPP partition sh1idx sh1 s }}.
+\end{lstlisting}
+where :
+\begin{itemize}
+	\item \textbf{getFstShadow} : is a function that \textbf{returns the physical page of the first shadow} for a given partition. The index of the virtual address of the first shadow, called \textit{sh1idx} as shown in annex \ref{stateFile} p.\pageref{stateFile}, is predefined in PIP as the 4\rth index of a partition. Furthermore, we know that the virtual address and the physical address of any page are consecutive. Therefore, we only need to fetch the predefined index of the first shadow, calculate its successor then read the corresponding page in the given partition. It is defined as follows :
+\begin{lstlisting}[caption = {getFstShadow function in the shallow embedding}]
+Definition getFstShadow (partition : page):=
+  perform idx := getSh1idx in
+  perform idxsucc := MALInternal.Index.succ idx in
+  readPhysical partition idxsucc.
+\end{lstlisting} 
+\vspace{4pt}
+	\item \textbf{P} : is the propagated property on the state;
+	\item \textbf{getPartitions} : is a function that returns the list of all sub-partitions of a given partition. In our case, since we give it the multiplexer partition which is the root partition, it returns all the partitions in the memory. This function is used to verify that the partition we give to the \textit{getFstShadow} function is valid by checking its presence in the partition tree;
+	\item \textbf{nextEntryIsPP} : returns \textit{True} if the entry at position successor of the given index into the given table is a physical page and is equal to another given page. It is defined as follows :
+\begin{lstlisting}[caption = {nextEntryIsPP property},mathescape=true, xleftmargin=-.1\textwidth, xrightmargin=-.05\textwidth,label={nextEnt}]
+Definition nextEntryIsPP table idxroot tableroot s : Prop:= 
+match Index.succ idxroot with 
+ | Some idxsucc => 
+  match lookup table idxsucc (memory s) beqPage beqIndex with 
+   | Some (PP table) => tableroot = table
+   |_ => False 
+  end
+ | _ => False 
+end.
+\end{lstlisting} 
+	\item \textbf{partitionDescriptorEntry} : defines some properties of the partition descriptor. All the predefined indexes in the file \textit{PIPstate.v}, shown in annex \ref{stateFile} p.\pageref{stateFile}, should be less than the table size minus one and contain virtual addresses. This is verified by the \textit{isVA} property which returns \textit{True} if the entry at the position of the given index into the given table is a virtual address and is equal to a given value. The successors of these indexes contain physical pages which should not be equal to the default page. This is verified by the \textit{nextEntryIsPP} property. The \textit{partitionDescriptorEntry} property is defined as follows :
+\begin{lstlisting}[caption = {partitionDescriptorEntry property},mathescape=true, xleftmargin=-.05\textwidth,label{descrip}]
+Definition partitionDescriptorEntry s := 
+$\forall$ (partition : page),  
+ partition $\in$ (getPartitions multiplexer s) $\rightarrow$ 
+ $\forall$ (idxroot : index), 
+  (idxroot = PDidx $\vee$ idxroot = sh1idx $\vee$ 
+   idxroot = sh2idx $\vee$ idxroot = sh3idx $\vee$ 
+   idxroot = PPRidx $\vee$ idxroot = PRidx) $\rightarrow$
+  idxroot < tableSize - 1 $\wedge$  isVA partition idxroot s $\wedge$  
+  $\exists$ entry, nextEntryIsPP partition idxroot entry s $\wedge$  
+           entry $\neq$ defaultPage.
+\end{lstlisting} 
+\vspace{4pt}	
+\end{itemize}
+In the next sections we will rewrite the \textit{getFstShadow} function as well as adapt these properties in order to prove this invariant in the deep embedding.
+
+
+\subsection{Modelling the \textit{getFstShadow} function}
+
+We worked on several possible definitions for this function in the deep embedding, each corresponding to a certain approach we wanted to further look into. 
+First, let's define \textit{getSh1idx} which returns the value of \textit{sh1idx}. In the deep embedding, we defined it as a deep index value of the predefined first shadow index :
+\begin{lstlisting}[caption = {Index of the first shadow in the deep embedding},xleftmargin=.02\textwidth,
+xrightmargin=.02\textwidth]
+Definition getSh1idx : Exp := Val (cst index sh1idx).
+\end{lstlisting} \vspace{4pt}
+
+Next, we need to implement the index successor function in the deep embedding. An index value has to be less then the preset table size. This property should be verified before calculating the successor. This function is defined as follows in the shallow embedding :
+\begin{lstlisting}[caption = {Index successor function in the shallow embedding},xleftmargin=.04\textwidth,
+xrightmargin=.04\textwidth]
+Program Definition succ (n : index) : LLI index :=
+ let isucc := n+1 in
+ if (lt_dec isucc tableSize)
+ then ret (Build_index isucc _)
+ else  undefined 28.
+\end{lstlisting} \vspace{4pt}
+We rewrote this function so that we could use it in a \textit{Modify} construct replacing the output type by \textit{option index}. We used the index constructor \textit{CIndex} to build the new index : 
+\begin{lstlisting}[caption = {Rewritten shallow index successor function},xleftmargin=-.01\textwidth,
+xrightmargin=-.01\textwidth,label{succInt}]
+Definition succIndexInternal (idx:index) : option index :=
+ let (i,_) := idx in 
+ if lt_dec i tableSize 
+ then Some (CIndex (i+1)) 
+ else None.
+\end{lstlisting} \vspace{4pt}
+Thus, the first version of the index successor function, called \textit{Succ}, is defined as a \textit{Modify} construct that uses an effect handler, called xf\_succ, of input type \textit{index} and output type \textit{option index}, which calls the rewritten shallow function \textit{succIndexInternal}. \textit{Succ} is parametrised by the name of the input index variable which will be evaluated in the variable environment : \pagebreak
+\begin{lstlisting}[caption = {Definition of Succ},xleftmargin=-.02\textwidth,
+xrightmargin=-.02\textwidth,mathescape=true]
+Instance VT_index : ValTyp index.
+Instance VT_option_index : ValTyp (option index).
+
+Definition xf_succ : XFun index (option index) := {|
+  b_mod := fun s (idx:index) $\Rightarrow$  (s, succIndexInternal idx)
+|}.
+
+Definition Succ (x:Id) : Exp :=
+  Modify index (option index) VT_index VT_option_index 
+  	            xf_succ (Var x).
+\end{lstlisting} \vspace{4pt}
+
+The second version of the successor function, called \textit{SuccD}, is different from the former two. In this version we don't want to call the shallow function \textit{succIndexInternal}. Instead, we are trying to devise a practically deep definition of successor where the conditional structure is replaced by the deep construct \textit{IfThenElse} and the assignments are defined using the \textit{BindS} construct. The new version is defined as follows: 
+\begin{lstlisting}[caption = {Definition of SuccD}]
+Definition SuccD (x:Id) :Exp :=
+BindS "i" (prj1 x) 
+          (IfThenElse (LtDec "i" tableSize) 
+                      (Apply SomeCindexQF
+                             (PS[SuccR "i"])
+                      ) 
+                      (Val(cst (option index) None))
+          ).
+\end{lstlisting} \vspace{4pt}
+where \textit{prj1} is a projection of the first value of an index record which corresponds to the actual value of the index, \textit{LtDec} is the definition of the comparison function using its shallow version, \textit{SomeCindexQF} is a quasi-function that lifts a natural number to an \textit{option index} typed value using the constructors \textit{Cindex} and \textit{Some} successively and \textit{SuccR} is a function that calculates the successor of a natural number. Their formal definitions in Coq are as follows :  
+\begin{lstlisting}[caption = {Functions called in SuccD} ,xleftmargin=-.04\textwidth,
+xrightmargin=-.04\textwidth,mathescape=true]
+(* projection function *)
+Definition xf_prj1 : XFun index nat := {|
+   b_mod := fun s (idx:index) => (s,let (i,_) := idx in i)
+|}.
+Definition prj1 (x:Id) : Exp :=
+  Modify index nat VT_index VT_nat xf_prj1 (Var x). 
+  
+(* comparision function *)
+Definition xf_LtDec (n: nat) : XFun nat bool := {|
+   b_mod := fun s i $\Rightarrow$ (s,if lt_dec i n then true else false)
+|}.
+Definition LtDec (x:Id) (n:nat): Exp :=
+  Modify nat bool VT_nat VT_bool (xf_LtDec n) (Var x). 
+
+(* lifting funtion *)
+Definition xf_SomeCindex : XFun nat (option index) := {|
+   b_mod := fun s i $\Rightarrow$ (s,Some (CIndex i))
+|}.
+Definition SomeCindex (x:Id) : Exp :=
+  Modify nat (option index) VT_nat VT_option_index  
+  	      xf_SomeCindex (Var x).
+Definition SomeCindexQF := QF 
+(FC emptyE [("i",Nat)] (SomeCindex "i") 
+    (Val (cst (option index) None)) "SomeCindex" 0).
+
+(* successor function for natural numbers *)
+Definition xf_SuccD : XFun nat nat := {|
+   b_mod := fun s i => (s,S i)
+|}.
+Definition SuccR (x:Id) : Exp :=
+  Modify nat nat VT_nat VT_nat xf_SuccD (Var x).
+\end{lstlisting} 
+
+The last version calls a recursive function \textit{plusR} that calculates the sum of two natural numbers. More precisely, we replace the call of \textit{SuccR} in the former definition with \textit{plusR 1} which adds one to its given parameter. \textit{plusR} and the new successor function, called \textit{SuccRec}, are defined as follows : 
+\begin{lstlisting}[caption = {Definition of PlusR} ,xleftmargin=-.04\textwidth,
+xrightmargin=-.04\textwidth, mathescape=true]
+Definition plusR' (f: Id) (x:Id) : Exp :=
+      Apply (FVar f) (PS [VLift (Var x)]). 
+      
+Definition plusR (n:nat) := QF 
+(FC emptyE [("i",Nat)] (VLift(Var "i")) 
+    (BindS "p" (plusR' "plusR" "i") (SuccR "p")) "plusR" n).
+\end{lstlisting}  
+\pagebreak 
+\begin{lstlisting}[caption = {Definition of SuccRec} ,xleftmargin=-.04\textwidth,
+xrightmargin=-.04\textwidth, mathescape=true]
+Definition SuccRec (x:Id) :Exp :=
+BindS "i" (prj1 x) 
+          (IfThenElse (LtDec "i" tableSize) 
+                      (Apply SomeCindexQF 
+                             (PS[Apply (plusR 1) 
+                                       (PS[VLift(Var "i")])
+                                ])
+                      ) 
+                      (Val(cst (option index) None))
+          ).
+\end{lstlisting} \vspace{4pt}
+
+Now we need to define the function that will read the physical page in the given index. This function, called \textit{readPhysical} in the shallow embedding,  uses the predefined lookup function that returns the value mapped to the address-index pair we give it. As shown in script \ref{ReadPhy}, \textit{readPhysical} checks whether the read page is actually a physical page by performing a match on the returned entry. \textit{beqPage} and \textit{beqIndex} are comparison functions respectively for pages and indexes. 
+\begin{lstlisting}[caption = {readPhysical function in the shallow embedding},xleftmargin=-.06\textwidth,
+xrightmargin=-.06\textwidth ,label={ReadPhy},mathescape=true]
+Definition readPhysical (paddr: page) (idx: index) : LLI page:=
+ perform s := get in
+ let entry := lookup paddr idx s.(memory) beqPage beqIndex in
+ match entry with
+  | Some (PP a) $\Rightarrow$ ret a
+  | Some _ $\Rightarrow$ undefined 5
+  | None $\Rightarrow$ undefined 4
+ end.
+\end{lstlisting} \vspace{4pt}
+To implement this function in the deep embedding, we first copied all the predefined association list functions in a file we named \textit{Liv.v}, as shown in annex \ref{LibFile} p.\pageref{LibFile}. We then rewrote this function so that we could use it in a \textit{Modify} construct replacing the output type by \textit{option page} as follows :
+\begin{lstlisting}[caption = {Rewritten shallow readPhysical function},xleftmargin=-.02\textwidth,
+xrightmargin=-.02\textwidth,mathescape=true]
+Definition readPhysicalInternal p i memory :option page := 
+ match (lookup p i memory beqPage beqIndex) with
+  | Some (PP a) $\Rightarrow$ Some a
+  | _ $\Rightarrow$ None
+ end.
+\end{lstlisting} \vspace{4pt}
+The function is called \textit{ReadPhysical} in the deep embedding and is parametrised by the name of the \textit{option index} typed variable. \textit{ReadPhysical} permorms a match on its input to verify that its a valid index then naturally calls \textit{readPhysicalInternal}. It is defined as follows : 
+\begin{lstlisting}[caption = {Definition of ReadPhysical} ,xleftmargin=-.085\textwidth,
+xrightmargin=-.085\textwidth,mathescape=true]
+Instance VT_option_page : ValTyp (option page).
+
+Definition xf_read (p: page): XFun (option index) (option page) := 
+{| b_mod := fun s oi => (s,match oi with 
+   	|None => None 
+   	|Some i => readPhysicalInternal p i (memory s) end) |}.
+
+Definition ReadPhysical (p:page) (x:Id) : Exp :=
+  Modify (option index) (option page) 
+         VT_option_index VT_option_page 
+         (xf_read p) (Var x).
+\end{lstlisting} \vspace{4pt}
+
+Using these definitions we are going to define three versions of \textit{getFstShadow} in the deep embedding, each calling a different version of the index successor function. These functions are named \textit{getFstShadowBind}, \textit{getFstShadowBindDeep} and \textit{getFstShadowBindDeepRec} and respectively call Succ, SuccD and SuccRec. Since their definitions are same, we will only give the definition of \textit{getFstShadowBind} :
+
+\begin{lstlisting}[caption = {Definition of getFstShadowBind} ,mathescape=true,xleftmargin=.06\textwidth,
+xrightmargin=.06\textwidth,label={getFstBind}]
+Definition getFstShadowBind (p:page) : Exp :=
+ BindS "x" getSh1idx 
+           (BindS "y" (Succ "x") 
+                      (ReadPhysical p "y")
+           ).
+\end{lstlisting}
+ 
+\subsection{Invariant in the deep embedding}
+To model this invariant in the deep embedding we will use the Hoare triple we defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}. However, we need to adapt some of the properties mentioned in section \ref{getFstInv} p.\pageref{getFstInv}. In particular, the property \textit{nextEntryIsPP}, defined in script \ref{nextEnt} p.\pageref{nextEnt}, needs to be parametrised by the resulting deep value. So the page we need to compare is of type \textit{Value} instead of \textit{page}. the comparison between the fetched and given value now becomes a comparison between two deep values and not shallow ones. Also, to calculate the successor of the given index we use the rewritten successor function \textit{succIndexInternal}, defined in script \ref{succInt} p.\pageref{succInt}. Also, when we call this property in \textit{partitionDescriptorEntry}, defined in script \ref{descrip} p.\pageref{descrip}, we need to lift the page to an \textit{option page} typed deep value. This property is now defined as follows : 
+\begin{lstlisting}[caption = {Definition of getFstShadowBind} ,mathescape=true,xleftmargin=-.08\textwidth,
+xrightmargin=-.08\textwidth]
+Definition nextEntryIsPP (p:page) (idx:index) (p':Value) (s:W) := 
+match succIndexInternal idx with 
+ | Some i => 
+  match lookup p i (memory s) beqPage beqIndex with 
+   | Some (PP table) => p' = cst (option page) (Some table)
+   |_ => False 
+  end
+ | _ => False 
+end.
+\end{lstlisting} \vspace{4pt}
+
+Finally, we can write the deep Hoare triple which is not only parametrised by the partition and the propagated property but also by the function environment as well as the variable environment we want to evaluate the \textit{getFstShadow} function in. It is formally defined in Coq as follows : 
+\begin{lstlisting}[caption = {Definition of getFstShadowBind} ,mathescape=true,xleftmargin=-.08\textwidth,
+xrightmargin=-.08\textwidth]
+Lemma getFstShadowBindH (partition : page) (P : W -> Prop) 
+	                (fenv: funEnv) (env: valEnv) :
+{{fun s $\Rightarrow$ P s $\wedge$ partitionDescriptorEntry s $\wedge$ 
+           partition $\in$ (getPartitions multiplexer s)}}
+fenv >> env >> (getFstShadowBind partition) 
+{{fun sh1 s $\Rightarrow$ P s $\wedge$ nextEntryIsPP partition sh1idx sh1 s}}.
+\end{lstlisting} \vspace{4pt}
+Naturally, since we defined three \textit{getFstShadow} functions, each calling a different version of the deep index successor function, we only need to specify the name of version of \textit{getFstShadow} we want to  call. In this case we are calling \textit{getFstShadowBind} defined in script\ref{getFstBind} p.\pageref{getFstBind}.
+
+
+\subsection{Invariant proof}
+\begin{lstlisting}[caption = {proof of the getFstShadow invariant},xleftmargin=-.08\textwidth,
+xrightmargin=-.08\textwidth,mathescape=true,numbers=left]
+Proof.
+unfold getFstShadowBind. (* or other called function *)
+eapply BindS_VHTT1.
+eapply getSh1idxWp.
+simpl; intros.
+eapply BindS_VHTT1.
+eapply weakenEval.
+eapply succWp. (* or other Lemma for called function *)
+simpl; intros; intuition.
+instantiate (1:=(fun s => P s $\wedge$ partitionDescriptorEntry s $\wedge$ 
+                  partition $\in$ (getPartitions multiplexer s))).
+simpl. intuition.
+instantiate (1:=sh1idx).
+eapply H0 in H3.
+specialize H3 with sh1idx.
+eapply H3.
+auto. auto.
+simpl; intros.
+eapply weakenEval.
+eapply readPhysicalW.
+simpl;intros. intuition.
+destruct H3.
+exists x.
+unfold partitionDescriptorEntry in H1.
+apply H1 with partition sh1idx in H4.
+clear H1.
+intuition.
+destruct H5.
+exists x0.
+intuition.
+unfold nextEntryIsPP in H4.
+unfold readPhysicalInternal.
+subst.
+inversion H2.
+repeat apply inj_pair2 in H3.
+unfold nextEntryIsPP in H5.
+rewrite H3 in H5.
+destruct (lookup partition x (memory s) beqPage beqIndex).
+unfold cst in H5.
+destruct v0;try contradiction.
+apply inj_pairT2 in H5.
+inversion H5.
+auto.
+unfold isVA in H4.
+destruct (lookup partition sh1idx (memory s) beqPage beqIndex) 
+in H2; try contradiction. auto.
+Qed.
+\end{lstlisting} \vspace{4pt}
+
+As shown in the previous script, we start the proof by evaluating the first assignment using the assignment rule \textit{BindS\_VHTT1} defined in section \ref{HoareDeepSec} p.\ref{HoareDeepSec}. This implies evaluating \textit{getSh1idx} and mapping its resulting value to \textit{x} in the variable environment then evaluating the rest of the function in this updated environment. To evaluate \textit{getSh1idx}, we use a lemma that we have proven called \textit{getSh1idxWp}. This lemma also propagates any property on the state.
+\begin{lstlisting}[caption = {getSh1idxWp lemma definition and proof},xleftmargin=-.06\textwidth,
+xrightmargin=-.06\textwidth,mathescape=true]
+Lemma getSh1idxW (P: Value -> W -> Prop) 
+	         (fenv: funEnv) (env: valEnv) :
+  {{wp P fenv env getSh1idx}} fenv >> env >> getSh1idx {{P}}.
+Proof.
+(* the weakest precondition is a precondition *)
+apply wpIsPrecondition.
+Qed.
+
+Lemma getSh1idxWp P fenv env :
+{{P}} fenv >> env >> getSh1idx 
+{{fun (idxSh1 : Value) (s : state) $\Rightarrow$ P s  
+	    $\wedge$ idxSh1 = cst index sh1idx }}.
+Proof.
+eapply weakenEval. (* weakening precondition *)
+eapply getSh1idxW.
+intros. 
+unfold wp.
+intros.
+unfold getSh1idx in X.
+inversion X;subst.
+auto.
+inversion X0.
+Qed. 
+\end{lstlisting} \vspace{4pt}
+
+In script \ref{getFstInv}, two lines change in the the proof for the different \textit{getFstShadow} functions. Indeed, in the first line, we need to adapt the name of the unfolded function according to the one we call in the Hoare triple definition. Later, we call the assignment rule again and we need to evaluate the successor function which is different in each \textit{getFstShadow} definition. Therefore, we need to define a lemma for each version and call it when needed in the 8\rth line. The version which corresponds to our case is defined and proven as follows : \pagebreak
+\begin{lstlisting}[caption = {getSh1idxWp lemma definition and proof},numbers=left, xleftmargin=-.06\textwidth,
+xrightmargin=-.06\textwidth,mathescape=true]
+Lemma succWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
+ $\forall$ (idx:index), 
+ {{fun s $\Rightarrow$ P s $\wedge$ idx < tableSize - 1 $\wedge$ v=cst index idx}} 
+  fenv >> (x,v)::env >> Succ x (* or other successor function *) 
+ {{fun (idxsuc : Value) (s : state) $\Rightarrow$ P s  $\wedge$
+	 idxsuc = cst (option index) (succIndexInternal idx) $\wedge$
+	 $\exists$ i, idxsuc = cst (option index) (Some i)}}.
+Proof.
+intros.
+eapply weakenEval.
+eapply succW. (* or other lemma for called function *)
+intros.
+simpl.
+split.
+instantiate (1:=idx).  
+intuition.
+intros.
+intuition.
+destruct idx.
+exists (CIndex (i + 1)).
+f_equal.
+unfold succIndexInternal.
+case_eq (lt_dec i tableSize).
+intros.
+auto.
+intros.
+contradiction.
+Qed.
+\end{lstlisting} \vspace{4pt}
+This lemma proves that we get a valid index after executing successor since the precondition assures its correct execution. Only the 11\rth line of the proof changes according the the called successor function. The lemma defined in the 11\rth line proves that the resulting value of the execution of the successor function is equal the the value we get when we apply the shallow \textit{succIndexInternal} function to the same given index. The proof of this evaluation lemma is quite different between the various versions which is logical since evaluating a \textit{Modify} that calls the shallow \textit{succIndexInternal} function is different from evaluating all the deep constructs in the deep and recursive versions of the successor function. \\
+
+\noindent The proof of the first lemma, called \textit{succW}, which evaluates the \textit{Succ} function goes naturally by inversion on the closure. It is defined and proven as follows :
+\begin{lstlisting}[caption = {succW Lemma definition and proof}, xleftmargin=-.05\textwidth,
+xrightmargin=-.05\textwidth,mathescape=true]
+Lemma succW  (x : Id) (P: Value $\rightarrow$ W $\rightarrow$ Prop) (v:Value) 
+	     (fenv: funEnv) (env: valEnv) :
+$\forall$ (idx:index),
+ {{fun s $\Rightarrow$ idx < (tableSize -1) $\wedge$ $\forall$  l : idx + 1 < tableSize, 
+    P (cst (option index) (succIndexInternal idx)) s $\wedge$
+    v = cst index idx }}  
+  fenv >> (x,v)::env >> Succ x {{ P }}.
+Proof.
+intros.
+unfold THoareTriple_Eval; intros; intuition.
+destruct H1 as [H1 H1'].
+omega.
+inversion X;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H7;subst.
+inversion X2;subst.
+inversion X3;subst.
+inversion H;subst.
+destruct IdModP.IdEqDec in H3.
+inversion H3;subst.
+clear H3 e X3 H XF1.
+inversion X1;subst.
+inversion X3;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H9.
+subst.
+unfold b_exec,b_eval,xf_succ,b_mod in *.
+simpl in *.
+inversion X4;subst.
+apply H1.
+inversion X5.
+inversion X5.
+contradiction.
+Qed.
+\end{lstlisting} \vspace{4pt}
+
+The proof of the second lemma, called \textit{succDW}, which evaluates the \textit{SuccD} function defined in script \ref{succD} p.\pageref{succD}, is quite longer than the previous one. Indeed, we need to proceed by inversion on the evaluation of every deep construct. This lemma is defined and proven in annex \ref{getFstFile} p.pageref{getFstFile}.    
+For The third lemma, which evaluates the \textit{SuccRec} function defined in script \ref{succRec} p.\pageref{succRec}, we did two different proofs : one using only inversions and the other using the predefined Hoare triple rules mentioned in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}. \\
+
+Finally, all what is left in the main proof is to evaluate the last function \textit{ReadPhysical} and prove the implication between properties. To that end, we defined and proved the lemma \textit{readPhysicalW} as follows : 
+\begin{lstlisting}[caption = {readPhysicalW Lemma definition and proof}, xleftmargin=-.08\textwidth,
+xrightmargin=-.08\textwidth,mathescape=true]
+Lemma readPhysicalW (y:Id) table (v:Value) 
+	(P' : Value $\rightarrow$ W $\rightarrow$ Prop) (fenv: funEnv) (env: valEnv) :
+ {{fun s $\Rightarrow$  $\exists$ idxsucc p1, v = cst (option index) (Some idxsucc)
+   $\wedge$ readPhysicalInternal table idxsucc (memory s) = Some p1 
+   $\wedge$ P' (cst (option page) (Some p1)) s}} 
+fenv >> (y,v)::env >> ReadPhysical table y {{P'}}.
+Proof.
+intros.
+unfold THoareTriple_Eval.
+intros.
+intuition.
+destruct H.
+destruct H.
+intuition.
+inversion H0;subst.
+clear k3 t k2 k1 ftenv tenv H1.
+inversion X;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+subst.
+inversion X2;subst.
+inversion X3;subst.
+inversion H0;subst.
+destruct IdEqDec in H3.
+inversion H3;subst.
+clear H3 e X3 H0 XF1. 
+inversion X0;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H11.
+subst.
+inversion X1;subst.
+inversion X4;subst.
+repeat apply inj_pair2 in H7.
+apply inj_pair2 in H9.
+subst.
+unfold xf_read at 2 in X4.
+unfold b_eval,b_exec,b_mod in X4.
+simpl in *.
+rewrite H in X4.
+unfold xf_read,b_eval,b_exec,b_mod in X5.
+simpl in *.
+rewrite H in X5.
+inversion X5;subst.
+auto.
+inversion X6.
+inversion X6.
+contradiction.
+Qed.
+\end{lstlisting} \vspace{4pt}
+
+\section{2\nd invariant and proof}
+
+\section{3\rd invariant and proof}
+
+\section{Observations}

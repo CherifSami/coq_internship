@@ -15,6 +15,7 @@
 \usepackage{bussproofs}
 \usepackage[nonumberlist]{glossaries}
 \usepackage{color}
+\usepackage[toc,page]{appendix}
 
 % header & footer
 \usepackage{fancyhdr}
@@ -36,6 +37,9 @@
 \makeatother
 
 \newcommand\st{\textsuperscript{st}\xspace}
+\newcommand\nd{\textsuperscript{nd}\xspace}
+\newcommand\rd{\textsuperscript{rd}\xspace}
+\newcommand\rth{\textsuperscript{th}\xspace}
 
 \renewcommand{\lstlistingname}{\textbf{Script}}
 \renewcommand{\lstlistlistingname}{List of \lstlistingname s}
@@ -48,8 +52,9 @@
 {
   % list of keywords
   morekeywords={
-    Definition,Lemma,Instance,
-    Axiom,Record,Parameter,Inductive
+    Definition,Lemma,Instance,Program,
+    Axiom,Record,Parameter,
+    Inductive,Fixpoint
   },
   sensitive=true,
   morecomment=[s]{(*}{*)}, % comments
@@ -61,7 +66,7 @@
 \definecolor{coqRed}{RGB}{189,92,61}
 \definecolor{coqPink}{RGB}{255,41,254}
 \definecolor{coqBg}{RGB}{255,248,220}
-\definecolor{coqSep}{RGB}{0,128,128}
+\definecolor{coqSep}{RGB}{5,98,19}
 
 % Set Language
 \lstset{
@@ -74,7 +79,10 @@
   commentstyle=\color{coqRed},
   keywordstyle=\bf\color{coqOrange},
   keywordstyle=[2]\bf\color{coqPurple},
-  keywords=[2]{Proof,Qed,*,-,Import,Module,Export,Notation,Require},
+  keywordstyle=[3]\color{coqSep},
+  keywords=[2]{Proof,Qed,*,-,Import,Module,
+  End,Export,Notation,Require},
+  keywords=[3]{if,then,else,match,in,end,let,with},
   stringstyle=\color{coqPink}, 
   backgroundcolor=\color{coqBg}
 }
@@ -138,11 +146,11 @@
 
 %\input{./introduction.tex}
 
-\input{./cristal.tex}
+%\input{./cristal.tex}
  
-\input{./PIP.tex}
+%\input{./PIP.tex}
 
-%\input{./deep_invariants.tex}
+\input{./contributions.tex}
 
 %\input{./conclusion.tex}
 

@@ -125,7 +125,7 @@ The Coq proof assistant provides us with powerful tactics to perform proofs. Her
 	\item \textbf{f\_equal :} applies to a goal of the form $f$ a{\tiny 1} \dots a{\tiny n} = $g$ b{\tiny 1} \dots b{\tiny n} and leads to subgoals $f = g$ and a{\tiny 1} = b{\tiny 1} and so on up to a{\tiny n} = b{\tiny n}. Amongst these subgoals, the simple ones are automatically solved;
 	\item \textbf{contradiction :} tries to find a contradiction amongst the hypotheses.	
 \end{itemize}
-Coq also provides several tactics to deal with first-order logic, particularly targeting binary connectives and quantifiers such as \textbf{split}, \textbf{left} and \textbf{right}, \textbf{intros}, \textbf{exists} and \textbf{apply} respectively devised for conjunction, disjunction, implication, existential quantifiers and universal quantifiers. Furthermore, many tactics can be preceded with the letter \textit{e} like \textbf{eauto}, \textbf{eassumption} and \textbf{eapply} to deal with existential variables. Some tactics can also be applied on hypotheses if we use the reserved clause \textit{in} with the name of the hypothesis such as unfold, apply and simpl. 
+Coq also provides several tactics to deal with higher-order logic, particularly targeting binary connectives and quantifiers such as \textbf{split} for conjunction, \textbf{left} and \textbf{right} for disjunction, \textbf{intros} for implication and universal quantifiers and \textbf{exists} for existential quantifiers when they are in the goal. In addition, We have \textbf{destruct} for conjunction and disjunction, \textbf{apply} for implication, \textbf{elim} for existential quantifiers and \textbf{specialize} for universal quantifiers when they are in the hypothesis. Furthermore, many tactics can be preceded with the letter \textit{e} like \textbf{eauto}, \textbf{eassumption} and \textbf{eapply} to deal with existential variables. Some tactics can also be applied on hypotheses if we use the reserved clause \textit{in} with the name of the hypothesis such as unfold, apply and simpl. 
 %ref Curry , In throry, \textbf{proving is the same as programming}. 
 
 \subsection{In-depth understanding of PIP's Data structures} \label{structures}
@@ -152,10 +152,10 @@ To prove the isolation properties on this memory structure it is essential to as
 	\label{partitionEx}
 \end{figure}
 
-\subsubsection{The state}
+\subsubsection{The state} \label{PIPstateSection}
  
 \noindent The PIP state is defined as follows :
-\begin{lstlisting}[linewidth=1.02\linewidth,caption = {PIP state definition}] 
+\begin{lstlisting}[linewidth=1.02\linewidth,caption = {PIP state definition},label={PIPstate}] 
 Record state : Type := 
 { currentPartition: page ; memory: list (paddr * value) }.
 \end{lstlisting}
@@ -420,7 +420,7 @@ Inductive QValue : Type := Var (x: Id)
 	\begin{itemize}
 		\item \textbf{\textit{fenv}} corresponds to the function environment which maps identifiers to functions;
 		\item \textbf{\textit{tenv}} corresponds to the typing environment for parameters which maps identifiers to value types;
-		\item \textbf{\textit{e0}} and \textbf{\textit{e1}} are expressions in the deep embedding corresponding to the first and second inductive cases;
+		\item \textbf{\textit{e0}} and \textbf{\textit{e1}} are expressions in the deep embedding corresponding respectively to the base case and step case;
 		\item \textbf{\textit{x}} corresponds to the name of the function;
 		\item \textbf{\textit{n}} is the bound. If its value is 0, the first expression \textit{e0} is evaluated else the second expression \textit{e1} gets evaluated. This enables us to define terminating recursive functions.
 \vfill
@@ -440,7 +440,7 @@ xrightmargin=.14\textwidth]
 Inductive QFun : Type := FVar (x: Id) 
 	               | QF (f: Fun).
 \end{lstlisting}
-	\item \textbf{XFun type :} represents effect handlers in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non-recursive functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need effect handlers with \textit{unit} as the input and output type. Moreover, when specifying an effect handler, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. Although this implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions, it can be risky as we can confuse shallow with deep. This will be further discussed in section \ref{confusion} :
+	\item \textbf{XFun type :} represents generic effects in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non-recursive functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need effect handlers with \textit{unit} as the input and output type. Moreover, when specifying an effect handler, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. This implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions :
 \begin{lstlisting}[caption = {effect handlers in the deep embedding}, label={XFun}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Record XFun (T1 T2: Type) : Type := {
@@ -471,7 +471,7 @@ xrightmargin=.12\textwidth]
 Inductive Prms : Type := PS (es: list Exp).     
 \end{lstlisting}	
 \pagebreak
-	\item \textbf{Modify} \textit{T1 T2 VT1 VT2 xf qv} \textbf{:} is used to define state operations and non-recursive functions. \textit{xf} is the effect handler that specifies the operation, \textit{T1} and \textit{T2} are respectively its input and output types and \textit{VT1} and \textit{VT2} assure that \textit{T1} and \textit{T2} are admissible value types. If \textit{qv} is a variable it gets evaluated in the variable environment. For instance, we can define a simple \textit{SKIP} instruction with the \textit{Modify} construct as follows :
+	\item \textbf{Modify} \textit{T1 T2 VT1 VT2 xf qv} \textbf{:} is used to define affectful state operations and functions. \textit{xf} is the effect handler that specifies the operation, \textit{T1} and \textit{T2} are respectively its input and output types and \textit{VT1} and \textit{VT2} assure that \textit{T1} and \textit{T2} are admissible value types. If \textit{qv} is a variable it gets evaluated in the variable environment. For instance, we can define a simple \textit{SKIP} instruction with the \textit{Modify} construct as follows :
 \begin{lstlisting}[caption = {SKIP instruction in the deep embedding},xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition xf_skip : XFun unit unit := {|
@@ -504,13 +504,13 @@ The deep expressions are meant to be evaluated in certain variable and function 
 
 \item \textbf{PrmsStep fenv env (Conf Prms n es) (Conf Prms n' es') :} represents a single-step evaluation of the list of parameters \textit{es} which conducts a single-step evaluation of the first expression in the list. If the first expression is a value, it moves on to the
 next parameter;
-\item \textbf{EClosure fenv env (Conf Exp n e) (Conf Exp n' e') :} represents a \textbf{multi-step evaluation} of the expression \textit{e}. It uses the predefined single evaluation steps. It is important to note that there exists a state where any expression gets evaluated to a certain value. Furthermore, the evaluation process is deterministic i.e. an expression gets evaluated to a unique value;
+\item \textbf{EClosure fenv env (Conf Exp n e) (Conf Exp n' e') :} represents a \textbf{multi-step evaluation} of the expression \textit{e} which is defined as a reflexive transitive closure. It uses the predefined single evaluation steps. It is important to note that there exists a state where any expression gets evaluated to a certain value which we conclude from the termination property of the deep embedding. Furthermore, since the evaluation process is deterministic, an expression gets evaluated to a unique value;
 \item \textbf{PrmsClosure fenv env (Conf Prms n es) (Conf Exp n' es') :} represents a multi-step evaluation of the list of parameters \textit{es} which conducts a multi-step evaluation of each expression in the list.
 \end{itemize}
 
-Finally, the state in the deep embedding is represented with an abstract type \textit{W}, as shown in script \ref{XFun} p.\pageref{XFun}, that can be specified as required.  We also have at our disposal several proven \textbf{congruence} and \textbf{concatenation} lemmas for both expressions and parameters.
+Finally, the state in the deep embedding is represented with a type parameter \textit{W}, as shown in script \ref{XFun} p.\pageref{XFun}, that can be specified as required. 
 
-\subsection{Hoare logic in the deep embedding}
+\subsection{Hoare logic in the deep embedding} \label{HoareDeepSec}
 A Hoare triple in the deep embedding is slightly different from its counterpart in the shallow embedding. Indeed, this new version of the Hoare triple depends on the function environment as well as the variable environment we're evaluating the expression in. Both will be passed to the Hoare triple as parameters along with the expression, the precondition and the postcondition. The precondition is a predicate on the state while the postcondition is a predicate on both the resulting value and state. We must also ensure that the expression we are dealing with is well-typed. Therefore, as shown in script \ref{HoareEval}, a Hoare triple is considered valid if and only if the expression \emph{e} is well-typed and there is an \textit{EClosure} from a certain starting state verifying the precondition to a certain resulting state and value that verify the postcondition with \textit{e} evaluated in the given function and variable environments \textit{fenv} and \textit{env}. \textbf{\{\{P\}\} fenv $>>$ env $>>$ e \{\{Q\}\}} is the chosen notation for the Hoare triple in the deep embedding where \textit{P}, \textit{Q}, \textit{e}, \textit{fenv}, and \textit{env} are respectively the precondition, the postcondition, the expression, the function environment and the variable environment. Furthermore, as the evaluation of parameters is different from that of expressions, we need to devise a separate Hoare triple for parameters as shown in script \ref{HoarePrmsEval} where \textit{EClosure} is replaced by \textit{PrmsClosure}.
 \pagebreak
 \begin{lstlisting}[caption = {Hoare triple for expressions in the deep embedding}, label={HoareEval},mathescape=true]

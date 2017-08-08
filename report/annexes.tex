@@ -1,0 +1,291 @@
+\begin{appendices}
+
+\chapter{Project files}
+
+\section{PIP\_state.v file} \label{stateFile}
+\begin{lstlisting}[caption = {PIP\_state.v file},xleftmargin=-.1\textwidth,
+xrightmargin=-.1\textwidth,
+mathescape=true,numbers=left]
+(* Imports ... *)
+
+(* PIP axioms *)
+Axiom tableSize nbLevel nbPage: nat.
+Axiom nbLevelNotZero: nbLevel > 0.
+Axiom nbPageNotZero: nbPage > 0.
+Axiom tableSizeIsEven : Nat.Even tableSize.
+Definition tableSizeLowerBound := 14.  
+Axiom tableSizeBigEnough : tableSize > tableSizeLowerBound. 
+
+(* Type definitions ... *)
+
+(*Constructors*)
+Parameter index_d : index.
+Parameter page_d : page.
+Parameter level_d : level.
+
+Program Definition CIndex  (p : nat) : index := 
+ if (lt_dec p tableSize) 
+ then Build_index p _ 
+ else index_d.
+
+Program Definition CPage (p : nat) : page := 
+ if (lt_dec p nbPage) 
+ then Build_page p _ 
+ else page_d.
+
+Program Definition CVaddr (l: list index) : vaddr := 
+ if ( Nat.eq_dec (length l)  (nbLevel+1))  
+ then Build_vaddr l _
+ else Build_vaddr (repeat (CIndex 0) (nbLevel+1)) _.
+
+Program Definition CLevel ( a :nat) : level := 
+ if lt_dec a nbLevel 
+ then  Build_level a _ 
+ else level_d.
+
+$\pagebreak$
+
+(* Comparison functions *)
+Definition beqIndex (a b : index) : bool := a =? b.
+Definition beqPage (a b : page) : bool := a =? b.
+Definition beqVAddr (a b : vaddr) : bool := eqList a b beqIndex.
+
+(* Predefined values *)
+Definition multiplexer := CPage 1.
+Definition PRidx := CIndex 0.   (* descriptor *)
+Definition PDidx := CIndex 2.   (* page directory *)
+Definition sh1idx := CIndex 4.  (* shadow1 *) 
+Definition sh2idx := CIndex 6.  (* shadow2 *)
+Definition sh3idx := CIndex 8.  (* configuration pages *)
+Definition PPRidx := CIndex 10. (* parent *)
+
+Definition defaultIndex := CIndex 0.
+Definition defaultVAddr := CVaddr (repeat (CIndex 0) nbLevel).
+Definition defaultPage := CPage 0.
+Definition fstLevel :=  CLevel 0.
+Definition Kidx := CIndex 1.
+\end{lstlisting}
+\pagebreak
+\section{Lib.v file} \label{LibFile}
+\begin{lstlisting}[caption = {PIP\_state.v file},xleftmargin=-.1\textwidth,
+xrightmargin=-.1\textwidth,
+mathescape=true,numbers=left]
+(* Imports ... *)
+
+Fixpoint eqList {A : Type} (l1 l2 : list A) 
+	 (eq : A -> A -> bool) : bool := 
+ match l1, l2 with 
+  |nil,nil => true
+  |a::l1' , b::l2' => if  eq a b then eqList l1' l2' eq else false
+  |_ , _ => false
+ end.
+
+Definition beqPairs {A B: Type} (a : (A*B)) (b : (A*B)) 
+	   (eqA : A -> A -> bool) (eqB : B -> B -> bool) :=
+ if (eqA (fst a) (fst b)) && (eqB (snd a) (snd b))  
+ then true else false.
+
+Fixpoint lookup {A B C: Type} (k : A) (i : B) (assoc : list 
+  ((A * B)*C)) (eqA : A -> A -> bool) (eqB : B -> B -> bool) :=
+ match assoc with
+  | nil => None  
+  | (a, b) :: assoc' => if beqPairs a (k,i) eqA eqB 
+  	 then Some b else lookup k i assoc' eqA eqB
+ end. 
+ 
+Fixpoint removeDup {A B C: Type} (k : A) (i : B) (assoc : list 
+  ((A * B)*C) )(eqA : A -> A -> bool) (eqB : B -> B -> bool)   :=
+ match assoc with
+  | nil => nil
+  | (a, b) :: assoc' => if beqPairs a (k,i) eqA eqB 
+  	then removeDup k i assoc' eqA eqB 
+  	else (a, b) :: (removeDup k i assoc' eqA eqB)
+ end.
+
+Definition add {A B C: Type} (k : A) (i : B) (v : C) (assoc : list 
+  ((A * B)*C) ) (eqA : A -> A -> bool) (eqB : B -> B -> bool)  :=
+ (k,i,v) :: removeDup k i assoc eqA eqB.
+
+Definition disjoint {A : Type} (l1 l2 : list A) : Prop := 
+forall x : A,  In x l1  -> ~ In x l2 . 
+\end{lstlisting}
+\pagebreak
+\section{Hoare\_getFstShadow.v file} \label{getFstFile}
+\begin{lstlisting}[caption = {Hoare\_getFstShadow.v file},xleftmargin=-.1\textwidth,
+xrightmargin=-.1\textwidth,
+mathescape=true,numbers=left]
+(* Imports ... *)
+
+(* Definitions & lemmas ...*)
+
+Lemma succDW  (x : Id) (P: Value $\rightarrow$ W $\rightarrow$ Prop) (v:Value) 
+	     (fenv: funEnv) (env: valEnv) :
+$\forall$ (idx:index),
+ {{fun s $\Rightarrow$ idx < (tableSize -1) $\wedge$ $\forall$  l : idx + 1 < tableSize, 
+    P (cst (option index) (succIndexInternal idx)) s $\wedge$
+    v = cst index idx }}  
+  fenv >> (x,v)::env >> SuccD x {{ P }}.
+Proof.
+intros.
+unfold THoareTriple_Eval; intros.
+clear k3 t k2 k1 tenv ftenv.
+intuition.
+destruct H1 as [H1 H1'].
+omega.
+inversion X;subst.
+inversion X0;subst.
+inversion X2;subst.
+repeat apply inj_pair2 in H7;subst.
+inversion X3;subst.
+inversion X4;subst.
+inversion H;subst.
+destruct IdModP.IdEqDec in H3.
+inversion H3;subst.
+clear H3 e X4 H XF1.
+inversion X1;subst.
+inversion X4;subst.
+inversion X6;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H9.
+subst.
+unfold xf_prj1 at 3 in X6.
+unfold b_exec,b_eval,b_mod in *.
+simpl in *.
+destruct idx.
+inversion X5;subst.
+inversion X7;subst.
+inversion X8;subst.
+inversion X9;subst.
+simpl in *.
+inversion X11;subst.
+inversion X12;subst.
+repeat apply inj_pair2 in H7.
+subst.
+inversion X13;subst.
+inversion X14;subst.
+inversion H;subst.
+clear H X14 XF2.
+inversion X10;subst.
+inversion X14;subst.
+simpl in *.
+inversion X16;subst.
+inversion X17;subst.
+repeat apply inj_pair2 in H7.
+repeat apply inj_pair2 in H10.
+subst.
+unfold xf_LtDec at 3 in X17.
+unfold b_exec,b_eval,b_mod in *.
+simpl in *.
+case_eq (lt_dec i tableSize).
+intros.
+rewrite H in X17, H1.
+inversion X15;subst.
+inversion X18;subst.
+simpl in *.
+inversion X20; subst.
+inversion X19;subst.
+inversion X21;subst.
+simpl in *.
+inversion X23;subst.
+inversion H10;subst.
+destruct vs; inversion H2.
+inversion X24;subst.
+inversion X25;subst.
+repeat apply inj_pair2 in H11.
+subst.
+inversion X26;subst.
+inversion X27;subst.
+inversion H2;subst.
+clear X27 H2 XF3.
+inversion X22;subst.
+inversion X27;subst.
+simpl in *.
+inversion X29;subst.
+inversion H10;subst.
+destruct vs; inversion H2.
+inversion X30;subst.
+inversion X31;subst.
+repeat apply inj_pair2 in H11.
+repeat apply inj_pair2 in H13.
+subst.
+unfold xf_SuccD at 3 in X31.
+unfold b_exec,b_eval,xf_SuccD,b_mod in *.
+simpl in *.
+inversion X28;subst.
+inversion X32;subst.
+simpl in *.
+inversion X34;subst.
+inversion H10;subst.
+destruct vs.
+inversion H2.
+inversion H2;subst.
+destruct vs.
+unfold mkVEnv in *; simpl in *.
+inversion X33;subst.
+inversion X35;subst.
+inversion X37;subst.
+simpl in *.
+inversion X38;subst.
+repeat apply inj_pair2 in H15.
+subst.
+inversion X39;subst.
+inversion X40;subst.
+inversion H3;subst.
+clear X40 H3 XF4 H5.
+inversion X36;subst.
+inversion X40;subst.
+inversion X42;subst.
+simpl in *.
+inversion X43;subst.
+repeat apply inj_pair2 in H14.
+repeat apply inj_pair2 in H16.
+subst.
+unfold xf_SomeCindex at 3 in X43.
+unfold b_exec,b_eval,b_mod in *.
+simpl in *.
+inversion X41;subst.
+inversion X44;subst.
+simpl in *.
+inversion X46;subst.
+inversion X45;subst.
+inversion X47;subst.
+inversion X48;subst.
+assert (Z : S i = i+1) by omega.
+rewrite Z; auto.
+inversion X49.
+inversion X49.
+inversion X47.
+inversion X44.
+inversion H5.
+inversion X35;subst.
+inversion X36.
+inversion X36.
+inversion X35.
+inversion X32.
+inversion X30.
+inversion X24.
+repeat apply inj_pair2 in H6.
+rewrite H in H6.
+inversion H6.
+rewrite H in X21.
+inversion X21.
+intros.
+contradiction.
+inversion X18.
+inversion X9.
+inversion X7.
+contradiction.
+Qed.
+
+(* Lemma succRecW : proof of using Hoare triple rules *)
+
+(* Lemma succRecWByInversion : proof by inversions *)
+
+(* Other lemmas ... *)
+
+\end{lstlisting}
+
+\end{appendices}
+
+
+
