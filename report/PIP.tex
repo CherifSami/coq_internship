@@ -389,7 +389,31 @@ createPartition descChild pdChild shadow1 shadow2 list
 \section{The deep embedding} \label{deep}
 
 \subsection{Deep versus shallow embedding}
+The deep embedding or DEC (Deep Embedding of a
+terminating C-style language with effects) is a \gls{DSL} embedded in \textit{Gallina} and developed as an intermediate language for
+the translation of Pip to C. DEC Relies on Coq modules to define parametrisable state and identifiers types. The dynamic semantics of DEC is specified in the style of
+\gls{SOS} which enables us to perform software verification by reasoning on formulas' structure.
+This language has the following properties : 
+\begin{enumerate}
+	\item \textbf{Type soundness :} no well-typed program gets stuck on a
+non-value, and when a well-typed program terminates it gives a value
+of the right type;
+	\item \textbf{Termination :} every execution of a well-typed program
+ends with a value;
+	\item \textbf{Subject reduction :} the execution of a well-typed
+program preserves its type at each step ;
+	\item \textbf{Deterministic  :} given an initial state, each well-typed
+program can only evaluate to one value and one new state. Furthermore, at
+each non-terminal state in a well-typed program execution there is
+just one possible step;
+	\item \textbf{Strong typedness :} each program has at most one
+type ;	
+\end{enumerate}
+DEC supports Hoare logic reasoning, providing valid Hoare logic rules that will be detailed in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}.
+
+\iffalse
 A deep embedding is mainly an \textbf{abstract representation of a language by modelling its expressions as data}. Strictly speaking, The main difference between a shallow and deep embedding is that the former is \textbf{ extensible with regards to adding language constructs} while the latter is \textbf{extensible with regards to adding interpretations of its abstract data types}. A typical approach in PIP's case would have been reasoning on a predefined deep embedding as structural abstraction enables us to perform cost-effective software verification by inversion on formulas' structure. However, defining such an abstract language, at the beginning, is quite tedious and rather intricate since we need to worry about the wingspan of such language and expression soundness among others. Therefore, the tasks of proof engineering and developing the deep embedding were separated. At first, a formal reasoning system based on Hoare logic was built on the shallow embedding as shown in section \ref{Hoare} p.\pageref{Hoare}. Then, an abstract representation of the shallow model was written in \textit{Gallina} which corresponds to the deep embedding. Needless to say, at some point later on, we need to worry about the preservation of proven properties between both embeddings either by proving that there is a bijection between them or by rewriting all the proofs in the deep embedding. By and large, we need to \textbf{ascertain the feasibility of such proofs in the deep embedding} as well as \textbf{compare examples of conducted proofs in both embeddings}.
+\fi
 
 \subsection{Deep embedding constructs}
 Before we move on to the main constructs of the deep embedding, we need to introduce essential background types and structures :
