@@ -2,7 +2,7 @@
 
 \chapter{Project files}
 
-\section{PIP\_state.v file} \label{stateFile}
+\section{Pip\_state.v file} \label{stateFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
 mathescape=true,numbers=left]
@@ -291,17 +291,14 @@ fenv >> (y,v)::env >> ReadPhysical table y {{P'}}.
 Proof.
 intros.
 unfold THoareTriple_Eval.
-intros.
-intuition.
+intros; intuition.
 destruct H.
-destruct H.
-intuition.
+destruct H. intuition.
 inversion H0;subst.
 clear k3 t k2 k1 ftenv tenv H1.
 inversion X;subst.
 inversion X0;subst.
-repeat apply inj_pair2 in H7.
-subst.
+repeat apply inj_pair2 in H7. subst.
 inversion X2;subst.
 inversion X3;subst.
 inversion H0;subst.
@@ -310,22 +307,17 @@ inversion H3;subst.
 clear H3 e X3 H0 XF1. 
 inversion X0;subst.
 repeat apply inj_pair2 in H7.
-repeat apply inj_pair2 in H11.
-subst.
+repeat apply inj_pair2 in H11. subst.
 inversion X1;subst.
 inversion X4;subst.
 repeat apply inj_pair2 in H7.
-apply inj_pair2 in H9.
-subst.
+apply inj_pair2 in H9. subst.
 unfold xf_read at 2 in X4.
-unfold b_eval,b_exec,b_mod in X4.
-simpl in *.
+unfold b_eval,b_exec,b_mod in X4. simpl in *.
 rewrite H in X4.
-unfold xf_read,b_eval,b_exec,b_mod in X5.
-simpl in *.
+unfold xf_read,b_eval,b_exec,b_mod in X5. simpl in *.
 rewrite H in X5.
-inversion X5;subst.
-auto.
+inversion X5;subst. auto.
 inversion X6.
 inversion X6.
 contradiction.
@@ -334,6 +326,475 @@ Qed.
 (* Other lemmas ... *)
 
 \end{lstlisting}
+
+\section{Hoare\_writeVirtualInv.v file} \label{writeFile}
+\begin{lstlisting}[xleftmargin=-.1\textwidth,
+xrightmargin=-.1\textwidth,
+mathescape=true,numbers=left]
+(* Imports ... *)
+
+(* Definitions & lemmas ... *)
+
+Lemma writeVirtualInv (vaInCurrentPartition vaChild: vaddr)  
+       currentPart currentShadow descChild idxDescChild 
+       ptDescChild ptVaInCurPart idxvaInCurPart vainve 
+       isnotderiv currentPD ptVaInCurPartpd accessiblesrc 
+       presentmap ptDescChildpd idxDescChild1 presentDescPhy 
+       phyDescChild pdChildphy ptVaChildpd idxvaChild 
+       presentvaChild phyVaChild sh2Childphy ptVaChildsh2 level 
+                 (fenv: funEnv) (env: valEnv) :
+ isnotderiv && accessiblesrc && 
+ presentmap && negb presentvaChild = true -> 
+ negb presentDescPhy = false -> 
+ {{ fun s : state => propagatedPropertiesAddVaddr 
+   s vaInCurrentPartition vaChild currentPart currentShadow 
+   descChild idxDescChild ptDescChild ptVaInCurPart idxvaInCurPart
+   vainve isnotderiv currentPD ptVaInCurPartpd accessiblesrc 
+   presentmap ptDescChildpd idxDescChild1 presentDescPhy 
+   phyDescChild pdChildphy ptVaChildpd idxvaChild presentvaChild 
+   phyVaChild sh2Childphy ptVaChildsh2 level }} fenv >> env >> 
+   WriteVirtual ptVaChildsh2 idxvaChild vaInCurrentPartition 
+ {{ fun _ s => propagatedPropertiesAddVaddr 
+   s vaInCurrentPartition vaChild currentPart currentShadow 
+   descChild idxDescChild ptDescChild ptVaInCurPart idxvaInCurPart
+   vainve isnotderiv currentPD ptVaInCurPartpd accessiblesrc 
+   presentmap ptDescChildpd idxDescChild1 presentDescPhy 
+   phyDescChild pdChildphy ptVaChildpd idxvaChild presentvaChild 
+   phyVaChild sh2Childphy ptVaChildsh2 level /\ 
+   readVirtualInternal ptVaChildsh2 idxvaChild s.(memory) = 
+   Some vaInCurrentPartition }}.
+Proof.
+intros.
+eapply weakenEval. (* weakening precondition *)
+eapply writeVirtualWp. (* proven lemma about writeVirtual *)
+simpl; intros.
+(* The rest is identical to the shallow proof *)
+split. 
+unfold propagatedPropertiesAddVaddr in *.
+assert(Hlookup :exists entry, 
+ lookup ptVaChildsh2 idxvaChild (memory s) beqPage beqIndex = 
+ Some (VA entry)).
+{assert(Hva: isVA ptVaChildsh2 (getIndexOfAddr vaChild fstLevel) s) 
+ by intuition.
+ unfold isVA in *.
+ assert(Hidx:  getIndexOfAddr vaChild fstLevel = idxvaChild) 
+  by intuition.
+ clear H. subst. 
+ destruct(lookup ptVaChildsh2 (getIndexOfAddr vaChild fstLevel)
+       (memory s) beqPage beqIndex);intros; try now contradict Hva.
+ destruct v; try now contradict Hva.
+ do 2 f_equal.
+ exists v;trivial. }
+ destruct Hlookup as (entry & Hlookup).
+intuition try assumption.
+(** partitionsIsolation **)
++ apply partitionsIsolationUpdateSh2 with entry;trivial.
+(** kernelDataIsolation **)
++ apply kernelDataIsolationUpdateSh2 with entry;trivial.
+(** verticalSharing **)
++ apply verticalSharingUpdateSh2 with entry;trivial. 
+(** consistency **)
++ apply consistencyUpdateSh2 with
+    entry vaChild
+    currentPart currentShadow descChild idxDescChild ptDescChild
+    ptVaInCurPart idxvaInCurPart vainve isnotderiv currentPD
+    ptVaInCurPartpd accessiblesrc presentmap ptDescChildpd 
+    idxDescChild1 presentDescPhy phyDescChild pdChildphy 
+    ptVaChildpd presentvaChild phyVaChild sh2Childphy level;trivial.
+  unfold propagatedPropertiesAddVaddr ;intuition.
+(** Other Propagated properties **)
++ rewrite <- nextEntryIsPPUpdateSh2;trivial.
+  exact Hlookup.
++ apply isVEUpdateSh2 with entry;trivial.
++ apply getTableAddrRootUpdateSh2 with entry;trivial.
++ apply entryPDFlagUpdateSh2 with entry;trivial.
++ apply isVEUpdateSh2 with entry;trivial.
++ apply getTableAddrRootUpdateSh2 with entry;trivial.
++ apply isEntryVAUpdateSh2 with entry;trivial.
++ rewrite <- nextEntryIsPPUpdateSh2;trivial.
+  exact Hlookup.
++ apply isPEUpdateSh2 with entry;trivial.
++ apply getTableAddrRootUpdateSh2 with entry;trivial.
++ apply entryUserFlagUpdateSh2 with entry;trivial.
++ apply entryPresentFlagUpdateSh2 with entry;trivial.
++ apply isPEUpdateSh2 with entry;trivial.
++ apply getTableAddrRootUpdateSh2 with entry;trivial.
++ apply entryPresentFlagUpdateSh2 with entry;trivial.
++ apply isEntryPageUpdateSh2  with entry;trivial.
++ assert(Hchildren: forall part, getChildren part
+  {| currentPartition := currentPartition s;
+     memory := add ptVaChildsh2 idxvaChild(VA vaInCurrentPartition) 
+     (memory s) beqPage beqIndex |} = getChildren part s).
+  { intros; symmetry;
+    apply getChildrenUpdateSh2 with entry;trivial. } 
+  rewrite Hchildren in *;trivial.
++ rewrite <- nextEntryIsPPUpdateSh2;trivial.
+  exact Hlookup.
++ apply isPEUpdateSh2 with entry;trivial.
++ apply getTableAddrRootUpdateSh2 with entry;trivial.
++ apply entryPresentFlagUpdateSh2 with entry;trivial.
++ apply isEntryPageUpdateSh2  with entry;trivial.
++ rewrite <- nextEntryIsPPUpdateSh2;trivial.
+  exact Hlookup.
++ apply isVAUpdateSh2 with entry;trivial.
++ apply getTableAddrRootUpdateSh2 with entry;trivial.
+(** new property **)
++ unfold readVirtualInternal. cbn.
+  assert (Htrue: beqPairs (ptVaChildsh2, idxvaChild) 
+      (ptVaChildsh2, idxvaChild) beqPage beqIndex = true). 
+  apply beqPairsTrue;split;trivial.
+  rewrite Htrue.
+  trivial.
+Qed.
+\end{lstlisting} \pagebreak
+
+\section{Hoare\_initVAddrTable.v file} \label{initFile}
+\begin{lstlisting}[xleftmargin=-.1\textwidth,
+xrightmargin=-.1\textwidth,
+mathescape=true,numbers=left]
+(* Imports ... *)
+
+(* Definitions & lemmas ...*)
+
+Lemma succDWp' (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
+ $\forall$ (idx:index), 
+ {{fun s => P s  /\ idx < tableSize - 1 /\ v=cst index idx}} 
+  fenv >> (x,v)::env >> SuccD x 
+ {{fun (idxsuc: Value) (s: state) => P s  /\ idx < tableSize - 1 /\ 
+ v=cst index idx /\ idxsuc=cst (option index (succIndexInternal idx) 
+  /\ $\exists$ i, idxsuc = cst (option index) (Some i)}}.
+Proof.
+intros.
+eapply weakenEval.
+eapply succDW.
+intros. 
+simpl. 
+split.
+instantiate (1:=idx).  
+intuition.
+intros.
+intuition.
+destruct idx.
+exists (CIndex (i + 1)).
+f_equal.
+unfold succIndexInternal.
+case_eq (lt_dec i tableSize).
+intros.
+auto.
+intros.
+contradiction.
+Qed.
+
+Lemma initVAddrTableNewProperty table (curidx : index) 
+                (fenv: funEnv) (env: valEnv) :
+ {{ fun s $\Rightarrow$ ($\forall$ idx : index, idx < curidx $\rightarrow$ 
+     (readVirtual table idx (memory s) = Some defaultVAddr) )}} 
+  fenv >> env >> initVAddrTable table curidx 
+ {{fun _ s $\Rightarrow$ $\forall$ idx, readVirtual table idx s.(memory) = 
+ 	             Some defaultVAddr }}. 
+Proof.
+unfold initVAddrTable.
+unfold initVAddrTableAux.
+assert(H : tableSize + curidx >= tableSize) by omega.
+revert fenv env H. revert curidx.
+generalize tableSize at 1 3. 
+induction n.  simpl. 
+(** begin case n=0 *)
+intros.
+destruct curidx.
+simpl in *. omega.
+(** end *)
+intros; simpl.
+eapply Apply_VHTT1.
+(** begin PS [Val (cst index curidx)] *)
+instantiate (1:= fun vs s => (forall idx : index,
+idx<curidx -> readVirtual table idx (memory s) = Some defaultVAddr) 
+      /\ vs = [cst index curidx] ).
+unfold THoarePrmsTriple_Eval.
+intros.
+inversion X;subst.
+destruct vs; inversion H6.
+destruct vs ; inversion H3 ; subst.
+intuition.
+inversion X0;subst.
+inversion X2.
+inversion X2.
+(** end *)
+intuition; intros; simpl.
+destruct vs.
+unfold THoareTriple_Eval;intros.
+intuition; inversion H2.
+destruct vs.
+Focus 2.
+unfold THoareTriple_Eval;intros.
+intuition; inversion H2. simpl in *.
+(*eapply BindMS_VHTT1.*)
+eapply BindN_VHTT1.
+(** Begin write Virtual *)
+unfold THoareTriple_Eval; intros.
+clear IHn k3 k2 k1 t ftenv tenv env.
+intuition.
+inversion H2;subst.
+inversion X;subst.
+inversion X1;subst.
+inversion X0;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H8. subst.
+inversion X4;subst.
+inversion X5;subst.
+simpl in *.
+inversion H0;subst.
+clear X5 H0 XF1.
+inversion X2;subst.
+repeat apply inj_pair2 in H8.
+repeat apply inj_pair2 in H10. subst.
+unfold b_exec, b_eval, b_mod in *. simpl in *.
+inversion X3;subst.
+clear X0 X X1 X2 X3 X4.
+instantiate (1:= fun s => (forall idx : index,
+idx<curidx -> readVirtual table idx (memory s) = Some defaultVAddr) 
+/\ v=cst index curidx /\ readVirtual table curidx s.(memory) = 
+    Some defaultVAddr).
+intuition. split.
+intros.
+unfold writeVirtualInternal. simpl.
+unfold readVirtual.
+unfold add. simpl.
+assert(Hfalse : Lib.beqPairs (table, curidx) (table, idx) 
+	beqPage beqIndex= false).
+    { apply beqPairsFalse. right.
+      apply indexDiffLtb. right;assumption. }
+rewrite Hfalse.
+assert (lookup  table idx (Lib.removeDup table curidx (memory n') 
+	beqPage beqIndex)
+           beqPage beqIndex = Lib.lookup  table idx  (memory n') 
+           beqPage beqIndex) as Hmemory.
+    { apply removeDupIdentity.
+      right. 
+      apply indexDiffLtb.
+      left; trivial. }
+rewrite Hmemory.
+apply H1 in H0.
+unfold readVirtual in *. auto. intuition.
+unfold writeVirtualInternal. simpl.
+unfold readVirtual.
+unfold add. simpl.
+assert(Htrue : Lib.beqPairs (table, curidx) (table, curidx) 
+	beqPage beqIndex= true).
+    { apply beqPairsTrue. intuition. }
+rewrite Htrue. auto.
+inversion X5.
+inversion X5.
+(** end *)
+eapply IfTheElse_VHTT1.
+(** begin LtLtb *)
+unfold THoareTriple_Eval; intros.
+clear k3 k2 k1 t tenv ftenv.
+intuition. subst.
+inversion X;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H8. subst.
+inversion X2;subst.
+inversion X3;subst.
+simpl in *.
+inversion H0;subst.
+clear X3 H0 XF1.
+inversion X1;subst.
+inversion X3;subst.
+repeat apply inj_pair2 in H8.
+repeat apply inj_pair2 in H10. subst.
+unfold b_eval, b_exec, xf_Ltb, b_mod in *.
+simpl in *.
+inversion X4;subst.
+instantiate (1:= fun b s => (forall idx : index,
+idx<curidx -> readVirtual table idx (memory s) = Some defaultVAddr)
+ /\ readVirtual table curidx (memory s) = Some defaultVAddr 
+ /\ v=cst index curidx /\ b=cst bool (Index.ltb curidx maxIndex)).
+intuition.
+inversion X5.
+inversion X5.
+(** end *)
+simpl.
+eapply BindS_VHTT1.
+eapply BindS_VHTT1.
+(** begin SuccD *)
+eapply weakenEval.
+instantiate (2:= fun s => (fun s' => (forall idx : index,
+idx<curidx -> readVirtual table idx (memory s') = Some defaultVAddr) 
+ /\ readVirtual table curidx (memory s) = Some defaultVAddr) s 
+ /\ curidx < tableSize - 1 /\ v=cst index curidx).
+eapply succDWp'.
+simpl;intros; intuition.
+unfold maxIndex in H4.
+inversion H4.
+apply inj_pair2 in H5.
+symmetry in H5.
+apply indexltbTrue in H5.
+unfold CIndex in H5.
+destruct (lt_dec (tableSize - 1) tableSize). 
+simpl in *. assumption. contradict n0.
+assert (tableSize > tableSizeLowerBound).
+apply tableSizeBigEnough.
+unfold tableSizeLowerBound in *. omega.
+(** end *) 
+(** begin ExtractIndex *)
+intros;simpl.
+instantiate (1:= fun v' s => (forall idx : index,
+idx<curidx -> readVirtual table idx (memory s) = Some defaultVAddr) 
+ /\ readVirtual table curidx (memory s) = Some defaultVAddr 
+ /\ v = cst index curidx /\ curidx < tableSize - 1 /\
+ v' = cst index (match succIndexInternal curidx with 
+                 | Some i => i | None => index_d end) ).
+unfold THoareTriple_Eval; intros.
+clear k3 k2 k1 t tenv ftenv.
+destruct H0.
+destruct H1.
+destruct H2.
+destruct H3.
+subst.
+destruct H4.
+inversion H2.
+repeat apply inj_pair2 in H4.
+rewrite H4 in *.
+inversion X;subst.
+inversion X0;subst.
+repeat apply inj_pair2 in H10. subst.
+inversion X2;subst.
+inversion X3;subst.
+simpl in *.
+inversion H3;subst.
+clear X3 H3 XF1.
+inversion X1;subst.
+inversion X3;subst.
+repeat apply inj_pair2 in H10.
+repeat apply inj_pair2 in H12. subst.
+unfold b_eval, b_exec, xf_ExtractIndex, b_mod in *.
+simpl in *.
+inversion X4;subst.
+intuition.
+inversion X5.
+inversion X5.
+(** end *)
+(* evaluating FVar and Prms*)
+intros; simpl.
+eapply QFun_VHTT.
+econstructor. econstructor.
+eapply Apply_VHTT2.
+instantiate(1:=fun vs s => (forall idx : index,
+idx<curidx -> readVirtual table idx (memory s) = Some defaultVAddr) 
+ /\ readVirtual table curidx (memory s) = Some defaultVAddr 
+ /\ v = cst index curidx /\ curidx < tableSize - 1 
+ /\ v0 = cst index match succIndexInternal curidx with
+     | Some i => i | None => index_d end /\ vs = [v0]).
+unfold THoarePrmsTriple_Eval;intros.
+inversion X;subst.
+destruct vs;inversion H6.
+inversion X0;subst.
+inversion X2;subst.
+inversion X3;subst.
+inversion X4;subst.
+inversion H1;subst.
+inversion X1;subst.
+destruct vs; inversion H7.
+inversion X5;subst.
+inversion X7;subst.
+inversion X6;subst.
+destruct vs;inversion H7;subst.
+destruct vs;inversion H4.
+intuition.
+inversion X8;subst.
+inversion X10.
+inversion X10.
+inversion X8.
+unfold mkVEnv in *; simpl in *.
+intros ;simpl.
+destruct vs.
+unfold THoareTriple_Eval;intros;intuition.
+inversion H6.
+destruct vs.
+Focus 2.
+unfold THoareTriple_Eval;intros;intuition.
+inversion H6. simpl in *.
+(** recursive call *)
+unfold THoareTriple_Eval.
+intros. intuition.
+inversion H6;subst.
+unfold succIndexInternal in *.
+destruct curidx.
+simpl in *.
+case_eq (lt_dec i tableSize);intros; try contradiction.
+rewrite H2 in *.
+specialize (IHn (CIndex(i+1))).
+unfold CIndex in *.
+case_eq (lt_dec (i + 1) tableSize);intros.
+rewrite H4 in *. simpl in *.
+assert (Z : n+(i+1) = S(n+i)) by omega.
+rewrite Z in *.
+eapply IHn in H as H5.
+clear IHn.
+eapply H5.
+eauto. eauto. eauto. eauto.
+clear H6 H5 H k3 k2 k1 t ftenv tenv env idx.
+intuition; simpl in *.
+assert (Hor: idx={| i:= i; Hi:= Hi |} \/ idx<{| i:= i; Hi:= Hi |}).
+    { simpl in *.
+      unfold CIndex in H.
+      destruct (lt_dec (i + 1) tableSize).
+      subst. simpl in *.
+      rewrite NPeano.Nat.add_1_r in H.
+      apply lt_n_Sm_le in H.
+      apply le_lt_or_eq in H.
+      destruct H.
+      right. assumption.
+      left. subst.
+      destruct idx. simpl in *. subst. 
+      assert (Hi = Hi0).
+      apply proof_irrelevance.
+      subst. reflexivity. omega. }
+destruct Hor.
+subst. eassumption.
+apply H1;trivial.
+assert (i+1<tableSize) by omega;
+contradiction.
+(** false case*)
+revert H. clear;intros.
+unfold mkVEnv in *; simpl in *.
+unfold THoareTriple_Eval; intros. intuition.
+clear k3 k2 k1 ftenv tenv.
+inversion X;subst.
+Focus 2. inversion X0.
+inversion H4.
+repeat apply inj_pair2 in H3.
+clear X H4.
+assert (idx<CIndex (tableSize - 1) \/ idx=CIndex (tableSize - 1)).
+    { destruct idx. simpl in *. 
+      unfold CIndex.
+      case_eq (lt_dec (tableSize - 1) tableSize).
+      intros. simpl in *.
+      assert (i <= tableSize -1). omega.
+      apply NPeano.Nat.le_lteq in H4.
+      destruct H4.
+      left. assumption. right. subst.
+      assert (Hi =  Pip_state.CIndex_obligation_1 (tableSize - 1) l).
+      apply proof_irrelevance.
+      subst. reflexivity.
+      intros. omega. }
+destruct H2.
+symmetry in H3.
+apply indexltbFalse in H3.
+generalize (H1 idx);clear H;intros Hmaxi.
+apply Hmaxi. subst.
+apply indexBoundEq in H3.
+subst. assumption. 
+symmetry in H3.
+apply indexltbFalse in H3.
+apply indexBoundEq in H3.
+subst. assumption.
+(** end *)
+Qed.
+
+\end{lstlisting}
+
 
 \end{appendices}
 

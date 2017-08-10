@@ -464,8 +464,8 @@ xrightmargin=.14\textwidth]
 Inductive QFun : Type := FVar (x: Id) 
 	               | QF (f: Fun).
 \end{lstlisting}
-	\item \textbf{XFun type :} represents generic effects in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non-recursive functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need effect handlers with \textit{unit} as the input and output type. Moreover, when specifying an effect handler, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. This implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions :
-\begin{lstlisting}[caption = {effect handlers in the deep embedding}, label={XFun}, mathescape=true,xleftmargin=.02\textwidth,
+	\item \textbf{XFun type :} represents generic effects in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non-recursive functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need generic effects with \textit{unit} as the input and output type. Moreover, when specifying a generic effect, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. This implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions :
+\begin{lstlisting}[caption = {generic effects in the deep embedding}, label={XFun}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Record XFun (T1 T2: Type) : Type := {
     b_mod : W $\rightarrow$ T1 $\rightarrow$ prod W T2 ;
@@ -495,7 +495,7 @@ xrightmargin=.12\textwidth]
 Inductive Prms : Type := PS (es: list Exp).     
 \end{lstlisting}	
 \pagebreak
-	\item \textbf{Modify} \textit{T1 T2 VT1 VT2 xf qv} \textbf{:} is used to define affectful state operations and functions. \textit{xf} is the effect handler that specifies the operation, \textit{T1} and \textit{T2} are respectively its input and output types and \textit{VT1} and \textit{VT2} assure that \textit{T1} and \textit{T2} are admissible value types. If \textit{qv} is a variable it gets evaluated in the variable environment. For instance, we can define a simple \textit{SKIP} instruction with the \textit{Modify} construct as follows :
+	\item \textbf{Modify} \textit{T1 T2 VT1 VT2 xf qv} \textbf{:} is used to define affectful state operations and functions. \textit{xf} is the generic effect that specifies the operation, \textit{T1} and \textit{T2} are respectively its input and output types and \textit{VT1} and \textit{VT2} assure that \textit{T1} and \textit{T2} are admissible value types. If \textit{qv} is a variable it gets evaluated in the variable environment. For instance, we can define a simple \textit{SKIP} instruction with the \textit{Modify} construct as follows :
 \begin{lstlisting}[caption = {SKIP instruction in the deep embedding},xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition xf_skip : XFun unit unit := {|
