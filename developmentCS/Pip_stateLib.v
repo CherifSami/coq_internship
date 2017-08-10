@@ -18,7 +18,7 @@ Definition readVirtualInternal p i memory : option vaddr:=
   end.
 
 Definition succIndexInternal (idx:index) : option index :=
-let (i,P):=idx in 
+let (i,_):=idx in 
   if lt_dec i tableSize 
   then Some (CIndex (i+1)) 
   else None.

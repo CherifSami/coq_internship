@@ -108,7 +108,7 @@ Definition getSh1idx : Exp := Val (cst index sh1idx). (** Return in the original
 (** ReadPhysical -page -index : reads physical address *)
 
 Definition xf_read (p: page) : XFun (option index) (option page) := {|
-   b_mod := fun s oi => (s,match oi with |None => None |Some  i => readPhysicalInternal p i (memory s) end)
+   b_mod := fun s oi => (s,match oi with |None => None |Some i => readPhysicalInternal p i (memory s) end)
 |}.
 
 Instance VT_index : ValTyp index.
@@ -253,7 +253,7 @@ end.
 
 Definition partitionDescriptorEntry (s:W) := 
 forall (p : page),  
-  In p (getPartitions multiplexer s)-> forall (idx : index), 
+  In p (getPartitions multiplexer s) -> forall (idx : index), 
     (idx = PDidx \/ idx = sh1idx \/ idx = sh2idx \/ idx = sh3idx \/ idx = PPRidx  \/ idx = PRidx ) ->
     idx < tableSize - 1  /\ isVA p idx  s /\ exists (p1:page) , nextEntryIsPP p idx (cst (option page) (Some p1)) s  /\  
     (cst page p1) <> (cst page defaultPage).
@@ -532,7 +532,6 @@ inversion X9.
 inversion X7.
 contradiction.
 Qed.
-
 
 Lemma succDWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
 forall (idx:index), {{fun s => P s  /\ idx < tableSize - 1 /\ v=cst index idx}} fenv >> (x,v)::env >> SuccD x 

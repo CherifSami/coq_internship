@@ -253,7 +253,7 @@ end.
 
 Definition partitionDescriptorEntry (s:W) := 
 forall (p : page),  
-  In p (getPartitions multiplexer s)-> forall (idx : index), 
+  In p (getPartitions multiplexer s) -> forall (idx : index), 
     (idx = PDidx \/ idx = sh1idx \/ idx = sh2idx \/ idx = sh3idx \/ idx = PPRidx  \/ idx = PRidx ) ->
     idx < tableSize - 1  /\ isVA p idx  s /\ exists (p1:page) , nextEntryIsPP p idx (cst (option page) (Some p1)) s  /\  
     (cst page p1) <> (cst page defaultPage).
@@ -532,7 +532,6 @@ inversion X9.
 inversion X7.
 contradiction.
 Qed.
-
 
 Lemma succDWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
 forall (idx:index), {{fun s => P s  /\ idx < tableSize - 1 /\ v=cst index idx}} fenv >> (x,v)::env >> SuccD x 
@@ -933,7 +932,7 @@ Qed.
 
 (*Proof without Hoare Lemmas
 
-Lemma succRecW  (x : Id) (P: Value -> W -> Prop) (v:Value) (fenv: funEnv) (env: valEnv) :
+Lemma succRecWByInversion  (x : Id) (P: Value -> W -> Prop) (v:Value) (fenv: funEnv) (env: valEnv) :
 forall (idx:index), {{fun s => idx < (tableSize -1) /\ forall  l : idx + 1 < tableSize , 
     P (cst (option index) (succIndexInternal idx)) s /\ v = cst index idx }}  
 fenv >> (x,v)::env >> SuccRec x {{ P }}.
@@ -1887,6 +1886,107 @@ rewrite H1 in H5.
 destruct (lookup partition x (memory s) beqPage beqIndex).
 unfold cst in H5.
 destruct v;try contradiction.
+apply inj_pairT2 in H5.
+inversion H5.
+auto.
+unfold isVA in H2.
+destruct (lookup partition sh1idx (memory s) beqPage beqIndex) in H2;try contradiction.
+auto.
+Qed.
+
+Lemma getFstShadowApplyH' (partition : page) (P : W -> Prop) (fenv: funEnv) (env: valEnv) :
+{{fun s => P s  /\ partitionDescriptorEntry s /\ In partition (getPartitions multiplexer s)}}
+fenv >> env >> (getFstShadowApply partition) 
+{{fun sh1 s => P s /\ nextEntryIsPP partition sh1idx sh1 s}}.
+Proof.
+unfold getFstShadowApply.
+eapply Apply_VHTT1.
+eapply Prms_VHTT1.
+eapply Apply_VHTT1.
+eapply Prms_VHTT1.
+eapply getSh1idxWp.
+intros; unfold THoarePrmsTriple_Eval; intros;simpl.
+inversion X;subst.
+destruct vs; inversion H5.
+instantiate (1:= fun vs s => P s /\ partitionDescriptorEntry s /\
+     In partition (getPartitions multiplexer s) /\ vs = [cst index sh1idx]).
+intuition. f_equal. auto.
+inversion X0.
+intuition.
+destruct vs.
+unfold THoareTriple_Eval; intros.
+intuition. inversion H3.
+destruct vs.
+Focus 2.
+unfold THoareTriple_Eval; intros.
+intuition. inversion H3.
+unfold mkVEnv. simpl.
+eapply weakenEval.
+eapply succWp.
+simpl; intros. 
+instantiate (1:= sh1idx).
+instantiate (1:= fun s => P s /\
+    partitionDescriptorEntry s /\
+    In partition (getPartitions multiplexer s)).
+simpl. intuition.
+eapply H in H1.
+specialize H1 with sh1idx.
+eapply H1.
+auto.
+inversion H3; intuition.
+intros; simpl.
+unfold THoarePrmsTriple_Eval; intros.
+inversion X; subst.
+destruct vs; inversion H5.
+instantiate (1:= fun vs s => P s /\ partitionDescriptorEntry s /\
+     In partition (getPartitions multiplexer s) 
+     /\ (exists i : index,
+     succIndexInternal sh1idx = Some i /\ vs = [cst (option index) (Some i)]) 
+    ).
+intuition.
+destruct H3.
+exists x.
+intuition.
+rewrite H0 in H2.
+inversion H2; subst.
+repeat apply inj_pair2 in H6.
+auto.
+f_equal.
+auto.
+inversion X0.
+intuition.
+destruct vs.
+unfold THoareTriple_Eval; intros.
+destruct H as [a [b [c d]]].
+destruct d. destruct H.
+inversion H0.
+destruct vs.
+Focus 2.
+unfold THoareTriple_Eval; intros.
+destruct H as [a [b [c d]]].
+destruct d. destruct H.
+inversion H0.
+unfold mkVEnv; simpl.
+eapply weakenEval.
+eapply readPhysicalW.
+simpl; intros.
+intuition.
+destruct H3.
+exists x.
+unfold partitionDescriptorEntry in H.
+apply H with partition sh1idx in H1.
+clear H.
+intuition.
+destruct H5.
+exists x0.
+intuition.
+inversion H4;subst. auto.
+unfold nextEntryIsPP in H5.
+unfold readPhysicalInternal.
+rewrite H1 in H5.
+destruct (lookup partition x (memory s) beqPage beqIndex).
+destruct v0;try contradiction.
+unfold cst in H5.
 apply inj_pairT2 in H5.
 inversion H5.
 auto.
