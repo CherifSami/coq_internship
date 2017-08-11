@@ -2,7 +2,7 @@
 
 \section{PIP protokernel}
 
-\subsection{A minimal OS kernel with proovable isolation} \label{PIP}
+\subsection{A minimal OS kernel with provable isolation} \label{PIP}
 An operating system is organized as a hierarchy  of layers, each one constructed  upon  the one  below  it. Each layer focuses on an essential role of the operating system such as memory management, multiprogramming, input/output \dots Generally speaking, while developing a kernel for an operating system based on the layered  approach,  the designers have a choice where to draw the kernel-user boundary. Traditionally, all the layers went in the kernel, but that is not necessary. In fact, putting as little as possible in kernel mode is safer because kernel bugs can bring down the system instantly. In contrast, user processes/layers are set up to have less power so that a bug there may not be fatal.\\
 
 Various studies on bug density, relatively to the developed module size, age as well as other factors, have been conducted (e.g.  \textit{Basilli}  and  \textit{Perricone} in 1984;  and \textit{Ostrand}  and  \textit{Weyuker} in 2002). A  ballpark  figure  for  serious industrial systems is ten  bugs per a thousand  lines  of code. Operating  systems  are  sufficiently  buggy  that  computer  manufacturers  put  reset  buttons  on  them, something  the  manufacturers of cars, TV sets and stereos do  not do,  despite  the  large  amount  of software in these devices. Furthermore, Operating systems generally present hardware resources to applications through high-level abstractions such as (virtual) file systems.\\
@@ -389,9 +389,9 @@ createPartition descChild pdChild shadow1 shadow2 list
 \section{The deep embedding} \label{deep}
 
 \subsection{DEC}
-The deep embedding of PIP or DEC (Deep Embedding of a
+DEC (Deep Embedding of a
 terminating C-style language with effects) is a \gls{DSL} embedded in \textit{Gallina} and developed as an intermediate language for
-the translation of Pip to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type \textit{IdModType} defined in annex \ref{ModType} p.\pageref{ModType}. The dynamic semantics of DEC is specified in the style of
+the translation of PIP to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type (\textit{IdModType} defined in annex \ref{ModType} p.\pageref{ModType}). The dynamic semantics of DEC is specified in the style of
 \gls{SOS} which enables us to perform software verification by reasoning on formulas' structure.
 This language has the following properties : 
 \begin{enumerate}
@@ -403,9 +403,7 @@ ends with a value;
 	\item \textbf{Subject reduction :} the execution of a well-typed
 program preserves its type at each step ;
 	\item \textbf{Deterministic  :} given an initial state, each well-typed
-program can only evaluate to one value and one new state. Furthermore, at
-each non-terminal state in a well-typed program execution there is
-just one possible step;
+program can only evaluate to one value and one new state;
 	\item \textbf{Strong typedness :} each program has at most one
 type ;	
 \end{enumerate}
@@ -434,7 +432,7 @@ Definition Value : Type := sigT ValueI.
 Definition cst (T: Type) (v: T) : Value :=
            @existT Type ValueI T (Cst T v).
 \end{lstlisting}
-	\item \textbf{QValue type :} represents quasi-values in the deep embedding which can be either actual values lifted to quasi-values using the constructor \textit{QV} or identifiers of variables in the variable environment that we lift to quasi-functions using the constructor \textit{Var}, as shown in the following script :
+	\item \textbf{QValue type :} represents head normal forms for expressions (here called quasi-values) in the deep embedding which can be either actual values lifted to quasi-values using the constructor \textit{QV} or identifiers of variables in the variable environment that we lift to quasi-functions using the constructor \textit{Var}, as shown in the following script :
 \begin{lstlisting}[caption = {Quasi-values in the deep embedding},xleftmargin=.08\textwidth,
 xrightmargin=.1\textwidth]
 Inductive QValue : Type := Var (x: Id) 
@@ -464,7 +462,7 @@ xrightmargin=.14\textwidth]
 Inductive QFun : Type := FVar (x: Id) 
 	               | QF (f: Fun).
 \end{lstlisting}
-	\item \textbf{XFun type :} represents generic effects in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non-recursive functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need generic effects with \textit{unit} as the input and output type. Moreover, when specifying a generic effect, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. This implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions :
+	\item \textbf{XFun type :} represents generic effects (external stateful functions) in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non-recursive functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need generic effects with \textit{unit} as the input and output type. Moreover, when specifying a generic effect, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. This implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions :
 \begin{lstlisting}[caption = {generic effects in the deep embedding}, label={XFun}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Record XFun (T1 T2: Type) : Type := {
