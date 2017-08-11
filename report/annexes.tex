@@ -2,6 +2,40 @@
 
 \chapter{Project files}
 
+\section{IdModTypeA.v file} \label{ModType}
+\begin{lstlisting}[xleftmargin=-.1\textwidth,
+xrightmargin=-.1\textwidth,
+mathescape=true,numbers=left]
+(* Imports ... *)
+
+Module Type IdModType.
+
+Parameter Id : Type.
+
+Parameter IdEqDec : forall (x y : Id), {x = y} + {x <> y}.
+
+Instance IdEq : DEq Id :=
+{
+  dEq := IdEqDec
+}.
+
+Parameter W : Type.
+
+Parameter Loc_PI : forall (T: Type) (p1 p2: ValTyp T), p1 = p2.
+
+Parameter BInit : W.
+
+Instance WP : PState W :=
+{
+  loc_pi := Loc_PI;
+  
+  b_init := BInit
+}.              
+  
+End IdModType.
+\end{lstlisting}
+\pagebreak
+
 \section{Pip\_state.v file} \label{stateFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
@@ -282,6 +316,7 @@ Proof using Hoare triple rules ... *)
 Proof by inversions ... *)
 
 
+
 Lemma readPhysicalW (y:Id) table (v:Value) 
 	(P' : Value $\rightarrow$ W $\rightarrow$ Prop) (fenv: funEnv) (env: valEnv) :
  {{fun s $\Rightarrow$  $\exists$ idxsucc p1, v = cst (option index) (Some idxsucc)
@@ -325,7 +360,92 @@ Qed.
 
 (* Other lemmas ... *)
 
-\end{lstlisting}
+Lemma getFstShadowApplyH' (partition : page) (P : W -> Prop) 
+	                  (fenv: funEnv) (env: valEnv) :
+ {{fun s $\Rightarrow$ P s  $\wedge$ partitionDescriptorEntry s $\wedge$
+ 	partition $\in$ (getPartitions multiplexer s)}}
+  fenv >> env >> (getFstShadowApply partition) 
+ {{fun sh1 s $\Rightarrow$ P s $\wedge$ nextEntryIsPP partition sh1idx sh1 s}}.
+Proof.
+unfold getFstShadowApply.
+eapply Apply_VHTT1.
+eapply Prms_VHTT1.
+eapply Apply_VHTT1.
+eapply Prms_VHTT1.
+eapply getSh1idxWp.
+intros; unfold THoarePrmsTriple_Eval; intros;simpl.
+inversion X;subst.
+destruct vs; inversion H5.
+instantiate (1:= fun vs s => P s /\ partitionDescriptorEntry s /\
+     In partition (getPartitions multiplexer s) /\
+     vs = [cst index sh1idx]).
+intuition. f_equal. auto.
+inversion X0. intuition.
+destruct vs.
+unfold THoareTriple_Eval; intros.
+intuition. inversion H3.
+destruct vs. Focus 2.
+unfold THoareTriple_Eval; intros.
+intuition. inversion H3.
+unfold mkVEnv. simpl.
+eapply weakenEval.
+eapply succWp.
+simpl; intros. 
+instantiate (1:= sh1idx).
+instantiate (1:= fun s => P s /\ partitionDescriptorEntry s /\
+    In partition (getPartitions multiplexer s)).
+simpl. intuition.
+eapply H in H1.
+specialize H1 with sh1idx.
+eapply H1. auto.
+inversion H3; 
+intuition. intros; simpl.
+unfold THoarePrmsTriple_Eval; intros.
+inversion X; subst.
+destruct vs; inversion H5.
+instantiate (1:= fun vs s => P s /\ partitionDescriptorEntry s /\
+     In partition (getPartitions multiplexer s) /\ 
+     (exists i : index, succIndexInternal sh1idx = Some i /\ 
+     vs = [cst (option index) (Some i)])).
+intuition.
+destruct H3. exists x. intuition.
+rewrite H0 in H2. inversion H2; subst.
+repeat apply inj_pair2 in H6.
+auto. f_equal. auto.
+inversion X0. intuition.
+destruct vs.
+unfold THoareTriple_Eval; intros.
+destruct H as [a [b [c d]]].
+destruct d. destruct H.
+inversion H0.
+destruct vs. Focus 2.
+unfold THoareTriple_Eval; intros.
+destruct H as [a [b [c d]]].
+destruct d. destruct H.
+inversion H0.
+unfold mkVEnv; simpl.
+eapply weakenEval.
+eapply readPhysicalW.
+simpl; intros. intuition.
+destruct H3. exists x.
+unfold partitionDescriptorEntry in H.
+apply H with partition sh1idx in H1.
+clear H. intuition. destruct H5.
+exists x0. intuition.
+inversion H4;subst. auto.
+unfold nextEntryIsPP in H5.
+unfold readPhysicalInternal.
+rewrite H1 in H5.
+destruct (lookup partition x (memory s) beqPage beqIndex).
+destruct v0;try contradiction.
+unfold cst in H5.
+apply inj_pairT2 in H5.
+inversion H5. auto.
+unfold isVA in H2.
+destruct (lookup partition sh1idx (memory s) beqPage beqIndex) 
+ in H2;try contradiction. auto.
+Qed.
+\end{lstlisting} \pagebreak
 
 \section{Hoare\_writeVirtualInv.v file} \label{writeFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
