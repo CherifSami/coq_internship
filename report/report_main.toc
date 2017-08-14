@@ -90,6 +90,8 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {5}Conclusion}{54}{chapter.5}
 \defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{55}{chapter*.13}
+\defcounter {refsection}{0}\relax 
 \contentsline {chapter}{Appendixes : Project Files}{56}{section*.14}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {A}IdModTypeA.v}{57}{Appendix.a.A}

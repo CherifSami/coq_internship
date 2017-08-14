@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  14 AUG 2017 14:17
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  14 AUG 2017 14:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1095,25 +1095,25 @@ Package biblatex Info: ... file 'report_main.bbl' found.
 Package biblatex Info: Reference section=0 on input line 135.
 Package biblatex Info: Reference segment=0 on input line 135.
  (./cover.tex
-<img/2xsLogo.png, id=180, 308.352pt x 177.0615pt>
+<img/2xsLogo.png, id=184, 308.352pt x 177.0615pt>
 File: img/2xsLogo.png Graphic file (type png)
  <use img/2xsLogo.png>
 Package pdftex.def Info: img/2xsLogo.png used on input line 35.
 (pdftex.def)             Requested size: 61.6693pt x 35.41165pt.
 
-<img/cristalLogo.png, id=182, 309.7974pt x 103.1052pt>
+<img/cristalLogo.png, id=186, 309.7974pt x 103.1052pt>
 File: img/cristalLogo.png Graphic file (type png)
 
 <use img/cristalLogo.png>
 Package pdftex.def Info: img/cristalLogo.png used on input line 35.
 (pdftex.def)             Requested size: 108.43071pt x 36.08734pt.
- <img/univ.png, id=183, 845.1575pt x 202.7575pt>
+ <img/univ.png, id=187, 845.1575pt x 202.7575pt>
 File: img/univ.png Graphic file (type png)
 
 <use img/univ.png>
 Package pdftex.def Info: img/univ.png used on input line 39.
 (pdftex.def)             Requested size: 169.0285pt x 40.55078pt.
-) <img/cover.jpg, id=184, 943.525pt x 1333.98375pt>
+) <img/cover.jpg, id=188, 943.525pt x 1333.98375pt>
 File: img/cover.jpg Graphic file (type jpg)
 
 <use img/cover.jpg>
@@ -1208,7 +1208,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 5--6
 
  []
 
-<img/cristalLocation.png, id=438, 536.0025pt x 320.19624pt>
+<img/cristalLocation.png, id=443, 536.0025pt x 320.19624pt>
 File: img/cristalLocation.png Graphic file (type png)
 
 <use img/cristalLocation.png>
@@ -1226,7 +1226,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
 
-<img/2XS.png, id=444, 745.78625pt x 292.09125pt>
+<img/2XS.png, id=449, 745.78625pt x 292.09125pt>
 File: img/2XS.png Graphic file (type png)
  <use img/2XS.png>
 Package pdftex.def Info: img/2XS.png used on input line 39.
@@ -1279,7 +1279,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 22--23
 
  []
 
-<img/OSLayersPIP.png, id=456, 561.09625pt x 369.38pt>
+<img/OSLayersPIP.png, id=461, 561.09625pt x 369.38pt>
 File: img/OSLayersPIP.png Graphic file (type png)
 
 <use img/OSLayersPIP.png>
@@ -1296,14 +1296,14 @@ been already used, duplicate ignored
                    \relax 
 l.35 
       [5 <./img/OSLayersPIP.png>]
-<img/memoryIsolShare.png, id=460, 812.03375pt x 539.01375pt>
+<img/memoryIsolShare.png, id=465, 812.03375pt x 539.01375pt>
 File: img/memoryIsolShare.png Graphic file (type png)
 
 <use img/memoryIsolShare.png>
 Package pdftex.def Info: img/memoryIsolShare.png used on input line 38.
 (pdftex.def)             Requested size: 312.00119pt x 207.09735pt.
 
-<img/FreeRTOSEx.png, id=462, 404.51125pt x 180.675pt>
+<img/FreeRTOSEx.png, id=467, 404.51125pt x 180.675pt>
 File: img/FreeRTOSEx.png Graphic file (type png)
  <use img/FreeRTOSEx.png>
 Package pdftex.def Info: img/FreeRTOSEx.png used on input line 46.
@@ -1314,19 +1314,19 @@ been already used, duplicate ignored
                    \relax 
 l.54 \begin{itemize}
                      [6 <./img/memoryIsolShare.png> <./img/FreeRTOSEx.png>]
-<img/PIPDesign.png, id=469, 846.16125pt x 423.5825pt>
+<img/PIPDesign.png, id=474, 846.16125pt x 423.5825pt>
 File: img/PIPDesign.png Graphic file (type png)
  <use img/PIPDesign.png>
 Package pdftex.def Info: img/PIPDesign.png used on input line 63.
 (pdftex.def)             Requested size: 312.00119pt x 156.18015pt.
 
-[7 <./img/PIPDesign.png>] <img/HAL.png, id=478, 765.86125pt x 343.2825pt>
+[7 <./img/PIPDesign.png>] <img/HAL.png, id=483, 765.86125pt x 343.2825pt>
 File: img/HAL.png Graphic file (type png)
 
 <use img/HAL.png>
 Package pdftex.def Info: img/HAL.png used on input line 92.
 (pdftex.def)             Requested size: 226.20071pt x 101.38792pt.
- <img/CoqLogo.png, id=479, 49.68562pt x 75.28125pt>
+ <img/CoqLogo.png, id=484, 49.68562pt x 75.28125pt>
 File: img/CoqLogo.png Graphic file (type png)
 
 <use img/CoqLogo.png>
@@ -1362,7 +1362,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 142--143
 
  []
 
-<img/memoryEx.png, id=499, 1405.25pt x 1465.475pt>
+<img/memoryEx.png, id=504, 1405.25pt x 1465.475pt>
 File: img/memoryEx.png Graphic file (type png)
  <use img/memoryEx.png>
 Package pdftex.def Info: img/memoryEx.png used on input line 150.
@@ -1597,7 +1597,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 8--188
 [54
 
 ]
-Overfull \hbox (0.90907pt too wide) in paragraph at lines 193--193
+Overfull \hbox (0.90907pt too wide) in paragraph at lines 192--192
 []\OT1/cmr/m/n/12 Bertot, Y. ``Lan-guage En-gi-neer-ing and Rig-or-ous Soft-war
 e De-vel-op-ment''.
  []
@@ -1659,7 +1659,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 196.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 196.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 196.
 Package rerunfilecheck Info: File `report_main.out' has not changed.
-(rerunfilecheck)             Checksum: FFC4F8BE4AAAEB19433A7D1176292F4B;3142.
+(rerunfilecheck)             Checksum: 2AD9FF15914F12FEFC24459E12980C34;3192.
 
 
 LaTeX Warning: There were undefined references.
@@ -1669,10 +1669,10 @@ Package logreq Info: Writing requests to 'report_main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20785 strings out of 494985
- 315206 string characters out of 6180356
+ 20786 strings out of 494985
+ 315219 string characters out of 6180356
  791666 words of memory out of 5000000
- 21894 multiletter control sequences out of 15000+600000
+ 21895 multiletter control sequences out of 15000+600000
  16080 words of font info for 57 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  46i,13n,72p,1714b,3321s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1692,10 +1692,10 @@ mr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb>
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on report_main.pdf (88 pages, 1216784 bytes).
+Output written on report_main.pdf (88 pages, 1213270 bytes).
 PDF statistics:
- 2889 PDF objects out of 2984 (max. 8388607)
- 2736 compressed objects within 28 object streams
+ 2893 PDF objects out of 2984 (max. 8388607)
+ 2740 compressed objects within 28 object streams
  1733 named destinations out of 2073 (max. 500000)
- 418 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 426 words of extra memory for PDF output out of 10000 (max. 10000000)
 
