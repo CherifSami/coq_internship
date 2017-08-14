@@ -1,0 +1,231 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \sortlist{entry}{nty}
+    \entry{Yves}{inproceedings}{}
+      \name{labelname}{1}{}{%
+        {{hash=877cbf536bf77c23de7f6116228e348d}{Bertot}{B\bibinitperiod}{Yves}{Y\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=877cbf536bf77c23de7f6116228e348d}{Bertot}{B\bibinitperiod}{Yves}{Y\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=9a058a901865f8cd7ad519b86d37194a}{Bove}{B\bibinitperiod}{Ana}{A\bibinitperiod}{}{}{}{}}%
+        {{hash=c1e2012053fd20cfa7d8e6e5188cd6a2}{Pinto}{P\bibinitperiod}{Jorge\bibnamedelima Sousa}{J\bibinitperiod\bibinitdelim S\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{877cbf536bf77c23de7f6116228e348d}
+      \strng{fullhash}{877cbf536bf77c23de7f6116228e348d}
+      \field{sortinit}{B}
+      \field{labeltitle}{Language Engineering and Rigorous Software Development}
+      \field{booktitle}{ERNET Summer School, eb 2008, Piriapolis, Uruguay}
+      \field{chapter}{Structural abstract interpretation, A formal study using Coq}
+      \field{series}{Lecture Notes in Computer Science}
+      \field{title}{Language Engineering and Rigorous Software Development}
+      \field{volume}{5520}
+      \field{year}{2008}
+    \endentry
+    \entry{MMUIsolation}{article}{}
+      \name{labelname}{4}{}{%
+        {{hash=5a710d1cbf7302664e54d4ddeb7d1c89}{Jomaa}{J\bibinitperiod}{Narjes}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+        {{hash=faed08e404782773057c864f338c7db5}{Grimaud}{G\bibinitperiod}{Gilles}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=ce3244ae0922700b7b6153f383e32522}{Hym}{H\bibinitperiod}{Samuel}{S\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{4}{}{%
+        {{hash=5a710d1cbf7302664e54d4ddeb7d1c89}{Jomaa}{J\bibinitperiod}{Narjes}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+        {{hash=faed08e404782773057c864f338c7db5}{Grimaud}{G\bibinitperiod}{Gilles}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=ce3244ae0922700b7b6153f383e32522}{Hym}{H\bibinitperiod}{Samuel}{S\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{3876aff1c603c1168ccacfc15aff549c}
+      \strng{fullhash}{3ba7d730c73c6a3dc4f8cb747bbf3a2e}
+      \field{sortinit}{J}
+      \field{labeltitle}{Formal Proof of Dynamic Memory Isolation Based on {MMU}}
+      \field{issn}{01676423}
+      \field{journaltitle}{Science of Computer Programming}
+      \field{title}{Formal Proof of Dynamic Memory Isolation Based on {MMU}}
+      \field{year}{2017}
+    \endentry
+    \entry{PIPWebSlides}{online}{}
+      \name{labelname}{1}{}{%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{55da439491bca65e6e2558a6f6562a24}
+      \strng{fullhash}{55da439491bca65e6e2558a6f6562a24}
+      \field{sortinit}{N}
+      \field{labeltitle}{Pip: A Minimal OS Kernel with Provable Isolation}
+      \field{month}{04}
+      \field{note}{Third French-Japanese Meeting on Cybersecurity}
+      \field{title}{Pip: A Minimal OS Kernel with Provable Isolation}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://project.inria.fr/FranceJapanICST/files/2017/05/DNowak_presentation_2017.pdf
+      \endverb
+    \endentry
+    \entry{SoftwareFoundation}{book}{}
+      \name{labelname}{8}{}{%
+        {{hash=8eb1c0a7778a466aa612ab3259d489ec}{Pierce}{P\bibinitperiod}{Benjamin\bibnamedelima C.}{B\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+        {{hash=36e42e651d7fbce3a308e58770149e20}{Amorim}{A\bibinitperiod}{Arthur\bibnamedelima Azevedo}{A\bibinitperiod\bibinitdelim A\bibinitperiod}{de}{d\bibinitperiod}{}{}}%
+        {{hash=5cbcd088d78ce11865025e8da01f325f}{Casinghino}{C\bibinitperiod}{Chris}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=2236e238d6bdc3c54b604fb209e4f6d2}{Gaboardi}{G\bibinitperiod}{Marco}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a9953f0b4a61c5c5a2208d5a1ebf8c5c}{Greenberg}{G\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=708ef205d7712d8fdda6e861941af0b0}{Hritcu}{H\bibinitperiod}{Catalin}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=d1a4ec9dfb5208ec69d6b3a3ef4ec7ff}{Sjöberg}{S\bibinitperiod}{Vilhelm}{V\bibinitperiod}{}{}{}{}}%
+        {{hash=4cedc901f26578d93d2ac6f60af7f707}{Yorgey}{Y\bibinitperiod}{Brent}{B\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{8}{}{%
+        {{hash=8eb1c0a7778a466aa612ab3259d489ec}{Pierce}{P\bibinitperiod}{Benjamin\bibnamedelima C.}{B\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+        {{hash=36e42e651d7fbce3a308e58770149e20}{Amorim}{A\bibinitperiod}{Arthur\bibnamedelima Azevedo}{A\bibinitperiod\bibinitdelim A\bibinitperiod}{de}{d\bibinitperiod}{}{}}%
+        {{hash=5cbcd088d78ce11865025e8da01f325f}{Casinghino}{C\bibinitperiod}{Chris}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=2236e238d6bdc3c54b604fb209e4f6d2}{Gaboardi}{G\bibinitperiod}{Marco}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a9953f0b4a61c5c5a2208d5a1ebf8c5c}{Greenberg}{G\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=708ef205d7712d8fdda6e861941af0b0}{Hritcu}{H\bibinitperiod}{Catalin}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=d1a4ec9dfb5208ec69d6b3a3ef4ec7ff}{Sjöberg}{S\bibinitperiod}{Vilhelm}{V\bibinitperiod}{}{}{}{}}%
+        {{hash=4cedc901f26578d93d2ac6f60af7f707}{Yorgey}{Y\bibinitperiod}{Brent}{B\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Electronic textbook}%
+      }
+      \strng{namehash}{be1956cf392d2df36ad49931b060ee18}
+      \strng{fullhash}{04080f9373993bd26f83201cc9a5b020}
+      \field{sortinit}{P}
+      \field{labeltitle}{Software Foundations}
+      \field{note}{Ebook version 4.2}
+      \field{title}{Software Foundations}
+      \field{year}{2017}
+      \verb{url}
+      \verb http://www.cis.upenn.edu/~bcpierce/sf
+      \endverb
+    \endentry
+    \entry{DeepVsShallow}{inbook}{}
+      \name{labelname}{2}{}{%
+        {{hash=7b12598e5739a662d4bc2c866844e25f}{Svenningsson}{S\bibinitperiod}{Josef}{J\bibinitperiod}{}{}{}{}}%
+        {{hash=455e665d4a6afac98086db1f207925f4}{Axelsson}{A\bibinitperiod}{Emil}{E\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{2}{}{%
+        {{hash=7b12598e5739a662d4bc2c866844e25f}{Svenningsson}{S\bibinitperiod}{Josef}{J\bibinitperiod}{}{}{}{}}%
+        {{hash=455e665d4a6afac98086db1f207925f4}{Axelsson}{A\bibinitperiod}{Emil}{E\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{03c12adfe74137edccff6984494d5ce2}
+      \strng{fullhash}{03c12adfe74137edccff6984494d5ce2}
+      \field{sortinit}{S}
+      \field{labeltitle}{Trends in Functional Programming}
+      \field{chapter}{Combining Deep and Shallow Embedding for EDSL}
+      \field{series}{Lecture Notes in Computer Science}
+      \field{title}{Trends in Functional Programming}
+      \field{volume}{7829}
+      \field{year}{2013}
+    \endentry
+    \entry{ModernOS}{inbook}{}
+      \name{labelname}{1}{}{%
+        {{hash=f5468b55b742e14a341a50be425d3715}{Tanenbaum}{T\bibinitperiod}{Andrew}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=f5468b55b742e14a341a50be425d3715}{Tanenbaum}{T\bibinitperiod}{Andrew}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Pearson}%
+      }
+      \strng{namehash}{f5468b55b742e14a341a50be425d3715}
+      \strng{fullhash}{f5468b55b742e14a341a50be425d3715}
+      \field{sortinit}{T}
+      \field{labeltitle}{Modern Operating Systems}
+      \field{chapter}{History of Operation Systems}
+      \field{edition}{3\rd}
+      \field{isbn}{013359162X}
+      \field{title}{Modern Operating Systems}
+      \field{year}{2009}
+      \field{pages}{60\bibrangedash 69}
+    \endentry
+    \entry{PIPWeb}{online}{}
+      \name{labelname}{1}{}{%
+        {{hash=8bdacb32f6fc276f4b456bdffd3fdb31}{{The\bibnamedelimb 2XS\bibnamedelimb team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=8bdacb32f6fc276f4b456bdffd3fdb31}{{The\bibnamedelimb 2XS\bibnamedelimb team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \strng{namehash}{8bdacb32f6fc276f4b456bdffd3fdb31}
+      \strng{fullhash}{8bdacb32f6fc276f4b456bdffd3fdb31}
+      \field{sortinit}{T}
+      \field{labeltitle}{The PIP protokernel official Website}
+      \field{note}{CRIStAL laboratry}
+      \field{title}{The PIP protokernel official Website}
+      \verb{url}
+      \verb http://pip.univ-lille1.fr
+      \endverb
+    \endentry
+    \entry{Coq}{manual}{}
+      \name{labelname}{1}{}{%
+        {{hash=882663116a5b3daa12664103cd3b8bf8}{{The\bibnamedelimb Coq\bibnamedelimb Development\bibnamedelimb Team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=882663116a5b3daa12664103cd3b8bf8}{{The\bibnamedelimb Coq\bibnamedelimb Development\bibnamedelimb Team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {INRIA}%
+      }
+      \strng{namehash}{882663116a5b3daa12664103cd3b8bf8}
+      \strng{fullhash}{882663116a5b3daa12664103cd3b8bf8}
+      \field{sortinit}{T}
+      \field{labeltitle}{The Coq Proof Assistant. Reference Manual}
+      \field{month}{07}
+      \field{note}{Coq version 8.6.1}
+      \field{title}{The Coq Proof Assistant. Reference Manual}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://coq.inria.fr/distrib/current/files/Reference-Manual.pdf
+      \endverb
+    \endentry
+    \entry{Wildmoser2004CertifyingMC}{inproceedings}{}
+      \name{labelname}{2}{}{%
+        {{hash=cae5656aacb1792abaacfaabbcb58806}{Wildmoser}{W\bibinitperiod}{Martin}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a41b38c2580f5bb8c574d84f66e0856a}{Nipkow}{N\bibinitperiod}{Tobias}{T\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{2}{}{%
+        {{hash=cae5656aacb1792abaacfaabbcb58806}{Wildmoser}{W\bibinitperiod}{Martin}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a41b38c2580f5bb8c574d84f66e0856a}{Nipkow}{N\bibinitperiod}{Tobias}{T\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{71a71407b20e7087f37f325859a6a6b5}
+      \strng{fullhash}{71a71407b20e7087f37f325859a6a6b5}
+      \field{sortinit}{W}
+      \field{labeltitle}{Certifying Machine Code Safety: Shallow Versus Deep Embedding}
+      \field{booktitle}{TPHOLs}
+      \field{title}{Certifying Machine Code Safety: Shallow Versus Deep Embedding}
+      \field{year}{2004}
+    \endentry
+  \endsortlist
+\endrefsection
+\endinput
+

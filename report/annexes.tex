@@ -1,8 +1,5 @@
 \begin{appendices}
-
-\chapter{Project files}
-
-\section{IdModTypeA.v file} \label{ModType}
+\chapter{IdModTypeA.v} \label{ModType}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
 mathescape=true,numbers=left]
@@ -34,9 +31,8 @@ Instance WP : PState W :=
   
 End IdModType.
 \end{lstlisting}
-\pagebreak
 
-\section{Pip\_state.v file} \label{stateFile}
+\chapter{Pip\_state.v} \label{stateFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
 mathescape=true,numbers=left]
@@ -97,8 +93,8 @@ Definition defaultPage := CPage 0.
 Definition fstLevel :=  CLevel 0.
 Definition Kidx := CIndex 1.
 \end{lstlisting}
-\pagebreak
-\section{Lib.v file} \label{LibFile}
+
+\chapter{Lib.v} \label{LibFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
 mathescape=true,numbers=left]
@@ -141,8 +137,8 @@ Definition add {A B C: Type} (k : A) (i : B) (v : C) (assoc : list
 Definition disjoint {A : Type} (l1 l2 : list A) : Prop := 
 forall x : A,  In x l1  -> ~ In x l2 . 
 \end{lstlisting}
-\pagebreak
-\section{Hoare\_getFstShadow.v file} \label{getFstFile}
+
+\chapter{Hoare\_getFstShadow.v} \label{getFstFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
 mathescape=true,numbers=left]
@@ -315,8 +311,6 @@ Proof using Hoare triple rules ... *)
 (* Lemma succRecWByInversion : 
 Proof by inversions ... *)
 
-
-
 Lemma readPhysicalW (y:Id) table (v:Value) 
 	(P' : Value $\rightarrow$ W $\rightarrow$ Prop) (fenv: funEnv) (env: valEnv) :
  {{fun s $\Rightarrow$  $\exists$ idxsucc p1, v = cst (option index) (Some idxsucc)
@@ -447,7 +441,7 @@ destruct (lookup partition sh1idx (memory s) beqPage beqIndex)
 Qed.
 \end{lstlisting} \pagebreak
 
-\section{Hoare\_writeVirtualInv.v file} \label{writeFile}
+\chapter{Hoare\_writeVirtualInv.v} \label{writeFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
 mathescape=true,numbers=left]
@@ -568,7 +562,7 @@ intuition try assumption.
 Qed.
 \end{lstlisting} \pagebreak
 
-\section{Hoare\_initVAddrTable.v file} \label{initFile}
+\chapter{Hoare\_initVAddrTable.v} \label{initFile}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,
 mathescape=true,numbers=left]
@@ -912,7 +906,6 @@ apply indexBoundEq in H3.
 subst. assumption.
 (** end *)
 Qed.
-
 \end{lstlisting}
 
 

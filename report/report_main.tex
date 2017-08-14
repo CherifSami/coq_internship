@@ -3,7 +3,7 @@
 
 % Packages 
 \usepackage[english]{babel}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{xspace}
 \usepackage{indentfirst}
 \usepackage{titlesec}
@@ -16,6 +16,19 @@
 \usepackage[nonumberlist]{glossaries}
 \usepackage{color}
 \usepackage[toc,page]{appendix}
+\usepackage{abstract}
+\usepackage{hyperref}
+\usepackage[firstinits=true]{biblatex}
+\usepackage{eso-pic}
+
+% PDF setup
+\hypersetup{							
+pdfauthor = {Mohamed Sami Cherif},
+pdftitle = {Title},	% Titre du document
+pdfsubject = {}, % Sujet
+pdfkeywords = {PIP, Hoare, logic, proof}, % Mots-clefs
+pdfstartview={FitH}
+pdfcreator = {Texmaker}}	
 
 % header & footer
 \usepackage{fancyhdr}
@@ -26,14 +39,12 @@
 \fancyfoot[C]{\thepage}
 
 % Commands
-
 \makeatletter
 \def\@makechapterhead#1{
   {\parindent \z@ \raggedright \normalfont
     \interlinepenalty\@M
     \Huge\bfseries  \thechapter.\quad #1\par\nobreak
-    \vskip 20\p@
-  }}
+    \vskip 20\p@ }}
 \makeatother
 
 \newcommand\st{\textsuperscript{st}\xspace}
@@ -43,6 +54,22 @@
 
 \renewcommand{\lstlistingname}{\textbf{Script}}
 \renewcommand{\lstlistlistingname}{List of \lstlistingname s}
+
+\newcommand\BackgroundPic{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth,height=\paperheight,%
+keepaspectratio]{img/cover.jpg}%
+\vfill
+}}}
+
+\providecommand{\keywords}[1]{\textbf{\textit{Keywords : }} #1}
+
+\renewcommand\appendixname{Appendixes : Project files}
+\renewcommand\appendixpagename{Appendixes : Project Files}
+\renewcommand\appendixtocname{Appendixes : Project Files}
 
 \makeglossaries
 
@@ -100,18 +127,21 @@
 \newacronym{SOS}{SOS}{Structural Operational Semantics}
 \glsaddall
 
+\DeclareNameAlias{author}{last-first}
+\bibliography{biblio.bib}
+
+
 \begin{document}
  
-%\input{./title.tex}
+\input{./cover.tex}
 
 \newpage
-~
 \thispagestyle{empty}
 \newpage
 
-%\input{./abstract.tex}
+\input{./abstract.tex}
 
-%\input{./acknowledgement.tex}
+\input{./acknowledgement.tex}
 
 %Table of contents
 \tableofcontents
@@ -148,16 +178,19 @@
 
 \input{./introduction.tex}
 
-%\input{./cristal.tex}
+\input{./cristal.tex}
  
-%\input{./PIP.tex}
+\input{./PIP.tex}
 
-%\input{./contributions.tex}
+\input{./contributions.tex}
 
-%\input{./conclusion.tex}
+\input{./conclusion.tex}
 
-%\input{./annexes.tex}
+% bibliography
+% not cited
+\nocite{*}
+\printbibliography
 
-%\bibliography{bibliographie.bib}
+\input{./annexes.tex}
 
 \end{document}
