@@ -20,6 +20,7 @@
 \usepackage{hyperref}
 \usepackage[firstinits=true]{biblatex}
 \usepackage{eso-pic}
+\usepackage{afterpage}
 
 % PDF setup
 \hypersetup{							
@@ -135,8 +136,7 @@ keepaspectratio]{img/cover.jpg}%
  
 \input{./cover.tex}
 
-\newpage
-\thispagestyle{empty}
+\afterpage{\null\thispagestyle{empty}\newpage}
 \newpage
 
 \input{./abstract.tex}
