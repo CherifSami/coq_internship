@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  14 AUG 2017 12:25
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  14 AUG 2017 14:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1090,18 +1090,18 @@ Package biblatex Info: Automatic encoding selection.
 \openout4 = `report_main.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'report_main.bbl' not found.
-
-No file report_main.bbl.
+Package biblatex Info: ... file 'report_main.bbl' found.
+ (./report_main.bbl)
 Package biblatex Info: Reference section=0 on input line 135.
 Package biblatex Info: Reference segment=0 on input line 135.
-(./cover.tex <img/2xsLogo.png, id=180, 308.352pt x 177.0615pt>
+ (./cover.tex
+<img/2xsLogo.png, id=180, 308.352pt x 177.0615pt>
 File: img/2xsLogo.png Graphic file (type png)
-
-<use img/2xsLogo.png>
+ <use img/2xsLogo.png>
 Package pdftex.def Info: img/2xsLogo.png used on input line 35.
 (pdftex.def)             Requested size: 61.6693pt x 35.41165pt.
- <img/cristalLogo.png, id=182, 309.7974pt x 103.1052pt>
+
+<img/cristalLogo.png, id=182, 309.7974pt x 103.1052pt>
 File: img/cristalLogo.png Graphic file (type png)
 
 <use img/cristalLogo.png>
@@ -1594,106 +1594,108 @@ Underfull \hbox (badness 10000) in paragraph at lines 8--188
 
  []
 
+[54
 
-LaTeX Warning: Empty bibliography on input line 192.
+]
+Overfull \hbox (0.90907pt too wide) in paragraph at lines 193--193
+[]\OT1/cmr/m/n/12 Bertot, Y. ``Lan-guage En-gi-neer-ing and Rig-or-ous Soft-war
+e De-vel-op-ment''.
+ []
 
-(./annexes.tex [54
+(./annexes.tex [55
 
-] [55
+] [56
 
 
 ]
 Appendix A.
-[56
+[57
 
 ]
 Appendix B.
-[57
+[58
 
-] [58]
+] [59]
 Appendix C.
-[59
+[60
 
 ]
 Appendix D.
-[60
+[61
 
-] [61] [62] [63] [64] [65] [66]
+] [62] [63] [64] [65] [66] [67]
 Appendix E.
-[67
+[68
 
 ]
 Overfull \hbox (1.09314pt too wide) in paragraph at lines 517--518
 [][][][][][][][][][][][][][][][][] 
  []
 
-[68] [69]
+[69] [70]
 Appendix F.
 
 Overfull \hbox (1.09314pt too wide) in paragraph at lines 578--579
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[70
+[71
 
-] [71] [72]
+] [72] [73]
 Overfull \hbox (1.09314pt too wide) in paragraph at lines 737--738
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[73] [74] [75] [76]
+[74] [75] [76] [77]
 Overfull \hbox (7.99164pt too wide) in paragraph at lines 892--893
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 )
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 196.
- [77]
+ [78]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 196.
  (./report_main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 196.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 196.
 Package rerunfilecheck Info: File `report_main.out' has not changed.
-(rerunfilecheck)             Checksum: 1E936F2CA35AD2ADFC42CCBD312DB0F3;3142.
+(rerunfilecheck)             Checksum: FFC4F8BE4AAAEB19433A7D1176292F4B;3142.
 
 
 LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                report_main
-(biblatex)                and rerun LaTeX afterwards.
 
 Package logreq Info: Writing requests to 'report_main.run.xml'.
 \openout1 = `report_main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20630 strings out of 494985
- 312383 string characters out of 6180356
+ 20785 strings out of 494985
+ 315206 string characters out of 6180356
  791666 words of memory out of 5000000
- 21754 multiletter control sequences out of 15000+600000
- 15610 words of font info for 55 fonts, out of 8000000 for 9000
+ 21894 multiletter control sequences out of 15000+600000
+ 16080 words of font info for 57 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  46i,13n,72p,1714b,3321s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on report_main.pdf (87 pages, 1195053 bytes).
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on report_main.pdf (88 pages, 1216784 bytes).
 PDF statistics:
- 2856 PDF objects out of 2984 (max. 8388607)
- 2706 compressed objects within 28 object streams
- 1722 named destinations out of 1728 (max. 500000)
+ 2889 PDF objects out of 2984 (max. 8388607)
+ 2736 compressed objects within 28 object streams
+ 1733 named destinations out of 2073 (max. 500000)
  418 words of extra memory for PDF output out of 10000 (max. 10000000)
 
