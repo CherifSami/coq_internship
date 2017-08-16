@@ -9,11 +9,11 @@ Various studies on bug density, relatively to the developed module size, age as 
 
 \noindent Therefore, we can distinguish several OS kernel families such as : 
 \begin{itemize}
-	\item \textbf{Microkernels :} The basic idea  behind a microkernel design  is  to  achieve  high reliability  by  splitting  the  operating  system  up  into  small,  well-defined  modules,  only  one  of  which, the  microkernel, runs  in  kernel  mode;
+	\item \textbf{Microkernels :} The basic idea  behind a microkernel design  is  to  achieve high reliability  by  splitting the operating  system  up into small, well-defined  modules, only  one  of  which, the  microkernel, runs  in  kernel  mode;
 	\item \textbf{Exokernels :} The idea behind an exokernel is to force as few abstractions as possible on application developers, enabling them to make as many decisions as possible about hardware abstractions.
 \end{itemize} 
   
-\noindent Although the closest kernel design to PIP is the exokernel, PIP does not belong to any of the kernel families featured in the state of art, but it is the first member of a new kernel family, \textbf{protokernels}, as compared to most microkernels and exokernels, the TCB in PIP is even more restricted :
+\noindent Although the closest kernel design to PIP is the exokernel, PIP\cite{PIP} does not belong to any of the kernel families featured in the state of art, but it is the first member of a new kernel family, \textbf{protokernels}, as compared to most microkernels and exokernels, the TCB in PIP is even more restricted :
 \begin{itemize}
 	\item Scheduling and IPC are done in user mode unlike a microkernel;
 	\item Multiplexing is also done in user mode unlike an exokernel.
@@ -21,7 +21,7 @@ Various studies on bug density, relatively to the developed module size, age as 
 
 \noindent whereas the kernel mode is only for \textbf{multi-level MMU control and configuration} (virtual memory) and \textbf{context switching}. This not only ensures less bugs density but also more feasibility of formal proof that will warrant the memory isolation property of the protokernel. \\
 
-As a \textbf{minimal OS Kernel with provable isolation}, PIP focuses more on security and safety without sacrificing efficiency and ensures memory isolation between different tasks running on the same device.PIP's algorithmic part is written in Gallina, the language of the Coq proof assistant, in a monadic style that allows direct translation into free-standing C. We will refer to this implementation in \textit{Gallina} as the shallow embedding in contrast to the deep embedding introduced in section \ref{deep} p.\pageref{deep}. 
+As a \textbf{minimal OS Kernel with provable isolation}\cite{PIPSlides}, PIP focuses more on security and safety without sacrificing efficiency and ensures memory isolation between different tasks running on the same device.PIP's algorithmic part is written in Gallina, the language of the Coq proof assistant, in a monadic style that allows direct translation into free-standing C. We will refer to this implementation in \textit{Gallina} as the shallow embedding in contrast to the deep embedding introduced in section \ref{deep} p.\pageref{deep}. 
 
 \begin{figure}[!ht]
 	\centering 
@@ -100,7 +100,7 @@ This API is sufficient as far as memory requirements are concerned but it lacks 
 \centering
 \includegraphics[frame]{img/CoqLogo.png}
 \end{wrapfigure}
-Coq is the result of about 30 years of research.
+Coq\cite{Coq} is the result of about 30 years of research.
 It started in 1984 as an implementation of the Calculus of Constructions, an expressive formal language, at INRIA by \textit{Thierry Coquand} and \textit{Gérard Huet} and was extended,later in 1991, by Christine to the Calculus of Inductive Constructions. \\
 
 Coq is a \textbf{formal proof management system}. It provides a formal language to write mathematical definitions, executable algorithms and theorems together with an environment for semi-interactive development of machine-checked proofs. Typical applications include the certification of properties of programming languages (e.g. the \textit{CompCert} compiler certification project, or the \textit{Bedrock} verified low-level programming library), the formalization of mathematics (e.g. the full formalization of the Feit-Thompson theorem or homotopy type theory) and teaching. It implements a program specification and mathematical higher-level language called \textit{Gallina} that is based on the Calculus of Inductive Constructions combining both a higher-order logic and a richly-typed functional programming language.\\
@@ -134,7 +134,7 @@ Coq also provides several tactics to deal with higher-order logic, particularly 
 
 PIP uses several data structures per partition, which will represent the global state of the partition's memory state. This is necessary as it has to keep track of pages allocated to partitions in order to allow or deny derivation and partition creation while preserving the required properties. \\
 
-Figure \ref{partitionEx} shows a partition tree example consisting of a  partition, Parent, that has a single child, Child1. A partition is identified by a partition descriptor which is a page number essential to access the whole data structure of a partition. In our case, the partition descriptors of Parent and Child1 are respectively 1 and 12. The pages lent to PIP to manage a partition are organized in a tree with three branches : the MMU tables, the first shadow and the second shadow. The aim of this organization is to keep additional information about each page lent to a partition. Moreover these structures have multiple goals :
+Figure \ref{partitionEx} shows a partition tree example consisting of a partition, Parent, that has a single child, Child1. A partition is identified by a partition descriptor which is a page number essential to access the whole data structure of a partition. In our case, the partition descriptors of Parent and Child1 are respectively 1 and 12. The pages lent to PIP to manage a partition are organized in a tree with three branches : the MMU tables, the first shadow and the second shadow. The aim of this organization is to keep additional information about each page lent to a partition. Moreover these structures have multiple goals :
 \begin{itemize}
 	\item \textbf{Access control :} the first shadow is used to avoid deriving the same page multiple times;
 	\item \textbf{Performance :} the second shadow and the configuration list are used to quickly find the virtual address of a page without having to parse the whole virtual space when the parent partition reclaims it.
@@ -255,10 +255,10 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \BinaryInfC{\{P\} IF B THEN C1 ELSE C2 \{Q\}}
 \end{prooftree}
 \end{enumerate}
-The rules defined above are in their simplest form and we need to adapt them to the language or semantics we're working on. Also, This list isn't exhaustive. For example, we didn't define a rule for \textit{While} loops because the Coq model of PIP doesn't actually use them and uses recursion instead. Likewise, We're sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
+The rules defined above are in their simplest form and we need to adapt them to the language or semantics we're working on. Also, This list isn't exhaustive\cite{SoftwareFoundation}. For example, we didn't define a rule for \textit{While} loops because the Coq model of PIP doesn't actually use them and uses recursion instead. Likewise, We're sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
 
 \subsection{Hoare logic in the shallow embedding} \label{Hoare}
-The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section. A program in the shallow embedding is defined in a monadic style that returns a pair of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare}, \textbf{the postcondition must not only reason on the resulting state but also on the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in coq.
+The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section. A program in the shallow embedding is defined in a monadic style that returns a pair of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare}, \textbf{the postcondition must not only reason on the resulting state but also on the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in Coq.
 \begin{lstlisting}[caption = {Hoare triple in the shallow embedding},label = {shallow_Hoare}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition hoareTriple {A : Type} (P : state $\rightarrow$ Prop) 
@@ -306,7 +306,7 @@ Qed.
 \end{lstlisting}
 
 Finally, to reason with Hoare logic we need to formally  specify the properties we want to prove, the most important being partition memory isolation,
-kernel data isolation, vertical sharing and consistency mentioned in \ref{properties} p.\pageref{properties}. To that end, the following necessary functions on PIP's data structures were defined : 
+kernel data isolation, vertical sharing and consistency mentioned in \ref{properties} p.\pageref{properties}\cite{MMUIsolation}. To that end, the following necessary functions on PIP's data structures were defined : 
 \begin{itemize}
 	\item \textbf{getChildren :} returns the list of all children of a given parent partition in the partition tree of a given state;
 	\item \textbf{getAncestors :} returns the list of all ancestors of a given partition in the partition tree of a given state;
@@ -389,11 +389,9 @@ createPartition descChild pdChild shadow1 shadow2 list
 \section{The deep embedding} \label{deep}
 
 \subsection{DEC}
-DEC (Deep Embedding of a
+DEC\cite{DEC} (Deep Embedding of a
 terminating C-style language with effects) is a \gls{DSL} embedded in \textit{Gallina} and developed as an intermediate language for
-the translation of PIP to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type (\textit{IdModType} defined in annex \ref{ModType} p.\pageref{ModType}). The dynamic semantics of DEC is specified in the style of
-\gls{SOS} which enables us to perform software verification by reasoning on formulas' structure.
-This language has the following properties : 
+the translation of PIP to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type (\textit{IdModType} defined in annex \ref{ModType} p.\pageref{ModType}). The dynamic semantics of DEC is specified in the style of Structural Operational Semantics\cite{SOS} (SOS) which formally describe how the individual steps of a computation take place enabling us to perform software verification by reasoning on formulas' structure. The DEC language has the following properties : 
 \begin{enumerate}
 	\item \textbf{Type soundness :} no well-typed program gets stuck on a
 non-value, and when a well-typed program terminates it gives a value

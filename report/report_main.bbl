@@ -47,6 +47,42 @@
       \field{volume}{5520}
       \field{year}{2008}
     \endentry
+    \entry{TAOSD}{incollection}{}
+      \name{labelname}{4}{}{%
+        {{hash=266ea99d21779d64c2498c9990b0c913}{Churchill}{C\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a8f0bb7e7eafbfc42e172995a310b492}{Mosses}{M\bibinitperiod}{P.\bibnamedelimi D.}{P\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+        {{hash=d11ae176caf76c67d44643463304371b}{Sculthorpe}{S\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=92ecae16bd669a9f7b99789a24244e57}{Torrini}{T\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{4}{}{%
+        {{hash=266ea99d21779d64c2498c9990b0c913}{Churchill}{C\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a8f0bb7e7eafbfc42e172995a310b492}{Mosses}{M\bibinitperiod}{P.\bibnamedelimi D.}{P\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+        {{hash=d11ae176caf76c67d44643463304371b}{Sculthorpe}{S\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=92ecae16bd669a9f7b99789a24244e57}{Torrini}{T\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{e07cb3cec226ebb22589003e7f5e1073}
+      \strng{fullhash}{338767f11810fa528e20492d422da047}
+      \field{sortinit}{C}
+      \field{labeltitle}{Reusable Components of Semantic Specifications}
+      \field{booktitle}{TAOSD}
+      \field{number}{12}
+      \field{series}{LNCS 8989}
+      \field{title}{Reusable Components of Semantic Specifications}
+      \field{year}{2015}
+      \field{pages}{132\bibrangedash 179}
+    \endentry
+    \entry{cristal}{misc}{}
+      \field{sortinit}{C}
+      \field{labeltitle}{CRIStAL}
+      \field{howpublished}{Official website}
+      \field{title}{CRIStAL}
+      \verb{url}
+      \verb https://www.cristal.univ-lille.fr/
+      \endverb
+    \endentry
     \entry{MMUIsolation}{article}{}
       \name{labelname}{4}{}{%
         {{hash=5a710d1cbf7302664e54d4ddeb7d1c89}{Jomaa}{J\bibinitperiod}{Narjes}{N\bibinitperiod}{}{}{}{}}%
@@ -69,7 +105,7 @@
       \field{title}{Formal Proof of Dynamic Memory Isolation Based on {MMU}}
       \field{year}{2017}
     \endentry
-    \entry{PIPWebSlides}{online}{}
+    \entry{PIPSlides}{online}{}
       \name{labelname}{1}{}{%
         {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
       }
@@ -123,6 +159,23 @@
       \verb http://www.cis.upenn.edu/~bcpierce/sf
       \endverb
     \endentry
+    \entry{SOS}{article}{}
+      \name{labelname}{1}{}{%
+        {{hash=4129a8861790c18df9b27518d975d476}{Plotkin}{P\bibinitperiod}{G.\bibnamedelimi D.}{G\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=4129a8861790c18df9b27518d975d476}{Plotkin}{P\bibinitperiod}{G.\bibnamedelimi D.}{G\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{4129a8861790c18df9b27518d975d476}
+      \strng{fullhash}{4129a8861790c18df9b27518d975d476}
+      \field{sortinit}{P}
+      \field{labeltitle}{A Structural Approach to Operational Semantics}
+      \field{journaltitle}{J. Log. Algebr. Program.}
+      \field{title}{A Structural Approach to Operational Semantics}
+      \field{volume}{60-61}
+      \field{year}{2004}
+      \field{pages}{17\bibrangedash 139}
+    \endentry
     \entry{DeepVsShallow}{inbook}{}
       \name{labelname}{2}{}{%
         {{hash=7b12598e5739a662d4bc2c866844e25f}{Svenningsson}{S\bibinitperiod}{Josef}{J\bibinitperiod}{}{}{}{}}%
@@ -169,7 +222,7 @@
       \field{year}{2009}
       \field{pages}{60\bibrangedash 69}
     \endentry
-    \entry{PIPWeb}{online}{}
+    \entry{PIP}{online}{}
       \name{labelname}{1}{}{%
         {{hash=8bdacb32f6fc276f4b456bdffd3fdb31}{{The\bibnamedelimb 2XS\bibnamedelimb team}}{T\bibinitperiod}{}{}{}{}{}{}}%
       }
@@ -206,6 +259,27 @@
       \field{year}{2017}
       \verb{url}
       \verb https://coq.inria.fr/distrib/current/files/Reference-Manual.pdf
+      \endverb
+    \endentry
+    \entry{DEC}{unpublished}{}
+      \name{labelname}{1}{}{%
+        {{hash=92ecae16bd669a9f7b99789a24244e57}{Torrini}{T\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=92ecae16bd669a9f7b99789a24244e57}{Torrini}{T\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {CRIStAL laboratory}%
+      }
+      \strng{namehash}{92ecae16bd669a9f7b99789a24244e57}
+      \strng{fullhash}{92ecae16bd669a9f7b99789a24244e57}
+      \field{sortinit}{T}
+      \field{labeltitle}{The DEC language repository}
+      \field{month}{08}
+      \field{title}{The DEC language repository}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://github.com/ptorrx/DeepC4Pip
       \endverb
     \endentry
     \entry{Wildmoser2004CertifyingMC}{inproceedings}{}

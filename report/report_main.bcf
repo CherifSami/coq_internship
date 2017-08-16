@@ -1964,6 +1964,17 @@
     <bcf:datasource type="file" datatype="bibtex">biblio.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="1">cristal</bcf:citekey>
+    <bcf:citekey order="2">PIP</bcf:citekey>
+    <bcf:citekey order="3">DEC</bcf:citekey>
+    <bcf:citekey order="4">cristal</bcf:citekey>
+    <bcf:citekey order="5">PIP</bcf:citekey>
+    <bcf:citekey order="6">PIPSlides</bcf:citekey>
+    <bcf:citekey order="7">Coq</bcf:citekey>
+    <bcf:citekey order="8">SoftwareFoundation</bcf:citekey>
+    <bcf:citekey order="9">MMUIsolation</bcf:citekey>
+    <bcf:citekey order="10">DEC</bcf:citekey>
+    <bcf:citekey order="11">SOS</bcf:citekey>
     <bcf:citekey order="0">*</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" type="entry" label="nty">
