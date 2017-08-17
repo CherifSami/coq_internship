@@ -453,7 +453,7 @@ Apply (ReadPhysicalQF p) (PS [
 For the proof, we didn't need to define any additional lemma about the intermediate functions. This is due to the use of the Hoare triple rules. The new invariant, called \textit{getFstShadowApplyH'}, is defined and proven in annex \ref{getFstFile} p.\pageref{getFstFile}.
 
 \section{2\nd invariant and proof} \label{writeInvSec}
-This new invariant is about a function called \textit{writeVirtual} that writes a virtual adress in the memory. We want to prove that this function verifies all of PIP's properties which include memory isolation, vertical sharing, kernel data isolation and consistency properties, mentioned in section \ref{properties} p.\pageref{properties}. In the shallow embedding, \textit{writeVirtual} is defined as follows : 
+This new invariant is about a function called \textit{writeVirtual} that writes a virtual address in the memory. We want to prove that this function verifies all of PIP's properties which include memory isolation, vertical sharing, kernel data isolation and consistency properties, mentioned in section \ref{properties} p.\pageref{properties}. In the shallow embedding, \textit{writeVirtual} is defined as follows : 
 \begin{lstlisting}[caption = {writeVirtual function in the shallow embedding}, xleftmargin=-.05\textwidth,
 xrightmargin=-.05\textwidth,mathescape=true, label={writeS}]
 Definition writeVirtual (paddr: page) (idx: index) 
@@ -513,7 +513,7 @@ inversion X2.
 Qed.    
 \end{lstlisting} \vspace{4pt}
 
-To define the main invariant, we copied all the definitions of PIP's propagated properties as well as PIP's internal and dependant-type lemmas respectively in the files \textit{Pip\_Prop.v} \textit{Pip\_InternalLemmas.v} and \textit{Pip\_DependentType-\linebreak Lemmas.v}. Then we defined and prooved the following lemma about the  \textit{writeVirtual} function :
+To define the main invariant, we copied all the definitions of PIP's propagated properties as well as PIP's internal and dependant-type lemmas respectively in the files \textit{Pip\_Prop.v} \textit{Pip\_InternalLemmas.v} and \textit{Pip\_DependentType-\linebreak Lemmas.v}. Then we defined and proved the following lemma about the  \textit{writeVirtual} function :
 \begin{lstlisting}[caption = {writeVirtualWp lemma definition and proof}, xleftmargin=-.09\textwidth,
 xrightmargin=-.09\textwidth,mathescape=true]
 Lemma writeVirtualWp (p: page) (idx: index) (vad: vaddr) 
@@ -542,7 +542,7 @@ Finally, we use the lemma above to prove the main invariant. As expected, the de
 \textit{writeVirtualWp} lemma then we're proving a direct implication between properties on the state. The main invariant, called \textit{writeVirtualInv}, is defined and proven in annex \ref{writeFile} p.\pageref{writeFile}. 
 
 \section{3\rd invariant and proof} \label{proof3}
-The third invariant is about a recursive function of PIP called \textit{initVAddrTable} that initializes virtual addresses of a given table to the default value \textit{defaultVAddr} defined in annex ref{stateFile} p.\pageref{stateFile}. This function is defined as follows in the shallow embedding : 
+The third invariant is about a recursive function of PIP called \textit{initVAddrTable} that initializes virtual addresses of a given table to the default value \textit{defaultVAddr} defined in annex \ref{stateFile} p.\pageref{stateFile}. This function is defined as follows in the shallow embedding : 
 \begin{lstlisting}[caption = {initVAddrTable in the shallow embedding}, xleftmargin=-.02\textwidth,
 xrightmargin=-.02\textwidth,mathescape=true]
 Fixpoint initVAddrTableAux timeout shadow2 idx :=
@@ -668,7 +668,7 @@ Lemma succWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
 \end{lstlisting} \vspace{4pt}
 
 \subsection{Defining Shallow functions}
-As there is a dimorphism  between the deep embedding and the logic, it is generally necessary to have both a shallow and deep version of each function. The shallow versions are mainly used in the predicates included in the preconditions and postconditions of Hoare triples. For example, we used the shallow \textit{succIndexInternal} function, defined in script \ref{succInt} p.\pageref{succInt}, in the postcondition of the \textit{succWp} lemma, defined in script \ref{succWp} \pageref{succWp}, to describe the resulting value of the deep index successor function. We also used it extensively in the proof of the third invariant \textit{initVAddrTableNewProperty}, detailed in annex \ref{initFile} p.\pageref{initFile}. This practically implies double amount of work for deep proofs compared to shallow ones where we use only shallow functions. A possible solution to this problem is to define a deep language with embedded logic. 
+As there is a dimorphism  between the deep embedding and the logic, it is generally necessary to have both a shallow and deep version of each function. The shallow versions are mainly used in the predicates included in the preconditions and postconditions of Hoare triples. For example, we used the shallow \textit{succIndexInternal} function, defined in script \ref{succInt} p.\pageref{succInt}, in the postcondition of the \textit{succWp} lemma, defined in script \ref{succWp} \pageref{succWp}, to describe the resulting value of the deep index successor function. We also used it extensively in the proof of the third invariant \textit{initVAddrTableNewProperty}, detailed in annex \ref{initFile} p.\pageref{initFile}. This practically implies double amount of work for deep proofs compared to shallow ones where we use only shallow functions. A possible solution to this problem is to define a deep language with embedded logic\cite{SoftwareFoundation}. 
 
 
 \subsection{Deep implementation of shallow functions}

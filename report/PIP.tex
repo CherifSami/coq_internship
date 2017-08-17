@@ -3,40 +3,41 @@
 \section{PIP protokernel}
 
 \subsection{A minimal OS kernel with provable isolation} \label{PIP}
-An operating system is organized as a hierarchy  of layers, each one constructed  upon  the one  below  it. Each layer focuses on an essential role of the operating system such as memory management, multiprogramming, input/output \dots Generally speaking, while developing a kernel for an operating system based on the layered  approach,  the designers have a choice where to draw the kernel-user boundary. Traditionally, all the layers went in the kernel, but that is not necessary. In fact, putting as little as possible in kernel mode is safer because kernel bugs can bring down the system instantly. In contrast, user processes/layers are set up to have less power so that a bug there may not be fatal.\\
+An operating system is organized as a hierarchy  of layers\cite{ModernOS}, each one constructed  upon  the one  below. Each layer focuses on an essential role of the operating system such as memory management, multiprogramming, input/output \dots Generally speaking, while developing a kernel for an operating system based on the layered  approach, the designers have a choice where to draw the kernel-user boundary. Traditionally, all the layers went in the kernel, but that is not necessary. In fact, putting as little as possible in kernel mode is safer because kernel bugs can bring down the system instantly. In contrast, user processes/layers are set up to have less power so that a bug there may not be fatal.\\
 
 Various studies on bug density, relatively to the developed module size, age as well as other factors, have been conducted (e.g.  \textit{Basilli}  and  \textit{Perricone} in 1984;  and \textit{Ostrand}  and  \textit{Weyuker} in 2002). A  ballpark  figure  for  serious industrial systems is ten  bugs per a thousand  lines  of code. Operating  systems  are  sufficiently  buggy  that  computer  manufacturers  put  reset  buttons  on  them, something  the  manufacturers of cars, TV sets and stereos do  not do,  despite  the  large  amount  of software in these devices. Furthermore, Operating systems generally present hardware resources to applications through high-level abstractions such as (virtual) file systems.\\
 
 \noindent Therefore, we can distinguish several OS kernel families such as : 
 \begin{itemize}
+	\item \textbf{Monolithic kernels :}  All the OS layers are put in kernel space as in Windows and Linux;
 	\item \textbf{Microkernels :} The basic idea  behind a microkernel design  is  to  achieve high reliability  by  splitting the operating  system  up into small, well-defined  modules, only  one  of  which, the  microkernel, runs  in  kernel  mode;
 	\item \textbf{Exokernels :} The idea behind an exokernel is to force as few abstractions as possible on application developers, enabling them to make as many decisions as possible about hardware abstractions.
 \end{itemize} 
   
-\noindent Although the closest kernel design to PIP is the exokernel, PIP\cite{PIP} does not belong to any of the kernel families featured in the state of art, but it is the first member of a new kernel family, \textbf{protokernels}, as compared to most microkernels and exokernels, the TCB in PIP is even more restricted :
+\noindent Although the closest kernel design to PIP\cite{PIP} is the exokernel, PIP does not belong to any of the kernel families featured in the state of art, but it is the first member of a new kernel family, \textbf{protokernels}, as compared to most microkernels and exokernels, the TCB in PIP is even more restricted :
 \begin{itemize}
 	\item Scheduling and IPC are done in user mode unlike a microkernel;
 	\item Multiplexing is also done in user mode unlike an exokernel.
 \end{itemize}
 
-\noindent whereas the kernel mode is only for \textbf{multi-level MMU control and configuration} (virtual memory) and \textbf{context switching}. This not only ensures less bugs density but also more feasibility of formal proof that will warrant the memory isolation property of the protokernel. \\
+\noindent whereas the kernel mode is only for \textbf{multi-level MMU control and configuration} (virtual memory) and \textbf{context switching}. This not only ensures less bugs but also more feasibility of formal proof that will warrant the memory isolation property of the protokernel\cite{PIPSlides}. \\
 
-As a \textbf{minimal OS Kernel with provable isolation}\cite{PIPSlides}, PIP focuses more on security and safety without sacrificing efficiency and ensures memory isolation between different tasks running on the same device.PIP's algorithmic part is written in Gallina, the language of the Coq proof assistant, in a monadic style that allows direct translation into free-standing C. We will refer to this implementation in \textit{Gallina} as the shallow embedding in contrast to the deep embedding introduced in section \ref{deep} p.\pageref{deep}. 
+As a \textbf{minimal OS Kernel with provable isolation}, PIP focuses more on security and safety without sacrificing efficiency and ensures memory isolation between different tasks running on the same device. PIP's algorithmic part is written in Gallina, the language of the Coq proof assistant, in a monadic style that allows direct translation into free standing C. We will refer to this implementation in \textit{Gallina} as the shallow embedding in contrast to the deep embedding introduced in section \ref{deep} p.\pageref{deep}. 
 
 \begin{figure}[!ht]
 	\centering 
 	\includegraphics[width=\linewidth ,frame]{img/OSLayersPIP.png} 
-	\caption{Software layers of an OS built on top of PIP}
+	\caption[Software layers of an OS built on top of PIP]{Software layers of an OS built on top of PIP\cite{PIPSlides}}
 \end{figure}
 
 \subsection{Horizontal isolation \& vertical sharing} \label{properties}
 
-PIP can be used to partition the available memory which will be initially allocated to the root partition on top of PIP. Any partition can read and write in the memory of its children. However, partitions in different branches of the partition tree are disjoint. The former is referred to as \textbf{vertical sharing} and the latter as \textbf{horizontal isolation}. Needless to say, all memory lent to PIP for storing kernel data,such as when creating partitions, is inaccessible for all partitions to prevent messing up PIP data structures which means that the kernel data is totally isolated.
+PIP can be used to partition the available memory which will be initially allocated to the root partition on top of PIP. Any partition can read and write in the memory of its descendants. However, partitions in different branches of the partition tree are disjoint. The former is referred to as \textbf{vertical sharing} and the latter as \textbf{horizontal isolation}. Needless to say, all memory lent to PIP for storing kernel data,such as when creating partitions, is inaccessible for all partitions to prevent messing up PIP data structures which means that the kernel data is totally isolated.
    
 \begin{figure}[!ht]
 	\centering 
 	\includegraphics[width=0.8\linewidth,frame]{img/memoryIsolShare.png} 
-	\caption{Horizontal isolation \& vertical sharing in PIP}
+	\caption[Horizontal isolation \& vertical sharing in PIP]{Horizontal isolation \& vertical sharing in PIP\cite{PIPKernel}}
 \end{figure}
 
 \noindent Let us consider a more realistic partition tree, as shown in figure \ref{FreeRTOS}, in which we consider \textit{Linux} and \textit{FreeRTOS} as sub-partitions of a root partition, multiplexer. Knowing that \textit{FreeRTOS} is a real-time OS that does not isolate its tasks, we have easily secured it with task isolation by porting it on PIP.
@@ -44,13 +45,13 @@ PIP can be used to partition the available memory which will be initially alloca
 \begin{figure}[!ht] \label{FreeRTOS}
 	\centering 
 	\includegraphics[scale=0.5,frame]{img/FreeRTOSEx.png} 
-	\caption{FreeRTOS task isolation using PIP}
+	\caption[FreeRTOS task isolation using PIP]{FreeRTOS task isolation using PIP\cite{PIPSlides}}
 \end{figure}
 
 \subsection{Proof-oriented design}
 
 \subsubsection{PIP's design} 
-PIP's isolation properties are meant to be formally proven independently from the platform it's running onto. Consequently, the algorithm and the architecture dependant part were separated. Indeed, as shown in figure \ref{design}, PIP is split into two distinct layers  :
+PIP's isolation properties are meant to be formally proven independently from the platform it's running onto. Consequently, the algorithm and the architecture dependant part were separated\cite{PIPKernel}. Indeed, as shown in figure \ref{design}, PIP is split into two distinct layers  :
 \begin{itemize}
 	\item \textbf{HAL :} gives direct access to the architecture and hardware;
 	\item \textbf{API :} implements the algorithmic part to configure the virtual memory and the hardware.
@@ -61,7 +62,7 @@ PIP's isolation properties are meant to be formally proven independently from th
 \begin{figure}[!ht]  
 	\centering 
 	\includegraphics[width=0.8\linewidth, frame]{img/PIPDesign.png} 
-	\caption{PIP design}
+	\caption[PIP design]{PIP design\cite{PIPKernel}}
 	\label{design}
 \end{figure}
 
@@ -72,7 +73,7 @@ PIP's isolation properties are meant to be formally proven independently from th
 	\item \textbf{Bootstrap :} contains the low-level code required to boot the system.
 \end{itemize}
 
-\noindent PIP only provides system calls for management of the partitions and for context switching, thus reducing the TCB to its bare minimum as explained in section \ref{PIP} p.\pageref{PIP}. This user exposed API can be called by any partition using a platform dependant call :
+\noindent PIP only provides system calls for management of the partitions and for context switching, thus reducing the TCB to its bare minimum as explained in section \ref{PIP} p.\pageref{PIP}. This user exposed API\cite{PIP} can be called by any partition using a platform dependant call :
 \begin{itemize}
 	\item \textbf{createPartition :} creates a new child (sub-partition) into the current partition;
 	\item \textbf{deletePartition :} removes a child partition and puts all its used pages back in the current partition;
@@ -82,7 +83,7 @@ PIP's isolation properties are meant to be formally proven independently from th
 	\item \textbf{addVaddr :} maps a virtual address into the given child;
 	\item \textbf{removeVAddr :} removes a given mapping from a given child.
 \end{itemize} 
-This API is sufficient as far as memory requirements are concerned but it lacks a way to handle interrupts. Hardware interrupts are implicitly handled by PIP and automatically dispatched to the root partition, while software interrupts, such as system calls, are notified to the parent partition of the caller and can be managed by these two additional services of PIP :
+This API is sufficient as far as memory requirements are concerned but it lacks a way to handle interrupts. Hardware interrupts are implicitly handled by PIP and automatically dispatched to the root partition, while software interrupts, such as system calls, are notified to the parent partition of the caller\cite{PIPKernel} and can be managed by these two additional services of PIP :
 \begin{itemize}
 	\item \textbf{dispatch :} notifies an interrupt to a given partition, interrupting its current control flow and backing it up for a further resume call;
 	\item \textbf{resume :} restores a previously interrupted context.
@@ -90,7 +91,7 @@ This API is sufficient as far as memory requirements are concerned but it lacks 
 \vspace{-0.8em} 
 \begin{figure}[!ht]  
 	\centering 	\includegraphics[width=0.58\linewidth,frame]{img/HAL.png} 
-	\caption{HAL and API relationship}
+	\caption[HAL and API relationship]{HAL and API relationship\cite{PIPKernel}}
 	\label{HAL}
 \end{figure}
 
@@ -100,16 +101,16 @@ This API is sufficient as far as memory requirements are concerned but it lacks 
 \centering
 \includegraphics[frame]{img/CoqLogo.png}
 \end{wrapfigure}
-Coq\cite{Coq} is the result of about 30 years of research.
-It started in 1984 as an implementation of the Calculus of Constructions, an expressive formal language, at INRIA by \textit{Thierry Coquand} and \textit{Gérard Huet} and was extended,later in 1991, by Christine to the Calculus of Inductive Constructions. \\
+Coq\cite{CoqWeb} is the result of about 30 years of research.
+It started in 1984 as an implementation of the Calculus of Constructions, an expressive formal language, at INRIA by \textit{Thierry Coquand} and \textit{Gérard Huet} and was extended,later in 1991, by \textit{Christine Paulin} to the Calculus of Inductive Constructions\cite{Calculus}. \\
 
-Coq is a \textbf{formal proof management system}. It provides a formal language to write mathematical definitions, executable algorithms and theorems together with an environment for semi-interactive development of machine-checked proofs. Typical applications include the certification of properties of programming languages (e.g. the \textit{CompCert} compiler certification project, or the \textit{Bedrock} verified low-level programming library), the formalization of mathematics (e.g. the full formalization of the Feit-Thompson theorem or homotopy type theory) and teaching. It implements a program specification and mathematical higher-level language called \textit{Gallina} that is based on the Calculus of Inductive Constructions combining both a higher-order logic and a richly-typed functional programming language.\\
+Coq is a \textbf{formal proof management system}. It provides a formal language to write mathematical definitions, executable algorithms and theorems together with an environment for semi-interactive development of machine-checked proofs. Typical applications include the certification of properties of programming languages (e.g. the \textit{CompCert} compiler certification project, or the \textit{Bedrock} verified low-level programming library), the formalization of mathematics and teaching. It implements a program specification and mathematical higher-level language called \textit{Gallina} that is based on the Calculus of Inductive Constructions combining both a higher-order logic and a richly-typed functional programming language.\\
 
 As a \textbf{proof development system}, Coq provides interactive proof methods, decision and semi-decision algorithms as well as a tactic language letting the user define his own proof methods. Furthermore, as a \textbf{platform for the formalization of mathematics or the development of programs}, Coq provides support for high-level notations, implicit contents and various other useful kinds of macros.\\
 
-For this project, the latest version of Coq, 8.6 released in December 2016, was used. It features among other things a faster universe checker, asynchronous error processing, proof search improvements, generalized introduction patterns, a new warning system, patterns in abstractions and a new subterm selection algorithm. \\
+For this project, the latest version of Coq, 8.6 released in December 2016, was used. It features among other things a faster universe checker, asynchronous error processing, proof search improvements, generalized introduction patterns, a new warning system and subterm selection algorithm. \\
 
-The Coq proof assistant provides us with powerful tactics to perform proofs. Here is a non exhaustive list of these tactics :
+The Coq proof assistant provides us with powerful tactics to perform proofs\cite{Coq}. Here is a non exhaustive list of these tactics :
 \begin{itemize}
 \item \textbf{simpl :} simplifies the current goal;
 	\item \textbf{assumption :} solves the current goal if it is computationally equal to a hypothesis;
@@ -132,7 +133,7 @@ Coq also provides several tactics to deal with higher-order logic, particularly 
 
 \subsubsection{The memory}
 
-PIP uses several data structures per partition, which will represent the global state of the partition's memory state. This is necessary as it has to keep track of pages allocated to partitions in order to allow or deny derivation and partition creation while preserving the required properties. \\
+PIP uses several data structures per partition\cite{PIPKernel}, which will represent the global state of the partition's memory state. This is necessary as it has to keep track of pages allocated to partitions in order to allow or deny derivation and partition creation while preserving the required properties. \\
 
 Figure \ref{partitionEx} shows a partition tree example consisting of a partition, Parent, that has a single child, Child1. A partition is identified by a partition descriptor which is a page number essential to access the whole data structure of a partition. In our case, the partition descriptors of Parent and Child1 are respectively 1 and 12. The pages lent to PIP to manage a partition are organized in a tree with three branches : the MMU tables, the first shadow and the second shadow. The aim of this organization is to keep additional information about each page lent to a partition. Moreover these structures have multiple goals :
 \begin{itemize}
@@ -141,20 +142,20 @@ Figure \ref{partitionEx} shows a partition tree example consisting of a partitio
 \end{itemize} 
 As such, adding an indirection table in the MMU configuration requires two additional pages for the shadows. Therefore, this model is estimated to require roughly three times the amount of memory a simple virtual environment would need, nevertheless it provides a  secure and an efficient API. \\
 
-To prove the isolation properties on this memory structure it is essential to assure its consistency relative to the partition tree, the well-typedness as well as some other consistency properties that will be detailed in section \ref{Hoare} p.\pageref{Hoare}.
+To prove the isolation properties on this memory structure, it is essential to ensure its consistency relative to the partition tree, the well-typedness as well as some other consistency properties that will be detailed in section \ref{Hoare} p.\pageref{Hoare}.
 
 \vfill 
 
 \begin{figure}[!ht]  
 	\centering 
 	\includegraphics[width=1\linewidth, height=0.6\textheight, frame]{img/memoryEx.png} 
-	\caption{An example of a partition tree}
+	\caption[An example of a partition tree]{An example of a partition tree\cite{PIPKernel}}
 	\label{partitionEx}
 \end{figure}
 
 \subsubsection{The state} \label{PIPstateSection}
  
-\noindent The PIP state is defined as follows :
+\noindent The PIP state\cite{PIPdraft} is defined as follows :
 \begin{lstlisting}[linewidth=1.02\linewidth,caption = {PIP state definition},label={PIPstate}] 
 Record state : Type := 
 { currentPartition: page ; memory: list (paddr * value) }.
@@ -203,7 +204,7 @@ Record vaddr : Type :=
 
 \subsection{Introduction to Hoare logic theory} \label{HoareIntro}
 \textit{How can we argue that a program is correct ?}
-Nowadays, Building reliable software is becoming more and more difficult considering the growing scale, specifications and complexity of modern systems. Therefore, tests alone can no longer ascertain the reliability of programs especially if we're talking about critical systems. Logicians, computer scientists and software engineers have responded to these challenges by developing different kinds of techniques some of which are based on formal reasoning about properties of software and tools for helping validate these properties. One of these reasoning techniques that was used to prove PIP's properties is \textit{Floyd–Hoare logic}, often shortened to just \textbf{Hoare Logic}. It was proposed in 1969 by the British computer scientist and logician Tony Hoare and it continues to be the subject of intensive research right up to the present day. It is not only a natural way of \textbf{writing down specifications of programs} but also a technique for \textbf{proving that programs are correct} with respect to such specifications.\\ % other technique : Model checking
+Nowadays, Building reliable software is becoming more and more difficult considering the growing scale, specifications and complexity of modern systems. Therefore, tests alone can no longer ascertain the reliability of programs especially if we're talking about critical systems. Logicians, computer scientists and software engineers have responded to these challenges by developing different kinds of techniques some of which are based on formal reasoning about properties of software and tools for helping validate these properties. One of these reasoning techniques that was used to prove PIP's properties is \textit{Floyd–Hoare logic}, often shortened to just \textbf{Hoare Logic}. It was proposed in 1969 by the British computer scientist and logician Tony Hoare\cite{Hoare} and it continues to be the subject of intensive research right up to the present day. It is not only a natural way of \textbf{writing down specifications of programs} but also a technique for \textbf{proving that programs are correct} with respect to such specifications.\\ % other technique : Model checking
 
 Let S be a program that we want to execute starting from a certain state s, P a predicate on the state describing the condition S relies on for correct execution and Q a predicate on the resulting state after the execution of S describing the condition S establishes after correctly running. Knowing that P is verified on s, if we prove that Q is verified after the execution of s, we can ascertain that S is partially correct. And by partial correctness of S we mean that S is correct if it terminates. Using standard Hoare logic, only partial correctness can be proven, while termination needs to be proven separately. This triple S, P and Q, written as \textbf{ \{P\} S \{Q\} }, is referred to as a \textbf{Hoare triple}. The assertions P and Q are respectively referred to as the \textbf{precondition} and the \textbf{postcondition}. \\
 
@@ -223,7 +224,7 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \RightLabel{\small{Hoare\_weaken}}
 \BinaryInfC{\{P\} S \{Q\}}
 \end{prooftree}
-\item If we can weaken a Hoare triple, we expect it to have a \textbf{weakest precondition}. This notion was introduced by Dijkstra in 1976 and is very important since it enables us to prove total correctness and in particular program termination. Indeed, if a program doesn't terminate, its weakest precondition would be \textit{True} and it would verify any postcondition.
+\item If we can weaken a Hoare triple, we expect it to have a \textbf{weakest precondition}. This notion was introduced by Dijkstra in 1976\cite{DIJ} and is very important since it enables us to prove total correctness and in particular program termination. Indeed, if a program doesn't terminate, its weakest precondition would be \textit{True} and it would verify any postcondition.
 \item If we consider a language containing a \textbf{SKIP instruction} which practically does nothing, we can affirm that this command preserves any property which means :
 \vspace{-15pt}
 \begin{prooftree}
@@ -305,8 +306,8 @@ apply H1 in H3; rewrite H5 in H3; trivial.
 Qed. 
 \end{lstlisting}
 
-Finally, to reason with Hoare logic we need to formally  specify the properties we want to prove, the most important being partition memory isolation,
-kernel data isolation, vertical sharing and consistency mentioned in \ref{properties} p.\pageref{properties}\cite{MMUIsolation}. To that end, the following necessary functions on PIP's data structures were defined : 
+Finally, to reason with Hoare logic we need to formally  specify the properties we want to prove\cite{MMUIsolation}\cite{PIPKernel}, the most important being partition memory isolation,
+kernel data isolation, vertical sharing and consistency mentioned in \ref{properties} p.\pageref{properties}. To that end, the following necessary functions on PIP's data structures were defined : 
 \begin{itemize}
 	\item \textbf{getChildren :} returns the list of all children of a given parent partition in the partition tree of a given state;
 	\item \textbf{getAncestors :} returns the list of all ancestors of a given partition in the partition tree of a given state;
@@ -390,8 +391,9 @@ createPartition descChild pdChild shadow1 shadow2 list
 
 \subsection{DEC}
 DEC\cite{DEC} (Deep Embedding of a
-terminating C-style language with effects) is a \gls{DSL} embedded in \textit{Gallina} and developed as an intermediate language for
-the translation of PIP to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type (\textit{IdModType} defined in annex \ref{ModType} p.\pageref{ModType}). The dynamic semantics of DEC is specified in the style of Structural Operational Semantics\cite{SOS} (SOS) which formally describe how the individual steps of a computation take place enabling us to perform software verification by reasoning on formulas' structure. The DEC language has the following properties : 
+terminating C-style language with effects) is a \gls{DSL} embedded in \textit{Gallina} and developed as an intermediate language for the translation of PIP to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type (\textit{IdModType} defined in annex \ref{ModType} p.\pageref{ModType}). The dynamic semantics of DEC is specified in the small-step style of \gls{SOS}, introduced by \textit{Plotkin}\cite{SOS}, which formally describe how the individual steps of a computation take place enabling us to perform software verification by reasoning on formulas' structure. In small-step semantics, program behaviour is specified in terms of atomic steps and this makes it easier to specify constructs in dependently of one another\cite{TAOSD}. \\
+
+\noindent The DEC language has the following properties : 
 \begin{enumerate}
 	\item \textbf{Type soundness :} no well-typed program gets stuck on a
 non-value, and when a well-typed program terminates it gives a value
@@ -400,7 +402,7 @@ of the right type;
 ends with a value;
 	\item \textbf{Subject reduction :} the execution of a well-typed
 program preserves its type at each step ;
-	\item \textbf{Deterministic  :} given an initial state, each well-typed
+	\item \textbf{Determinism :} given an initial state, each well-typed
 program can only evaluate to one value and one new state;
 	\item \textbf{Strong typedness :} each program has at most one
 type ;	
@@ -416,7 +418,6 @@ Before we move on to the main constructs of the deep embedding, we need to intro
 \begin{itemize}
 	\item \textbf{Id type :} represents the identifiers' type in the deep embedding. Typically, identifiers of variables are strings but we can use any other type;
 	\item \textbf{Value type :} represents the actual values the programs will be manipulating. They can be built using the constructor \textit{cst} followed by a shallow type and a value that should be of that type. The value type and its constructor are defined as follows :
-\vfill
 \begin{lstlisting}[caption = {Values in the deep embedding},xleftmargin=.02\textwidth,xrightmargin=.02\textwidth]
 (** the internal type of values,
 	 parametrised by a semantic type *)

@@ -23,11 +23,45 @@ journal = {Science of Computer Programming},
 year = {2017},
 issn = {01676423}}
 
+@article{Hoare,
+ author = {Hoare, C. A. R.},
+ title = {An Axiomatic Basis for Computer Programming},
+ journal = {Commun. ACM},
+ issue_date = {Oct. 1969},
+ volume = {12},
+ number = {10},
+ month = oct,
+ year = {1969},
+ issn = {0001-0782},
+ pages = {576--580},
+ numpages = {5},
+ url = {http://doi.acm.org/10.1145/363235.363259},
+ doi = {10.1145/363235.363259},
+ acmid = {363259},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {axiomatic method, formal language definition, machine-independent programming, program documentation, programming language design, theory of programming' proofs of programs}
+} 
+
+@Book{DIJ,
+author = { Dijkstra, Edsger W. },
+title = {A discipline of programming},
+isbn = { 013215871 },
+publisher = { Prentice-Hall Englewood Cliffs, N.J },
+year = { 1976 },
+}
+
 @online{PIP,
   title = {The PIP protokernel official Website},
   author = {{The 2XS team}},
   note = {CRIStAL laboratry},
   url = {http://pip.univ-lille1.fr}}
+  
+@online{CoqWeb,
+  title = {Coq official website},
+  author = {{The Coq development team}},
+  note = {Inria},
+  url = {https://coq.inria.fr}}
   
 @online{PIPSlides,
   title = {Pip: A Minimal OS Kernel with Provable Isolation},
@@ -36,6 +70,7 @@ issn = {01676423}}
   year = {2017},
   month = {April},
   url = {https://project.inria.fr/FranceJapanICST/files/2017/05/DNowak_presentation_2017.pdf}}
+%ref
 
 @manual{Coq,
   title = {The Coq Proof Assistant. Reference Manual},
@@ -46,46 +81,35 @@ issn = {01676423}}
   note = {Coq version 8.6.1},
   url = {https://coq.inria.fr/distrib/current/files/Reference-Manual.pdf}}
 
-@InBook{DeepVsShallow,
-title = {Trends in Functional Programming},
-chapter = {Combining Deep and Shallow Embedding for EDSL},
-author = {Josef Svenningsson and Emil Axelsson},
-publisher = {Springer},
-address = {Berlin, Heidelberg},
-year = {2013},
-volume = {7829},
-series = {Lecture Notes in Computer Science}}
-
-@inproceedings{Yves,
-author = {Yves Bertot},
-title = {Language Engineering and Rigorous Software Development},
+@inproceedings{Calculus,
+author = {Christine Paulin-Mohring},
+title = {Introduction to the Calculus of Inductive Constructions},
 chapter = {Structural abstract interpretation, A formal study using Coq},
-year = {2008},
-editor = {Ana Bove and
-Jorge Sousa Pinto},
-publisher = {Springer},
-booktitle = {ERNET Summer School, eb 2008,  Piriapolis, Uruguay},
-series = {Lecture Notes in Computer Science},
-volume = {5520},
-address = {Berlin, Heidelberg}
+year = {2014},
+editor = {Bruno Woltzenlogel Paleo and
+David Delahaye},
+publisher = { College Publications},
+booktitle = {All about Proofs, Proofs for All},
+series = {Studies in Logic (Mathematical logic and foundations)},
+volume = {55},
+isbn= {978-1-84890-166-7}
 }
 
-@inproceedings{Wildmoser2004CertifyingMC,
-  title={Certifying Machine Code Safety: Shallow Versus Deep Embedding},
-  author={Martin Wildmoser and Tobias Nipkow},
-  booktitle={TPHOLs},
-  year={2004}
-}
+@inproceedings{Wildmoser,
+author={Martin Wildmoser and Tobias Nipkow},
+title={Certifying Machine Code Safety: Shallow versus Deep Embedding},
+booktitle={Theorem Proving in Higher Order Logics (TPHOLs 2004)},
+editor={K. Slind and A. Bunker and G. Gopalakrishnan},
+publisher=Springer,series=LNCS,volume=3223,pages={305-320},year=2004}
 
 @unpublished{DEC,
-  author =      {Torrini, P.},
+  author =      {Paolo Torrini and David Nowak},
   title =      {The DEC language repository},
   url =      {https://github.com/ptorrx/DeepC4Pip},
   month =      {August},
   year =      {2017},
   institution =      {CRIStAL laboratory}
 }
-
 
 @article{SOS,
 author = {Plotkin, G. D.},
@@ -97,8 +121,7 @@ pages = {17-139}
 }
 
 @incollection{TAOSD,
-  author       = "Churchill, M. and Mosses, P. D. and
-Sculthorpe, N. and Torrini, P.",
+  author       = "Churchill, M. and Mosses, P. D. and Sculthorpe, N. and Torrini, P.",
   title        = "Reusable Components of Semantic Specifications",
   booktitle    = "TAOSD",
   number       = "12",
@@ -113,3 +136,20 @@ title={CRIStAL},
 howpublished={Official website},
 url = {https://www.cristal.univ-lille.fr/}
 }
+
+@Unpublished{PIPdraft,
+  author =      {Jomaa, N. and Grimaud, G. and Hym, S. and Nowak, D.},
+  title =      {Coding a real {O}{S} kernel in Coq and fomralising its security (unpublished paper draft)},
+  month =      {January},
+  year =      {2017},
+  institution =      {CRIStAL}
+}
+
+@Unpublished{PIPKernel,
+  author =      {Jomaa, N. and Grimaud, G. and Hym, S. and Nowak, D.},
+  title =      {PIP : A Minimal Kernel with Provable isolation (unpublished paper draft)},
+  year =      {2017},
+  institution =   {CRIStAL}
+}
+
+

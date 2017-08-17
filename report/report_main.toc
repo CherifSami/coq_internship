@@ -2,9 +2,11 @@
 \defcounter {refsection}{0}\relax 
 \select@language {english}
 \defcounter {refsection}{0}\relax 
+\thispagestyle {empty}
+\defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}CRIStAL laboratry}{2}{chapter.2}
+\contentsline {chapter}{\numberline {2}CRIStAL laboratory}{2}{chapter.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.1}History}{2}{section.2.1}
 \defcounter {refsection}{0}\relax 
@@ -24,7 +26,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{PIP's design}{7}{subsubsection*.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Formal proofs using Coq}{9}{subsubsection*.7}
+\contentsline {subsubsection}{Formal proofs using Coq}{8}{subsubsection*.7}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.1.4}In-depth understanding of PIP's Data structures}{11}{subsection.3.1.4}
 \defcounter {refsection}{0}\relax 
@@ -90,18 +92,18 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {5}Conclusion}{54}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Bibliography}{55}{chapter*.13}
+\contentsline {chapter}{Appendixes : Project Files}{55}{section*.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendixes : Project Files}{57}{section*.14}
+\begingroup \let \l@chapter \l@section \let \l@section \l@subsection 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {A}IdModTypeA.v}{58}{Appendix.a.A}
+\contentsline {chapter}{Appendix \numberline {A}IdModTypeA.v}{56}{Appendix.a.A}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {B}Pip\_state.v}{59}{Appendix.a.B}
+\contentsline {chapter}{Appendix \numberline {B}Pip\_state.v}{57}{Appendix.a.B}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {C}Lib.v}{61}{Appendix.a.C}
+\contentsline {chapter}{Appendix \numberline {C}Lib.v}{59}{Appendix.a.C}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {D}Hoare\_getFstShadow.v}{62}{Appendix.a.D}
+\contentsline {chapter}{Appendix \numberline {D}Hoare\_getFstShadow.v}{60}{Appendix.a.D}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {E}Hoare\_writeVirtualInv.v}{69}{Appendix.a.E}
+\contentsline {chapter}{Appendix \numberline {E}Hoare\_writeVirtualInv.v}{67}{Appendix.a.E}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {F}Hoare\_initVAddrTable.v}{72}{Appendix.a.F}
+\contentsline {chapter}{Appendix \numberline {F}Hoare\_initVAddrTable.v}{70}{Appendix.a.F}

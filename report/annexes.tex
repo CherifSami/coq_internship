@@ -1,4 +1,13 @@
 \begin{appendices}
+
+\makeatletter
+\addtocontents{toc}{%
+  \begingroup
+  \let\protect\l@chapter\protect\l@section
+  \let\protect\l@section\protect\l@subsection
+}
+\makeatother
+
 \chapter{IdModTypeA.v} \label{ModType}
 \begin{lstlisting}[xleftmargin=-.1\textwidth,
 xrightmargin=-.1\textwidth,

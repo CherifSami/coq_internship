@@ -13,9 +13,9 @@
 \usepackage{wrapfig}
 \usepackage{amsmath} 
 \usepackage{bussproofs}
-\usepackage[nonumberlist]{glossaries}
+\usepackage[nonumberlist,nopostdot]{glossaries}
 \usepackage{color}
-\usepackage[toc,page]{appendix}
+\usepackage[toc,titletoc,title,page]{appendix}
 \usepackage{abstract}
 \usepackage{hyperref}
 \usepackage[firstinits=true]{biblatex}
@@ -137,7 +137,9 @@ keepaspectratio]{img/cover.jpg}%
 \input{./cover.tex}
 
 \afterpage{\null\thispagestyle{empty}\newpage}
-\newpage
+\afterpage{\null\thispagestyle{empty}\newpage}
+\afterpage{\null\thispagestyle{empty}\newpage}
+
 
 \input{./abstract.tex}
 
@@ -146,11 +148,21 @@ keepaspectratio]{img/cover.jpg}%
 %Table of contents
 \tableofcontents
 \thispagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
 
 %Table of scripts
 \newpage
+
+\cleardoublepage
+\begingroup
+\makeatletter
+\let\ps@plain\ps@empty
+\makeatother
+
+\pagestyle{empty}
 \lstlistoflistings
-\thispagestyle{empty}
+\cleardoublepage
+\endgroup
 \newpage
 
 %Table of FIGURES
@@ -161,14 +173,6 @@ keepaspectratio]{img/cover.jpg}%
 %Abreviations
 \printglossary[title={Acronyms}]
 \thispagestyle{empty}
-
-\iffalse
-\begingroup
-\let\clearpage\relax
-\printglossary[title={Acronyms}]
-\endgroup
-\thispagestyle{empty}
-\fi
 
 %empty page
 \newpage
