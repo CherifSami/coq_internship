@@ -26,7 +26,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{PIP's design}{7}{subsubsection*.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Formal proofs using Coq}{8}{subsubsection*.7}
+\contentsline {subsubsection}{Formal proofs using Coq}{9}{subsubsection*.7}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {3.1.4}In-depth understanding of PIP's Data structures}{11}{subsection.3.1.4}
 \defcounter {refsection}{0}\relax 
@@ -54,11 +54,11 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {4.2}Modelling the PIP state in the deep embedding}{31}{section.4.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.3}1\textsuperscript {st}\xspace invariant and proof}{31}{section.4.3}
+\contentsline {section}{\numberline {4.3}1\textsuperscript {st}\xspace invariant and proof}{32}{section.4.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3.1}Invariant in the shallow embedding}{31}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.1}Invariant in the shallow embedding}{32}{subsection.4.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.3.2}Modelling the \textit {getFstShadow} function}{33}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.2}Modelling the \textit {getFstShadow} function}{34}{subsection.4.3.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{getSh1idx function}{34}{subsubsection*.10}
 \defcounter {refsection}{0}\relax 
@@ -80,30 +80,40 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {4.6.1}Deep vs shallow}{51}{subsection.4.6.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.6.2}Importance of Hoare triple rules}{51}{subsection.4.6.2}
+\contentsline {subsubsection}{Proof structuring}{51}{subsubsection*.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.6.3}Lack of a Pattern matching Construct}{52}{subsection.4.6.3}
+\contentsline {paragraph}{Importance of Hoare triple rules}{51}{paragraph*.14}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.6.4}Dealing with values in the deep embedding}{52}{subsection.4.6.4}
+\contentsline {subsubsection}{Proof specifications}{52}{subsubsection*.15}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.6.5}Defining Shallow functions}{53}{subsection.4.6.5}
+\contentsline {paragraph}{Dealing with values in the deep embedding}{52}{paragraph*.16}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.6.6}Deep implementation of shallow functions}{53}{subsection.4.6.6}
+\contentsline {paragraph}{Defining Shallow functions}{52}{paragraph*.17}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Conclusion}{54}{chapter.5}
+\contentsline {subsection}{\numberline {4.6.2}Limitations of DEC}{53}{subsection.4.6.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendixes : Project Files}{55}{section*.13}
+\contentsline {paragraph}{Pattern matching}{53}{paragraph*.18}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Error handling}{53}{paragraph*.19}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.6.3}Further discussion about the deep implementation of shallow functions}{53}{subsection.4.6.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}Conclusion}{55}{chapter.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{56}{chapter*.20}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Appendixes : Project Files}{58}{section*.21}
 \defcounter {refsection}{0}\relax 
 \begingroup \let \l@chapter \l@section \let \l@section \l@subsection 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendix \numberline {A}IdModTypeA.v}{56}{Appendix.a.A}
+\contentsline {chapter}{\numberline {A}IdModTypeA.v}{59}{Appendix.a.A}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendix \numberline {B}Pip\_state.v}{57}{Appendix.a.B}
+\contentsline {chapter}{\numberline {B}Pip\_state.v}{60}{Appendix.a.B}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendix \numberline {C}Lib.v}{59}{Appendix.a.C}
+\contentsline {chapter}{\numberline {C}Lib.v}{62}{Appendix.a.C}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendix \numberline {D}Hoare\_getFstShadow.v}{60}{Appendix.a.D}
+\contentsline {chapter}{\numberline {D}Hoare\_getFstShadow.v}{63}{Appendix.a.D}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendix \numberline {E}Hoare\_writeVirtualInv.v}{67}{Appendix.a.E}
+\contentsline {chapter}{\numberline {E}Hoare\_writeVirtualInv.v}{70}{Appendix.a.E}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Appendix \numberline {F}Hoare\_initVAddrTable.v}{70}{Appendix.a.F}
+\contentsline {chapter}{\numberline {F}Hoare\_initVAddrTable.v}{73}{Appendix.a.F}

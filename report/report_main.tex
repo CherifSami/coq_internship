@@ -13,14 +13,16 @@
 \usepackage{wrapfig}
 \usepackage{amsmath} 
 \usepackage{bussproofs}
+\usepackage[firstinits=true,backend=biber]{biblatex}
+%\usepackage{cite}
 \usepackage[nonumberlist,nopostdot]{glossaries}
 \usepackage{color}
-\usepackage[toc,titletoc,title,page]{appendix}
+\usepackage[toc,page]{appendix}
 \usepackage{abstract}
 \usepackage{hyperref}
-\usepackage[firstinits=true]{biblatex}
 \usepackage{eso-pic}
 \usepackage{afterpage}
+\usepackage{csquotes}
 
 % PDF setup
 \hypersetup{							
@@ -115,6 +117,9 @@ keepaspectratio]{img/cover.jpg}%
   backgroundcolor=\color{coqBg}
 }
 
+\DeclareNameAlias{author}{last-first}
+\bibliography{biblio.bib}
+
 % abbreviations:
 \newacronym{OS}{OS}{Operating System}
 \newacronym{TCB}{TCB}{Trusted Computing Base}
@@ -127,10 +132,6 @@ keepaspectratio]{img/cover.jpg}%
 \newacronym{DSL}{DSL}{Domain Specific Language}
 \newacronym{SOS}{SOS}{Structural Operational Semantics}
 \glsaddall
-
-\DeclareNameAlias{author}{last-first}
-\bibliography{biblio.bib}
-
 
 \begin{document}
  
@@ -192,8 +193,10 @@ keepaspectratio]{img/cover.jpg}%
 
 % bibliography
 % not cited
-\nocite{*}
 \printbibliography[heading=bibintoc]
+%\DeclareNameAlias{author}{last-first}
+%\bibliography{biblio.bib}{}
+%\bibliographystyle{plain}
 
 \input{./annexes.tex}
 

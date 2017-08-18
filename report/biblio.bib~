@@ -1,5 +1,5 @@
 @Book{SoftwareFoundation,
-author = {Pierce,Benjamin C. and de Amorim, Arthur Azevedo and Casinghino, Chris and Gaboardi, Marco and Greenberg, Michael and Hritcu, Catalin and Sj\"{o}berg, Vilhelm and Yorgey, Brent},
+author = {Pierce,Benjamin C. and de Amorim, Arthur Azevedo and Casinghino, Chris and Gaboardi, Marco and Greenberg, Michael and Hritcu, Catalin and Sjöberg, Vilhelm and Yorgey, Brent},
 title = {Software Foundations},
 publisher = {Electronic textbook},
 year = {2017},

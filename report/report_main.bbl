@@ -16,5 +16,387 @@
   {}
 \endgroup
 
+
+\refsection{0}
+  \sortlist{entry}{nty}
+    \entry{TAOSD}{incollection}{}
+      \name{labelname}{4}{}{%
+        {{hash=266ea99d21779d64c2498c9990b0c913}{Churchill}{C\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a8f0bb7e7eafbfc42e172995a310b492}{Mosses}{M\bibinitperiod}{P.\bibnamedelimi D.}{P\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+        {{hash=d11ae176caf76c67d44643463304371b}{Sculthorpe}{S\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=92ecae16bd669a9f7b99789a24244e57}{Torrini}{T\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{4}{}{%
+        {{hash=266ea99d21779d64c2498c9990b0c913}{Churchill}{C\bibinitperiod}{M.}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a8f0bb7e7eafbfc42e172995a310b492}{Mosses}{M\bibinitperiod}{P.\bibnamedelimi D.}{P\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+        {{hash=d11ae176caf76c67d44643463304371b}{Sculthorpe}{S\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=92ecae16bd669a9f7b99789a24244e57}{Torrini}{T\bibinitperiod}{P.}{P\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{e07cb3cec226ebb22589003e7f5e1073}
+      \strng{fullhash}{338767f11810fa528e20492d422da047}
+      \field{sortinit}{C}
+      \field{labeltitle}{Reusable Components of Semantic Specifications}
+      \field{booktitle}{TAOSD}
+      \field{number}{12}
+      \field{series}{LNCS 8989}
+      \field{title}{Reusable Components of Semantic Specifications}
+      \field{year}{2015}
+      \field{pages}{132\bibrangedash 179}
+    \endentry
+    \entry{cristal}{misc}{}
+      \field{sortinit}{C}
+      \field{labeltitle}{CRIStAL}
+      \field{howpublished}{Official website}
+      \field{title}{CRIStAL}
+      \verb{url}
+      \verb https://www.cristal.univ-lille.fr/
+      \endverb
+    \endentry
+    \entry{DIJ}{book}{}
+      \name{labelname}{1}{}{%
+        {{hash=3fa72084538a27e0e2efc0508856455c}{Dijkstra}{D\bibinitperiod}{Edsger\bibnamedelima W.}{E\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=3fa72084538a27e0e2efc0508856455c}{Dijkstra}{D\bibinitperiod}{Edsger\bibnamedelima W.}{E\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Prentice-Hall Englewood Cliffs, N.J}%
+      }
+      \strng{namehash}{3fa72084538a27e0e2efc0508856455c}
+      \strng{fullhash}{3fa72084538a27e0e2efc0508856455c}
+      \field{sortinit}{D}
+      \field{labeltitle}{A discipline of programming}
+      \field{isbn}{013215871}
+      \field{title}{A discipline of programming}
+      \field{year}{1976}
+    \endentry
+    \entry{Hoare}{article}{}
+      \name{labelname}{1}{}{%
+        {{hash=28fcf7e7d2cd56febbad02b0c8dd0354}{Hoare}{H\bibinitperiod}{C.\bibnamedelimi A.\bibnamedelimi R.}{C\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim R\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=28fcf7e7d2cd56febbad02b0c8dd0354}{Hoare}{H\bibinitperiod}{C.\bibnamedelimi A.\bibnamedelimi R.}{C\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim R\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{28fcf7e7d2cd56febbad02b0c8dd0354}
+      \strng{fullhash}{28fcf7e7d2cd56febbad02b0c8dd0354}
+      \field{sortinit}{H}
+      \field{labeltitle}{An Axiomatic Basis for Computer Programming}
+      \field{issn}{0001-0782}
+      \field{journaltitle}{Commun. ACM}
+      \field{month}{10}
+      \field{number}{10}
+      \field{title}{An Axiomatic Basis for Computer Programming}
+      \field{volume}{12}
+      \field{year}{1969}
+      \field{pages}{576\bibrangedash 580}
+      \verb{doi}
+      \verb 10.1145/363235.363259
+      \endverb
+      \verb{url}
+      \verb http://doi.acm.org/10.1145/363235.363259
+      \endverb
+      \keyw{axiomatic method,formal language definition,machine-independent programming,program documentation,programming language design,theory of programming' proofs of programs}
+    \endentry
+    \entry{MMUIsolation}{article}{}
+      \name{labelname}{4}{}{%
+        {{hash=5a710d1cbf7302664e54d4ddeb7d1c89}{Jomaa}{J\bibinitperiod}{Narjes}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+        {{hash=faed08e404782773057c864f338c7db5}{Grimaud}{G\bibinitperiod}{Gilles}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=ce3244ae0922700b7b6153f383e32522}{Hym}{H\bibinitperiod}{Samuel}{S\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{4}{}{%
+        {{hash=5a710d1cbf7302664e54d4ddeb7d1c89}{Jomaa}{J\bibinitperiod}{Narjes}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+        {{hash=faed08e404782773057c864f338c7db5}{Grimaud}{G\bibinitperiod}{Gilles}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=ce3244ae0922700b7b6153f383e32522}{Hym}{H\bibinitperiod}{Samuel}{S\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{3876aff1c603c1168ccacfc15aff549c}
+      \strng{fullhash}{3ba7d730c73c6a3dc4f8cb747bbf3a2e}
+      \field{sortinit}{J}
+      \field{labeltitle}{Formal Proof of Dynamic Memory Isolation Based on {MMU}}
+      \field{issn}{01676423}
+      \field{journaltitle}{Science of Computer Programming}
+      \field{title}{Formal Proof of Dynamic Memory Isolation Based on {MMU}}
+      \field{year}{2017}
+    \endentry
+    \entry{PIPdraft}{unpublished}{}
+      \name{labelname}{4}{}{%
+        {{hash=4c09c3b3176399cfed75667e73510aa8}{Jomaa}{J\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=74cd5512c9bbdf571cc8bc4d5b457fb5}{Grimaud}{G\bibinitperiod}{G.}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=92d0b99ca0747d84ef607c60fc0eb532}{Hym}{H\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{hash=b6f04aaed87ca35835de9366e3dafa4e}{Nowak}{N\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{4}{}{%
+        {{hash=4c09c3b3176399cfed75667e73510aa8}{Jomaa}{J\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=74cd5512c9bbdf571cc8bc4d5b457fb5}{Grimaud}{G\bibinitperiod}{G.}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=92d0b99ca0747d84ef607c60fc0eb532}{Hym}{H\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{hash=b6f04aaed87ca35835de9366e3dafa4e}{Nowak}{N\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {CRIStAL}%
+      }
+      \strng{namehash}{a65e3c831194e98b73ae384e8fac52f2}
+      \strng{fullhash}{45d429a280678607b130762242019116}
+      \field{sortinit}{J}
+      \field{labeltitle}{Coding a real {O}{S} kernel in Coq and fomralising its security (unpublished paper draft)}
+      \field{month}{01}
+      \field{title}{Coding a real {O}{S} kernel in Coq and fomralising its security (unpublished paper draft)}
+      \field{year}{2017}
+    \endentry
+    \entry{PIPKernel}{unpublished}{}
+      \name{labelname}{4}{}{%
+        {{hash=4c09c3b3176399cfed75667e73510aa8}{Jomaa}{J\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=74cd5512c9bbdf571cc8bc4d5b457fb5}{Grimaud}{G\bibinitperiod}{G.}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=92d0b99ca0747d84ef607c60fc0eb532}{Hym}{H\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{hash=b6f04aaed87ca35835de9366e3dafa4e}{Nowak}{N\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{4}{}{%
+        {{hash=4c09c3b3176399cfed75667e73510aa8}{Jomaa}{J\bibinitperiod}{N.}{N\bibinitperiod}{}{}{}{}}%
+        {{hash=74cd5512c9bbdf571cc8bc4d5b457fb5}{Grimaud}{G\bibinitperiod}{G.}{G\bibinitperiod}{}{}{}{}}%
+        {{hash=92d0b99ca0747d84ef607c60fc0eb532}{Hym}{H\bibinitperiod}{S.}{S\bibinitperiod}{}{}{}{}}%
+        {{hash=b6f04aaed87ca35835de9366e3dafa4e}{Nowak}{N\bibinitperiod}{D.}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {CRIStAL}%
+      }
+      \strng{namehash}{a65e3c831194e98b73ae384e8fac52f2}
+      \strng{fullhash}{45d429a280678607b130762242019116}
+      \field{sortinit}{J}
+      \field{labeltitle}{PIP : A Minimal Kernel with Provable isolation (unpublished paper draft)}
+      \field{title}{PIP : A Minimal Kernel with Provable isolation (unpublished paper draft)}
+      \field{year}{2017}
+    \endentry
+    \entry{PIPSlides}{online}{}
+      \name{labelname}{1}{}{%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{55da439491bca65e6e2558a6f6562a24}
+      \strng{fullhash}{55da439491bca65e6e2558a6f6562a24}
+      \field{sortinit}{N}
+      \field{labeltitle}{Pip: A Minimal OS Kernel with Provable Isolation}
+      \field{month}{04}
+      \field{note}{Third French-Japanese Meeting on Cybersecurity}
+      \field{title}{Pip: A Minimal OS Kernel with Provable Isolation}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://project.inria.fr/FranceJapanICST/files/2017/05/DNowak_presentation_2017.pdf
+      \endverb
+    \endentry
+    \entry{Calculus}{inproceedings}{}
+      \name{labelname}{1}{}{%
+        {{hash=4af7507643d249553134ea08cf3879ea}{Paulin-Mohring}{P\bibinithyphendelim M\bibinitperiod}{Christine}{C\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=4af7507643d249553134ea08cf3879ea}{Paulin-Mohring}{P\bibinithyphendelim M\bibinitperiod}{Christine}{C\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=dd602c215fedfec22fb7b33f1bf075fc}{Paleo}{P\bibinitperiod}{Bruno\bibnamedelima Woltzenlogel}{B\bibinitperiod\bibinitdelim W\bibinitperiod}{}{}{}{}}%
+        {{hash=5ee2bc33421ca6d301971fff90a5abc1}{Delahaye}{D\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {College Publications}%
+      }
+      \strng{namehash}{4af7507643d249553134ea08cf3879ea}
+      \strng{fullhash}{4af7507643d249553134ea08cf3879ea}
+      \field{sortinit}{P}
+      \field{labeltitle}{Introduction to the Calculus of Inductive Constructions}
+      \field{booktitle}{All about Proofs, Proofs for All}
+      \field{chapter}{Structural abstract interpretation, A formal study using Coq}
+      \field{isbn}{978-1-84890-166-7}
+      \field{series}{Studies in Logic (Mathematical logic and foundations)}
+      \field{title}{Introduction to the Calculus of Inductive Constructions}
+      \field{volume}{55}
+      \field{year}{2014}
+    \endentry
+    \entry{SoftwareFoundation}{book}{}
+      \name{labelname}{8}{}{%
+        {{hash=8eb1c0a7778a466aa612ab3259d489ec}{Pierce}{P\bibinitperiod}{Benjamin\bibnamedelima C.}{B\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+        {{hash=36e42e651d7fbce3a308e58770149e20}{Amorim}{A\bibinitperiod}{Arthur\bibnamedelima Azevedo}{A\bibinitperiod\bibinitdelim A\bibinitperiod}{de}{d\bibinitperiod}{}{}}%
+        {{hash=5cbcd088d78ce11865025e8da01f325f}{Casinghino}{C\bibinitperiod}{Chris}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=2236e238d6bdc3c54b604fb209e4f6d2}{Gaboardi}{G\bibinitperiod}{Marco}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a9953f0b4a61c5c5a2208d5a1ebf8c5c}{Greenberg}{G\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=708ef205d7712d8fdda6e861941af0b0}{Hritcu}{H\bibinitperiod}{Catalin}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=d1a4ec9dfb5208ec69d6b3a3ef4ec7ff}{Sjöberg}{S\bibinitperiod}{Vilhelm}{V\bibinitperiod}{}{}{}{}}%
+        {{hash=4cedc901f26578d93d2ac6f60af7f707}{Yorgey}{Y\bibinitperiod}{Brent}{B\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{8}{}{%
+        {{hash=8eb1c0a7778a466aa612ab3259d489ec}{Pierce}{P\bibinitperiod}{Benjamin\bibnamedelima C.}{B\bibinitperiod\bibinitdelim C\bibinitperiod}{}{}{}{}}%
+        {{hash=36e42e651d7fbce3a308e58770149e20}{Amorim}{A\bibinitperiod}{Arthur\bibnamedelima Azevedo}{A\bibinitperiod\bibinitdelim A\bibinitperiod}{de}{d\bibinitperiod}{}{}}%
+        {{hash=5cbcd088d78ce11865025e8da01f325f}{Casinghino}{C\bibinitperiod}{Chris}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=2236e238d6bdc3c54b604fb209e4f6d2}{Gaboardi}{G\bibinitperiod}{Marco}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a9953f0b4a61c5c5a2208d5a1ebf8c5c}{Greenberg}{G\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=708ef205d7712d8fdda6e861941af0b0}{Hritcu}{H\bibinitperiod}{Catalin}{C\bibinitperiod}{}{}{}{}}%
+        {{hash=d1a4ec9dfb5208ec69d6b3a3ef4ec7ff}{Sjöberg}{S\bibinitperiod}{Vilhelm}{V\bibinitperiod}{}{}{}{}}%
+        {{hash=4cedc901f26578d93d2ac6f60af7f707}{Yorgey}{Y\bibinitperiod}{Brent}{B\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Electronic textbook}%
+      }
+      \strng{namehash}{be1956cf392d2df36ad49931b060ee18}
+      \strng{fullhash}{04080f9373993bd26f83201cc9a5b020}
+      \field{sortinit}{P}
+      \field{labeltitle}{Software Foundations}
+      \field{note}{Ebook version 4.2}
+      \field{title}{Software Foundations}
+      \field{year}{2017}
+      \verb{url}
+      \verb http://www.cis.upenn.edu/~bcpierce/sf
+      \endverb
+    \endentry
+    \entry{SOS}{article}{}
+      \name{labelname}{1}{}{%
+        {{hash=4129a8861790c18df9b27518d975d476}{Plotkin}{P\bibinitperiod}{G.\bibnamedelimi D.}{G\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=4129a8861790c18df9b27518d975d476}{Plotkin}{P\bibinitperiod}{G.\bibnamedelimi D.}{G\bibinitperiod\bibinitdelim D\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{4129a8861790c18df9b27518d975d476}
+      \strng{fullhash}{4129a8861790c18df9b27518d975d476}
+      \field{sortinit}{P}
+      \field{labeltitle}{A Structural Approach to Operational Semantics}
+      \field{journaltitle}{J. Log. Algebr. Program.}
+      \field{title}{A Structural Approach to Operational Semantics}
+      \field{volume}{60-61}
+      \field{year}{2004}
+      \field{pages}{17\bibrangedash 139}
+    \endentry
+    \entry{ModernOS}{inbook}{}
+      \name{labelname}{1}{}{%
+        {{hash=f5468b55b742e14a341a50be425d3715}{Tanenbaum}{T\bibinitperiod}{Andrew}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=f5468b55b742e14a341a50be425d3715}{Tanenbaum}{T\bibinitperiod}{Andrew}{A\bibinitperiod}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {Pearson}%
+      }
+      \strng{namehash}{f5468b55b742e14a341a50be425d3715}
+      \strng{fullhash}{f5468b55b742e14a341a50be425d3715}
+      \field{sortinit}{T}
+      \field{labeltitle}{Modern Operating Systems}
+      \field{chapter}{History of Operation Systems}
+      \field{edition}{3\rd}
+      \field{isbn}{013359162X}
+      \field{title}{Modern Operating Systems}
+      \field{year}{2009}
+      \field{pages}{60\bibrangedash 69}
+    \endentry
+    \entry{PIP}{online}{}
+      \name{labelname}{1}{}{%
+        {{hash=8bdacb32f6fc276f4b456bdffd3fdb31}{{The\bibnamedelimb 2XS\bibnamedelimb team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=8bdacb32f6fc276f4b456bdffd3fdb31}{{The\bibnamedelimb 2XS\bibnamedelimb team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \strng{namehash}{8bdacb32f6fc276f4b456bdffd3fdb31}
+      \strng{fullhash}{8bdacb32f6fc276f4b456bdffd3fdb31}
+      \field{sortinit}{T}
+      \field{labeltitle}{The PIP protokernel official Website}
+      \field{note}{CRIStAL laboratry}
+      \field{title}{The PIP protokernel official Website}
+      \verb{url}
+      \verb http://pip.univ-lille1.fr
+      \endverb
+    \endentry
+    \entry{Coq}{manual}{}
+      \name{labelname}{1}{}{%
+        {{hash=882663116a5b3daa12664103cd3b8bf8}{{The\bibnamedelimb Coq\bibnamedelimb Development\bibnamedelimb Team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=882663116a5b3daa12664103cd3b8bf8}{{The\bibnamedelimb Coq\bibnamedelimb Development\bibnamedelimb Team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \list{publisher}{1}{%
+        {INRIA}%
+      }
+      \strng{namehash}{882663116a5b3daa12664103cd3b8bf8}
+      \strng{fullhash}{882663116a5b3daa12664103cd3b8bf8}
+      \field{sortinit}{T}
+      \field{labeltitle}{The Coq Proof Assistant. Reference Manual}
+      \field{month}{07}
+      \field{note}{Coq version 8.6.1}
+      \field{title}{The Coq Proof Assistant. Reference Manual}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://coq.inria.fr/distrib/current/files/Reference-Manual.pdf
+      \endverb
+    \endentry
+    \entry{CoqWeb}{online}{}
+      \name{labelname}{1}{}{%
+        {{hash=019b1556b8272b05c648205eafe79ffe}{{The\bibnamedelimb Coq\bibnamedelimb development\bibnamedelimb team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \name{author}{1}{}{%
+        {{hash=019b1556b8272b05c648205eafe79ffe}{{The\bibnamedelimb Coq\bibnamedelimb development\bibnamedelimb team}}{T\bibinitperiod}{}{}{}{}{}{}}%
+      }
+      \strng{namehash}{019b1556b8272b05c648205eafe79ffe}
+      \strng{fullhash}{019b1556b8272b05c648205eafe79ffe}
+      \field{sortinit}{T}
+      \field{labeltitle}{Coq official website}
+      \field{note}{Inria}
+      \field{title}{Coq official website}
+      \verb{url}
+      \verb https://coq.inria.fr
+      \endverb
+    \endentry
+    \entry{DEC}{unpublished}{}
+      \name{labelname}{2}{}{%
+        {{hash=07afa1f71caaffe8ebca2aa309da6af0}{Torrini}{T\bibinitperiod}{Paolo}{P\bibinitperiod}{}{}{}{}}%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{2}{}{%
+        {{hash=07afa1f71caaffe8ebca2aa309da6af0}{Torrini}{T\bibinitperiod}{Paolo}{P\bibinitperiod}{}{}{}{}}%
+        {{hash=55da439491bca65e6e2558a6f6562a24}{Nowak}{N\bibinitperiod}{David}{D\bibinitperiod}{}{}{}{}}%
+      }
+      \list{institution}{1}{%
+        {CRIStAL laboratory}%
+      }
+      \strng{namehash}{00c9f8d3681dd78dd97762178b4866ad}
+      \strng{fullhash}{00c9f8d3681dd78dd97762178b4866ad}
+      \field{sortinit}{T}
+      \field{labeltitle}{The DEC language repository}
+      \field{month}{08}
+      \field{title}{The DEC language repository}
+      \field{year}{2017}
+      \verb{url}
+      \verb https://github.com/ptorrx/DeepC4Pip
+      \endverb
+    \endentry
+    \entry{Wildmoser}{inproceedings}{}
+      \name{labelname}{2}{}{%
+        {{hash=cae5656aacb1792abaacfaabbcb58806}{Wildmoser}{W\bibinitperiod}{Martin}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a41b38c2580f5bb8c574d84f66e0856a}{Nipkow}{N\bibinitperiod}{Tobias}{T\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{2}{}{%
+        {{hash=cae5656aacb1792abaacfaabbcb58806}{Wildmoser}{W\bibinitperiod}{Martin}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=a41b38c2580f5bb8c574d84f66e0856a}{Nipkow}{N\bibinitperiod}{Tobias}{T\bibinitperiod}{}{}{}{}}%
+      }
+      \name{editor}{3}{}{%
+        {{hash=e61396bf0b2a08b7aa709af45ab61dc5}{Slind}{S\bibinitperiod}{K.}{K\bibinitperiod}{}{}{}{}}%
+        {{hash=3643d5d7eb1a148c258e3b170b8c4b0f}{Bunker}{B\bibinitperiod}{A.}{A\bibinitperiod}{}{}{}{}}%
+        {{hash=9b0cdb4cb53d25682523222e4c516f72}{Gopalakrishnan}{G\bibinitperiod}{G.}{G\bibinitperiod}{}{}{}{}}%
+      }
+      \strng{namehash}{71a71407b20e7087f37f325859a6a6b5}
+      \strng{fullhash}{71a71407b20e7087f37f325859a6a6b5}
+      \field{sortinit}{W}
+      \field{labeltitle}{Certifying Machine Code Safety: Shallow versus Deep Embedding}
+      \field{booktitle}{Theorem Proving in Higher Order Logics (TPHOLs 2004)}
+      \field{title}{Certifying Machine Code Safety: Shallow versus Deep Embedding}
+      \field{volume}{3223}
+      \field{year}{2004}
+      \field{pages}{305\bibrangedash 320}
+    \endentry
+  \endsortlist
+\endrefsection
 \endinput
 

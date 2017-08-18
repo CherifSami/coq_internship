@@ -102,7 +102,7 @@ This API is sufficient as far as memory requirements are concerned but it lacks 
 \includegraphics[frame]{img/CoqLogo.png}
 \end{wrapfigure}
 Coq\cite{CoqWeb} is the result of about 30 years of research.
-It started in 1984 as an implementation of the Calculus of Constructions, an expressive formal language, at INRIA by \textit{Thierry Coquand} and \textit{Gérard Huet} and was extended,later in 1991, by \textit{Christine Paulin} to the Calculus of Inductive Constructions\cite{Calculus}. \\
+It started in 1984 as an implementation of the Calculus of Constructions, an expressive formal language, at INRIA by \textit{Thierry Coquand} and \textit{G\'erard Huet} and was extended, later in 1991, by \textit{Christine Paulin} to the Calculus of Inductive Constructions\cite{Calculus}. \\
 
 Coq is a \textbf{formal proof management system}. It provides a formal language to write mathematical definitions, executable algorithms and theorems together with an environment for semi-interactive development of machine-checked proofs. Typical applications include the certification of properties of programming languages (e.g. the \textit{CompCert} compiler certification project, or the \textit{Bedrock} verified low-level programming library), the formalization of mathematics and teaching. It implements a program specification and mathematical higher-level language called \textit{Gallina} that is based on the Calculus of Inductive Constructions combining both a higher-order logic and a richly-typed functional programming language.\\
 
@@ -256,10 +256,10 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \BinaryInfC{\{P\} IF B THEN C1 ELSE C2 \{Q\}}
 \end{prooftree}
 \end{enumerate}
-The rules defined above are in their simplest form and we need to adapt them to the language or semantics we're working on. Also, This list isn't exhaustive\cite{SoftwareFoundation}. For example, we didn't define a rule for \textit{While} loops because the Coq model of PIP doesn't actually use them and uses recursion instead. Likewise, We're sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
+The rules defined above are in their simplest form and we need to adapt them to the language or semantics we are working on. Also, This list is not exhaustive\cite{SoftwareFoundation}. For example, we did not define a rule for \textit{While} loops because the Coq model of PIP doesn't actually use them and uses recursion instead. Likewise, We're sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
 
 \subsection{Hoare logic in the shallow embedding} \label{Hoare}
-The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section. A program in the shallow embedding is defined in a monadic style that returns a pair of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare}, \textbf{the postcondition must not only reason on the resulting state but also on the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in Coq.
+The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section. A program in the shallow embedding is defined in a monadic style that returns a pair of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare}, \textbf{the postcondition is a predicate on the resulting state and the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in Coq.
 \begin{lstlisting}[caption = {Hoare triple in the shallow embedding},label = {shallow_Hoare}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition hoareTriple {A : Type} (P : state $\rightarrow$ Prop) 
@@ -374,7 +374,7 @@ NoDup (getMappedPages partition s).
 \end{lstlisting}	
 	\item \textbf{Well-typedness :} This last category concerns kernel data types and ensures that PIP doesn't contain any type confusion. For instance, when PIP writes a virtual address in the memory, it should be read later as a virtual address which is ensured by a property called \textit{dataStructurePdSh1Sh2asRoot}. Otherwise, it is considered as an undefined behaviour in the model.
 \end{itemize}
-The only Hoare triple that was sucessfully proven to this date\footnotemark[1] is the one about the \textit{createPartition} call that required about 60000 lines of code to prove and which is defined as follows :
+The most difficult system call invariant, called \textit{createPartition}, was successfully proven. It required about 60000 lines of code to prove. It is defined as follows :
 \begin{lstlisting}[caption = {createPartition Hoare triple}, mathescape=true]
 Lemma createPartition (descChild pdChild
            shadow1 shadow2 list : vaddr) :
@@ -384,7 +384,7 @@ createPartition descChild pdChild shadow1 shadow2 list
 {{fun _ s  $\Rightarrow$ partitionsIsolation s $\bigwedge$ kernelDataIsolation 
               s $\bigwedge$ verticalSharing s $\bigwedge$ consistency s }}.
 \end{lstlisting}	
-\footnotetext[1]{\today}
+
 \pagebreak
 
 \section{The deep embedding} \label{deep}
@@ -401,11 +401,11 @@ of the right type;
 	\item \textbf{Termination :} every execution of a well-typed program
 ends with a value;
 	\item \textbf{Subject reduction :} the execution of a well-typed
-program preserves its type at each step ;
+program preserves its type at each step;
 	\item \textbf{Determinism :} given an initial state, each well-typed
 program can only evaluate to one value and one new state;
-	\item \textbf{Strong typedness :} each program has at most one
-type ;	
+	\item \textbf{Type uniqueness :} each program has at most one
+type.	
 \end{enumerate}
 DEC supports Hoare logic reasoning, providing proven Hoare logic rules that will be detailed in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}.
 
@@ -461,7 +461,7 @@ xrightmargin=.14\textwidth]
 Inductive QFun : Type := FVar (x: Id) 
 	               | QF (f: Fun).
 \end{lstlisting}
-	\item \textbf{XFun type :} represents generic effects (external stateful functions) in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement non-recursive functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need generic effects with \textit{unit} as the input and output type. Moreover, when specifying a generic effect, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. This implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions :
+	\item \textbf{XFun type :} represents generic effects (external stateful functions) in the deep embedding used to define prospective operations on the state and/or an input. It is used by the \textit{Modify} construct of the deep embedding defined in script \ref{DeepEmb} p.\pageref{DeepEmb}, when we want to read the state or perform changes on it and also when we need to implement external functions. As shown in script \ref{XFun}, it requires an input type \textit{T1} as well as an output type \textit{T2}. Thus, to define state operations, we will mainly need generic effects with \textit{unit} as the input and output type. Moreover, when specifying a generic effect, we only need to worry about the b\_mod attribute as b\_exec and b\_eval are already preset to build respectively the resulting state and value. This implementation deals with the issue of construct extensibility since it enables us to add shallow constructs and even use shallow functions :
 \begin{lstlisting}[caption = {generic effects in the deep embedding}, label={XFun}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Record XFun (T1 T2: Type) : Type := {
@@ -479,7 +479,7 @@ As shown in script \ref{DeepEmb}, The deep embedding provides us with 8 construc
 	\item \textbf{Val} \textit{v} \textbf{:} lifts the value \textit{v} to an expression using the constructor \textit{Val};
 	\item \textbf{BindN} \textit{e1 e2} \textbf{:} represents a \textbf{sequence} of instructions where the expression \textit{e1} is evaluated first then \textit{e2} next. It is equivalent to ``\textit{e1;;e2}'' in the shallow embedding;
 	\item \textbf{BindS} \textit{x e1 e2} \textbf{:} represents an \textbf{assignment}. It is equivalent to ``\textit{perform x := e1 in e2}'' in the shallow embedding. More precisely, the expression \textit{e2} is evaluated in the updated variable environment where \textit{x} gets mapped to the resulting value of the evaluation of \textit{e1};
-	\item \textbf{BindMS} \textit{fenv env e} \textbf{:} evaluates the expression \textit{e} in the function environment \textit{fenv} and variable environment \textit{env};
+	\item \textbf{BindMS} \textit{fenv env e} \textbf{:} the expression \textit{e} is considered in the function environment \textit{fenv} and variable environment \textit{env};
 	\item \textbf{IfThenElse} \textit{e1 e2 e3} \textbf{:} represents a \textbf{conditional structure}. It is equivalent to ``\textit{if e1 then e2 else e3}'' in the shallow embedding. This expression is considered well-typed only when \textit{e1} gets evaluated to a deep boolean value;
 	\item \textbf{Return} \textit{G qv} \textbf{:} lifts the quasi-value \textit{qv} to an expression using the constructor \textit{Return}. If \textit{qv} is a variable, it gets evaluated in the variable environment. \textit{G} is a flag which affirms whether the construct should get translated to an actual return in C or not. The type \textit{Tag} of \textit{G} is defined as follows :
 \begin{lstlisting}[caption = {Tag type in the deep embedding},xleftmargin=.12\textwidth,
@@ -492,7 +492,7 @@ xrightmargin=.12\textwidth]
 Inductive Prms : Type := PS (es: list Exp).     
 \end{lstlisting}	
 \pagebreak
-	\item \textbf{Modify} \textit{T1 T2 VT1 VT2 xf qv} \textbf{:} is used to define affectful state operations and functions. \textit{xf} is the generic effect that specifies the operation, \textit{T1} and \textit{T2} are respectively its input and output types and \textit{VT1} and \textit{VT2} assure that \textit{T1} and \textit{T2} are admissible value types. If \textit{qv} is a variable it gets evaluated in the variable environment. For instance, we can define a simple \textit{SKIP} instruction with the \textit{Modify} construct as follows :
+	\item \textbf{Modify} \textit{T1 T2 VT1 VT2 xf qv} \textbf{:} is used to define effectful state operations and functions. \textit{xf} is the generic effect that specifies the operation, \textit{T1} and \textit{T2} are respectively its input and output types and \textit{VT1} and \textit{VT2} assure that \textit{T1} and \textit{T2} are admissible value types. If \textit{qv} is a variable it gets evaluated in the variable environment. For instance, we can define a simple \textit{SKIP} instruction with the \textit{Modify} construct as follows :
 \begin{lstlisting}[caption = {SKIP instruction in the deep embedding},xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition xf_skip : XFun unit unit := {|
@@ -518,14 +518,9 @@ Inductive Exp : Type :=
 
 The deep expressions are meant to be evaluated in certain variable and function environments. To that end, single and multi-step evaluation were defined as follows :
 \begin{itemize}
-	\item \textbf{EStep fenv env (Conf Exp n e) (Conf Exp n' e') :} represents a \textbf{single-step evaluation} of the expression \textit{e}, in the function environment \textit{fenv} and variable environment \textit{env}, with \textit{n} as the current state. The constructor \textit{Conf} builds a configuration of the type we seek to evaluate which, in our case, is \textit{Exp} and contains the current state as well as the starting expression. \textit{n'} and \textit{e'} are respectively the resulting state and expression. For example, we can affirm that forall function environment \textit{fenv}, variable environment \textit{env}, state \textit{n} and value \textit{v} :
-\begin{center}
-\textbf{EStep} fenv env (\textbf{Conf} Exp n (Val v)) (\textbf{Conf} Exp n (Val v))
-\end{center}
-
-\item \textbf{PrmsStep fenv env (Conf Prms n es) (Conf Prms n' es') :} represents a single-step evaluation of the list of parameters \textit{es} which conducts a single-step evaluation of the first expression in the list. If the first expression is a value, it moves on to the
-next parameter;
-\item \textbf{EClosure fenv env (Conf Exp n e) (Conf Exp n' e') :} represents a \textbf{multi-step evaluation} of the expression \textit{e} which is defined as a reflexive transitive closure. It uses the predefined single evaluation steps. It is important to note that there exists a state where any expression gets evaluated to a certain value which we conclude from the termination property of the deep embedding. Furthermore, since the evaluation process is deterministic, an expression gets evaluated to a unique value;
+	\item \textbf{EStep fenv env (Conf Exp n e) (Conf Exp n' e') :} represents a \textbf{single-step evaluation} of the expression \textit{e}, in the function environment \textit{fenv} and variable environment \textit{env}, with \textit{n} as the current state. The constructor \textit{Conf} builds a configuration of the type we seek to evaluate which, in our case, is \textit{Exp} and contains the current state as well as the starting expression. \textit{n'} and \textit{e'} are respectively the resulting state and expression. \pagebreak
+\item \textbf{PrmsStep fenv env (Conf Prms n es) (Conf Prms n' es') :} represents a single-step evaluation of the list of parameters \textit{es} which conducts a single-step evaluation of the first expression in the list. If the first expression is a value, it moves on to the next parameter;
+\item \textbf{EClosure fenv env (Conf Exp n e) (Conf Exp n' e') :} represents a \textbf{multi-step evaluation} of the expression \textit{e} which is defined as a reflexive transitive closure. It uses the predefined single evaluation steps. It is important to note that there exists a state where any expression gets evaluated to a certain value which we conclude from the termination property of the deep embedding. Furthermore, since the evaluation process is deterministic, an expression gets evaluated to a unique value. 
 \item \textbf{PrmsClosure fenv env (Conf Prms n es) (Conf Exp n' es') :} represents a multi-step evaluation of the list of parameters \textit{es} which conducts a multi-step evaluation of each expression in the list.
 \end{itemize}
 
@@ -633,7 +628,7 @@ Lemma Apply_VHTT1 (P0: W $\rightarrow$ Prop)
  THoareTriple_Eval P0 P2 fenv env (Apply (QF f) (PS es)).
 \end{lstlisting}
 		\item \leftskip -4em
- \textbf{Apply\_VHTT2 :} only evaluates the parameters in a function application. It's de defined as follows : 
+ \textbf{Apply\_VHTT2 :} only evaluates the parameters in a function application. It's defined as follows : 
 \vspace{-1em} 
 \begin{prooftree}
 \leftskip -6em

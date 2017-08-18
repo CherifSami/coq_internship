@@ -1,12 +1,11 @@
 \chapter{Proving invariants in the deep embedding} \label{Work}
-In this section, we show how we proved three different invariants of PIP. The first one is about a function that reads the memory. The second one is about a function that writes in the memory. The last invariant is about a recursive function. We explain throughout this section our approach in modelling these functions and the way we engineered our proofs while trying to make them modular and as simple as possible. The first section is dedicated to a briefing on the preliminary work we did to become more familiar with the deep embedding and the Hoare logic we built on progressively.  
+In this section, we show how we proved three different invariants of PIP. The first one is about a function that reads the memory. The second one is about a function that writes in the memory. The last invariant is about a recursive function. We explain throughout this section our approach in modelling these functions and the way we engineered our proofs while trying to make them modular and as simple as possible. The first section is dedicated to a briefing on the preliminary work we did to become more familiar with the deep embedding and the Hoare logic we built on progressively.
+In the second section, we explain how we modelled the PIP monad by replicating the PIP state. It is important to note that, since we don't have error handling in the deep embedding, we are going to use \textit{option} types to deal with undefined behaviour of the PIP monad. In later sections we show how we modelled the shallow functions and proved their invariants in the deep embedding. Although some functions are defined in the hardware model and not in the PIP code, we chose to model them in the deep embedding as part of our experimentation with DEC. The last section is dedicated to our observations on the difference between shallow and deep proof and the limitations of the DEC language. 
 
 \section{Preliminary experiments}
-For this preliminary work, we used an untyped form of the Hoare logic triple which was later refined to the one we defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}. We started working with a natural number state on which we defined two functions. The first function called \textit{ReadN} simply reads the current value of the state while the second one called \textit{WriteN} writes a given value in the state. To model these functions, we used generic effects since they act directly on the state. We proved several Hoare triple rules about these functions. For instance, we proved that if we write a value x in the state then read it immediately after, we should get the same value x. This is quite similar to an invariant we proved on the PIP state, called  \textit{writeVirtualInvNewProp}, which is  detailed in section \ref{writeInvSec} p.\pageref{writeInvSec}.\\
+For this preliminary work, we used an untyped form of the Hoare logic triple which was later refined to the one we defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}. We started working with a natural number state on which we defined two functions. The first function called \textit{ReadN} simply reads the current value of the state while the second one called \textit{WriteN} writes a given value in the state. To model these functions, we used generic effects since they act directly on the state. We proved several Hoare triple rules about these functions. For instance, we proved that if we write a value x in the state then read it immediately after, we should get the same value x. This is quite similar to an invariant we proved on the PIP state, called  \textit{writeVirtualInvNewProp}, which is  detailed in section \ref{writeInvSec} p.\pageref{writeInvSec}. \\ \pagebreak
 
 Then, we switched to an association list state which resembles more the PIP state. We also devised shallow reading and writing functions on this state as the ones defined on the PIP state in annex \ref{LibFile} p.\pageref{LibFile}. We used these functions to define deep reading and writing functions on such state using generic effects. Then we proved similar lemmas to the one we did on the natural number state. 
-
-\pagebreak
  
 \section{Modelling the PIP state in the deep embedding}
 To prove invariants of PIP in the deep embedding, it is essential to replicate the PIP state. To that end, all type definitions mentioned in section \ref{PIPstateSection} p.\pageref{PIPstateSection} are copied in the file \textit{PIP\_state.v}. All the axioms, constructors, comparison functions as well as predefined values were also copied in this file as shown in annex \ref{stateFile} p.\pageref{stateFile}. Then, we defined a module of type \textit{IdModType}, detailed in annex \ref{ModType} p.\pageref{ModType}, where the type parameter \textit{W} is set to the PIP \textit{state} record type, defined in script \ref{PIPstate} p.\pageref{PIPstate}. We defined the initial value of this type parameter which corresponding to an empty memory. Furthermore, The \textit{Id} type parameter for identifiers is set to \textit{string}. This module, called \textit{IdModP}, will be passed as a parameter to the modules we're going to work on later. It is defined in the the file \textit{IdModPip.v} as follows :
@@ -31,7 +30,7 @@ End IdModP.
 \section{1\st invariant and proof} 
 
 \subsection{Invariant in the shallow embedding} \label{getFstInv}
-This invariant concerns a function named \textit{getFstSadow}. We want to prove that if the necessary properties for the correct execution of this function are verified then any precondition on the state persists after its execution since this function doesn't change it. We also need to ascertain the validity of the returned value. This invariant is defined as follows :  
+This invariant concerns a function named \textit{getFstShadow}. We want to prove that if the necessary properties for the correct execution of this function are verified then any precondition on the state persists after its execution since this function doesn't change it. We also need to ascertain the validity of the returned value. This invariant is defined as follows :  
 \begin{lstlisting}[caption = {getFstShadow invariant in the shallow embedding}, xleftmargin=-.02\textwidth,
 xrightmargin=-.02\textwidth,mathescape=true]
 Lemma getFstShadow (partition : page) (P : state $\rightarrow$ Prop) :
@@ -43,7 +42,7 @@ Internal.getFstShadow partition
 \end{lstlisting}
 where :
 \begin{itemize}
-	\item \textbf{getFstShadow} : is a function that \textbf{returns the physical page of the first shadow} for a given partition. The index of the virtual address of the first shadow, called \textit{sh1idx} as shown in annex \ref{stateFile} p.\pageref{stateFile}, is predefined in PIP as the 4\rth index of a partition. Furthermore, we know that the virtual address and the physical address of any page are consecutive. Therefore, we only need to fetch the predefined index of the first shadow, calculate its successor then read the corresponding page in the given partition. It is defined as follows :
+	\item \textbf{getFstShadow :} is a function that \textbf{returns the physical page of the first shadow} for a given partition. The index of the virtual address of the first shadow, called \textit{sh1idx} as shown in annex \ref{stateFile} p.\pageref{stateFile}, is predefined in PIP as the 4\rth index of a partition. Furthermore, we know that the virtual address and the physical address of any page are consecutive. Therefore, we only need to fetch the predefined index of the first shadow, calculate its successor then read the corresponding page in the given partition. It is defined as follows :
 \begin{lstlisting}[caption = {getFstShadow function in the shallow embedding},label={getFstShallow}]
 Definition getFstShadow (partition : page):=
   perform idx := getSh1idx in
@@ -51,9 +50,9 @@ Definition getFstShadow (partition : page):=
   readPhysical partition idxsucc.
 \end{lstlisting} 
 \vspace{4pt}
-	\item \textbf{P} : is the propagated property on the state;
+	\item \textbf{P :} is the propagated property on the state;
 	\item \textbf{getPartitions :}  is a function that returns the list of all sub-partitions of a given partition. In our case, since we give it the multiplexer partition which is the root partition, it returns all the partitions in the memory. This function is used to verify that the partition we give to the \textit{getFstShadow} function is valid by checking its presence in the partition tree;
-	\item \textbf{nextEntryIsPP :}  returns \textit{True} if the entry at position successor of the given index in the given table is a physical page and is equal to another given page. It is defined as follows : \pagebreak
+	\item \textbf{nextEntryIsPP :}  returns \textit{True} if the entry at position successor of the given index in the given table is a physical page and is equal to another given page. It is defined as follows : 
 \begin{lstlisting}[caption = {nextEntryIsPP property},mathescape=true, xleftmargin=-.1\textwidth, xrightmargin=-.05\textwidth,label={nextEnt}]
 Definition nextEntryIsPP table idxroot tableroot s : Prop:= 
 match Index.succ idxroot with 
@@ -102,7 +101,7 @@ Program Definition succ (n : index) : LLI index :=
  then ret (Build_index isucc _)
  else  undefined 28.
 \end{lstlisting} \vspace{4pt}
-\textbf{Our approach is to rewrite this function in the deep embedding while leaving shallow bits that we progressively replace with deep definitions in order to make the shift from shallow proofs to deep ones gradual and modular}. First, We rewrote this function so that we could use it in a \textit{Modify} construct replacing the output type by \textit{option index}. We used the index constructor \textit{CIndex} to build the new index : 
+Although this function is defined in the hardware model, we chose to model it as part of our experimentation with the deep embedding. \textbf{Our approach is to rewrite this function in the deep embedding while leaving shallow bits that we progressively replace with deep definitions in order to make the shift from shallow proofs to deep ones gradual and modular}. First, we rewrote this function so that we could use it in a \textit{Modify} construct replacing the output type by \textit{option index}. We used the index constructor \textit{CIndex} to build the new index. The new shallow version is defined as follows : \pagebreak
 \begin{lstlisting}[caption={Rewritten shallow index successor function},xleftmargin=-.01\textwidth,
 xrightmargin=-.01\textwidth,label={succInt}]
 Definition succIndexInternal (idx:index) : option index :=
@@ -137,7 +136,7 @@ BindS "i" (prj1 x)
                       (Val(cst (option index) None))
           ).
 \end{lstlisting} \vspace{4pt}
-where \textit{prj1} is a projection of the first value of an index record which corresponds to the actual value of the index, \textit{LtDec} is the definition of the comparison function using its shallow version, \textit{SomeCindexQF} is a quasi-function that lifts a natural number to an \textit{option index} typed value using the shallow constructors \textit{Cindex} and \textit{Some} successively and \textit{SuccR} is a function that calculates the successor of a natural number. It is important to note that \textit{SomeCindex} is defined as a \textit{Modify} construct using a generic effect instead of a pure deep function since the deep embedding doesn’t provide a pattern matching construct to deal with such cases. Their formal definitions in Coq are as follows :   \pagebreak
+where \textit{prj1} is a projection of the first value of an index record which corresponds to the actual value of the index, \textit{LtDec} is the definition of the comparison function using its shallow version, \textit{SomeCindexQF} is a quasi-function that lifts a natural number to an \textit{option index} typed value using the shallow constructors \textit{Cindex} and \textit{Some} successively and \textit{SuccR} is a function that calculates the successor of a natural number. It is important to note that \textit{SomeCindex} is defined as a \textit{Modify} construct using a generic effect instead of a pure deep function since the deep embedding doesn’t provide a pattern matching construct to deal with such cases. Their formal definitions in Coq are as follows :   
 \begin{lstlisting}[caption = {Functions called in SuccD} ,xleftmargin=-.04\textwidth,
 xrightmargin=-.04\textwidth,mathescape=true]
 (* projection function *)
@@ -173,12 +172,11 @@ Definition SuccR (x:Id) : Exp :=
   Modify nat nat VT_nat VT_nat xf_SuccD (Var x).
 \end{lstlisting} \vspace{4pt} 
 
-The last version calls a recursive function \textit{plusR} that calculates the sum of two natural numbers. More precisely, we replace the call of \textit{SuccR} in the former definition with \textit{plusR 1} which adds one to its given parameter. \textit{plusR} and the new successor function, called \textit{SuccRec}, are defined as follows : \pagebreak
+The last version calls a recursive function \textit{plusR} that calculates the sum of two natural numbers. More precisely, we replace the call of \textit{SuccR} in the former definition with \textit{plusR 1} which adds one to its given parameter. \textit{plusR} and the new successor function, called \textit{SuccRec}, are defined as follows : 
 \begin{lstlisting}[caption = {Definition of PlusR} ,xleftmargin=-.04\textwidth,
 xrightmargin=-.04\textwidth, mathescape=true]
 Definition plusR' (f: Id) (x:Id) : Exp :=
       Apply (FVar f) (PS [VLift (Var x)]). 
-      
 Definition plusR (n:nat) := QF 
 (FC emptyE [("i",Nat)] (VLift(Var "i")) 
     (BindS "p" (plusR' "plusR" "i") (SuccR "p")) "plusR" n).
@@ -191,8 +189,7 @@ BindS "i" (prj1 x)
           (IfThenElse (LtDec "i" tableSize) 
                       (Apply SomeCindexQF 
                              (PS[Apply (plusR 1) 
-                                       (PS[VLift(Var "i")])
-                                ])
+                                       (PS[VLift(Var "i")])])
                       ) 
                       (Val(cst (option index) None))
           ).
@@ -271,11 +268,11 @@ Lemma getFstShadowBindH (partition : page) (P : W -> Prop)
 fenv >> env >> (getFstShadowBind partition) 
 {{fun sh1 s $\Rightarrow$ P s $\wedge$ nextEntryIsPP partition sh1idx sh1 s}}.
 \end{lstlisting} \vspace{4pt}
-Naturally, since we defined three \textit{getFstShadow} functions, each calling a different version of the deep index successor function, we only need to specify the name of version of \textit{getFstShadow} we want to  call. In this case we are calling \textit{getFstShadowBind} defined in script\ref{getFstBind} p.\pageref{getFstBind}.
+Naturally, since we defined three \textit{getFstShadow} functions, each calling a different version of the deep index successor function, we only need to specify the name of version of \textit{getFstShadow} we want to  call. In this case we are calling \textit{getFstShadowBind} defined in script \ref{getFstBind} p.\pageref{getFstBind}.
 
 
 \subsection{Invariant proof} \label{proof}
-\begin{lstlisting}[caption = {proof of the getFstShadow invariant},xleftmargin=-.08\textwidth,
+\begin{lstlisting}[caption = {Proof of the getFstShadow invariant},xleftmargin=-.08\textwidth,
 xrightmargin=-.08\textwidth,mathescape=true,numbers=left]
 Proof.
 unfold getFstShadowBind. (* or other called function *)
@@ -317,7 +314,7 @@ destruct (lookup partition sh1idx (memory s) beqPage beqIndex)
 in H2; try contradiction. auto.
 Qed.
 \end{lstlisting} 
-As shown in the previous script, we start the proof by evaluating the first assignment using the assignment rule \textit{BindS\_VHTT1} defined in section \ref{HoareDeepSec} p.\ref{HoareDeepSec}. This implies evaluating \textit{getSh1idx} and mapping its resulting value to \textit{x} in the variable environment then evaluating the rest of the function in this updated environment. To evaluate \textit{getSh1idx}, we use a lemma that we have proven called \textit{getSh1idxWp}. This lemma also propagates any property on the state.
+As shown in the previous script, we start the proof by evaluating the first assignment using the assignment rule \textit{BindS\_VHTT1} defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}. This implies evaluating \textit{getSh1idx} and mapping its resulting value to \textit{x} in the variable environment then evaluating the rest of the function in this updated environment. To evaluate \textit{getSh1idx}, we use a lemma that we have proven called \textit{getSh1idxWp}. This lemma also propagates any property on the state.
 \begin{lstlisting}[caption = {getSh1idxWp lemma definition and proof},xleftmargin=-.06\textwidth,
 xrightmargin=-.06\textwidth,mathescape=true]
 Lemma getSh1idxW (P: Value -> W -> Prop) 
@@ -442,7 +439,7 @@ Definition ReadPhysicalQF (p:page) := QF (FC
  emptyE [("x",optionIndexType)] (ReadPhysical p "x") 
  (Val (cst (option page) None)) "ReadPhysical" 0).
 \end{lstlisting} \vspace{4pt}
-The new version of the \textit{getFstSadow} function, called \textit{getFstShadowApply} is defined as follows :
+The new version of the \textit{getFstShadow} function, called \textit{getFstShadowApply} is defined as follows :
 \begin{lstlisting}[caption = {getFstShadowApply definition}, mathescape=true]
 Definition getFstShadowApply (p:page) :Exp :=
 Apply (ReadPhysicalQF p) (PS [
@@ -547,8 +544,8 @@ The third invariant is about a recursive function of PIP called \textit{initVAdd
 xrightmargin=-.02\textwidth,mathescape=true]
 Fixpoint initVAddrTableAux timeout shadow2 idx :=
   match timeout with
-  | 0 => ret tt
-  | S timeout1 =>
+  | 0 $\Rightarrow$ ret tt
+  | S timeout1 $\Rightarrow$
     perform maxindex := getMaxIndex in
     perform res := MALInternal.Index.ltb idx maxindex in
     if (res)
@@ -569,7 +566,7 @@ Definition initVAddrTable sh2 n :=
 where :
 \begin{itemize}
 	\item\textbf{getMaxIndex :} returns the value of the maximum index which is equal to the table size minus one, knowing that the table size is different than 0. We wrote the following simplified definition to use in the deep embedding : 
-\begin{lstlisting}[caption = {Maximum index}, xleftmargin=.01\textwidth,
+\begin{lstlisting}[caption = {maxIndex definition}, xleftmargin=.01\textwidth,
 xrightmargin=.01\textwidth,mathescape=true]
 Axiom tableSizeNotZero : tableSize <> 0.
 Definition maxIndex : index := CIndex(tableSize-1). 
@@ -623,7 +620,7 @@ Apply (QF (FC emptyE [("x",Index)] (Val (cst unit tt))
           "initVAddrTable" tableSize) (PS[Val (cst index i)]). 
 \end{lstlisting}	\vspace{4pt}
 
-The invariant we want to prove, called \textit{initVAddrTableNewProperty}, is defined in script \ref{vaddInv}. The proof is done by induction on the bound. More precisely, we suppose that the Hoare triple is valid for the bound \textit{n} and we need to prove it's valid for \textit{S n}. We mainly used the Hoare triple rules defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec} to evaluate each deep construct to get to the next function application where n is the bound which we have as a hypothesis. The main difficulty was to get to the exact same expression as well as the same function and variable environments as we have in the hypothesis without unfolding the Hoare triple. Indeed, if we unfold the Hoare triple at some point earlier, we have to reason by inversion on large expressions and we may encounter some typing problems which makes the proof much more complicated. In order to break down the proof of the step case, we defined a new lemma about the successor function, called \textit{succWp'}, similar to the \textit{succWp} lemma defined in script \ref{succWp} p\pageref{succWp}, in which we propagate the specification of the value added to the environment.  It is also important to note that, to prove \textit{succWp'}, we used \textit{succDW}, the evaluation lemma for the index successor function defined and proven in annex \ref{getFstFile} p.\pageref{getFstFile}, which reinforces the importance of our modular approach. \textit{succWp'} and the proof of the \textit{initVAddrTableNewProperty} lemma is detailed in annex \ref{initFile} p.\pageref{initFile}.
+The invariant we want to prove, called \textit{initVAddrTableNewProperty}, is defined in script \ref{vaddInv}. The proof is done by induction on the bound. More precisely, we suppose that the Hoare triple is valid for the bound \textit{n} and we need to prove it's valid for \textit{S n}. We mainly used the Hoare triple rules defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec} to evaluate each deep construct to get to the next function application where n is the bound which we have as a hypothesis. The main difficulty was to get to the exact same expression as well as the same function and variable environments as we have in the hypothesis without unfolding the Hoare triple. Indeed, if we unfold the Hoare triple at some point earlier, we have to reason by inversion on large expressions and we may encounter some typing problems which makes the proof much more complicated. In order to break down the proof of the step case, we defined a new lemma about the successor function, called \textit{succWp'}, similar to the \textit{succWp} lemma defined in script \ref{succWp} p.\pageref{succWp}, in which we propagate the specification of the value added to the environment.  It is also important to note that, to prove \textit{succWp'}, we used \textit{succDW}, the evaluation lemma for the index successor function defined and proven in annex \ref{getFstFile} p.\pageref{getFstFile}, which reinforces the importance of our modular approach. \textit{succWp'} and the proof of the \textit{initVAddrTableNewProperty} lemma is detailed in annex \ref{initFile} p.\pageref{initFile}.
 \begin{lstlisting}[caption = {initVAddrTableNewProperty invariant in the deep embedding}, xleftmargin=-.07\textwidth,
 xrightmargin=-.07\textwidth,mathescape=true, label={vaddInv}]
 Lemma initVAddrTableNewProperty table (curidx : index) 
@@ -639,9 +636,10 @@ Lemma initVAddrTableNewProperty table (curidx : index)
 \section{Observations}
 
 \subsection{Deep vs shallow}
-Specifying programs in the deep embedding has the great advantage of simplifying their syntactic manipulation. It also ensures a stricter structuring of program expressions. An interesting conjecture is whether this structure is reflected in the proofs. If we consider naive proofs mostly done by applying inversions , this is not the case. Such proofs can be really monotonous but overall they lack structure and readability since we deal with the program as a whole and not each instruction at a time like we do in the shallow proofs. However using the Hoare rules, defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}, we could make proofs that compare favourably with the shallow ones in terms of structuring. Nevertheless, they become comparatively longer. Furthermore, proof specifications are generally more complex in the deep embedding as we need to worry about the specification of deep values among others. 
+Specifying programs in the deep embedding has the great advantage of simplifying their syntactic manipulation. It also ensures a stricter structuring of program expressions. An interesting conjecture is whether this structure is reflected in the proofs. If we consider naive proofs mostly done by applying inversions, this is not the case. Such proofs can be really monotonous but overall they lack structure and readability since we deal with the program as a whole and not each instruction at a time like we do in the shallow proofs. However using the Hoare rules, defined in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}, we could make proofs that compare favourably with the shallow ones in terms of structuring. Nevertheless, they become comparatively longer. Furthermore, proof specifications are generally more complex in the deep embedding as we need to worry about the specification of deep values among others. 
 
-\subsection{Importance of Hoare triple rules} \label{HoareRules}
+\subsubsection{Proof structuring}
+\paragraph{Importance of Hoare triple rules} \label{HoareRules}
 Throughout our experiments, the Hoare triple rules mentioned in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec} have proven efficient at dealing with proofs in the deep embedding and this is due to many reasons :
 \begin{itemize}
 	\item They enable us to structurally decompose our proofs and deal with each instruction at a time which makes them well structured and legible. This is really important when dealing with large expressions and it is what made our modular approach possible.
@@ -651,11 +649,9 @@ Throughout our experiments, the Hoare triple rules mentioned in section \ref{Hoa
 
 To summarise, Hoare triple rules make our proofs \textbf{simpler}, \textbf{shorter}, \textbf{more structured} and \textbf{legible}. That's why we strongly advise their use in deep proofs. \pagebreak
 
-\subsection{Lack of a Pattern matching Construct}
-The deep embedding doesn't provide us with a pattern matching construct which makes dealing with inductive types rather intricate. Indeed, we have to deal with such types at the shallow level, which is possible using generic effects. This is clearly outlined in the definition of \textit{ReadPhysical} in script \ref{ReadPhy} p.\pageref{ReadPhy}, where we had to specify its input type as \textit{option index} instead of \textit{index} and perform the pattern matching before reading the state. In this case, we couldn't put the pattern matching in a separate generic effect since we would have had an issue with the \textit{None} case. Another problem which arises in this case is that we may need to duplicate functions if, for instance, we need to use a definition of \textit{ReadPhysical} without pattern matching. \textbf{An effective solution to this problem would be to devise a pattern matching construct in the deep embedding}. 
-
-\subsection{Dealing with values in the deep embedding}
-Values in the deep embedding encapsulate their shallow type and value. This has a big impact on deep proofs. Indeed, when we need to communicate a value to certain lemma, we would naturally parametrise the lemma by a \textit{Value} typed parameter as in lemma \textit{succWp}, defined in script \ref{succWp} \pageref{succWp}. In script \ref{succWpF}, we give a slightly different definition of this lemma in which we omit the value specification part in the precondition. Proving this lemma is impossible as we don't have any information about the deep value \textit{v}. Thus, we can't ascertain that it is \textit{index} typed as a deep value nor that its actual value is \textit{idx}. This differs from shallow proofs where we manipulate directly shallow typed values. Furthermore, this makes dealing with variable and function environments more complicated as we may have to propagate some values in the environments as we did with lemma \textit{succWp'} mentioned in section \ref{proof3} \pageref{proof3}.
+\subsubsection{Proof specifications}
+\paragraph{Dealing with values in the deep embedding}
+Values in the deep embedding encapsulate their shallow type and value. This has a big impact on deep proofs. Indeed, when we need to communicate a value to certain lemma, we would naturally parametrise the lemma by a \textit{Value} typed parameter as in lemma \textit{succWp}, defined in script \ref{succWp} p.\pageref{succWp}. In script \ref{succWpF}, we give a slightly different definition of this lemma in which we omit the value specification part in the precondition. Proving this lemma is impossible as we don't have any information about the deep value \textit{v}. Thus, we can't ascertain that it is \textit{index} typed as a deep value nor that its actual value is \textit{idx}. This differs from shallow proofs where we manipulate directly shallow typed values. Furthermore, this makes dealing with variable and function environments more complicated as we may have to propagate some values in the environments as we did with lemma \textit{succWp'} mentioned in section \ref{proof3} p.\pageref{proof3}.
 \begin{lstlisting}[caption = {succWp false lemma definition},numbers=left, xleftmargin=-.06\textwidth,
 xrightmargin=-.06\textwidth, mathescape=true,label={succWpF}]
 Lemma succWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
@@ -667,11 +663,16 @@ Lemma succWp (x:Id) (v:Value) P (fenv: funEnv) (env: valEnv) :
 	 $\exists$ i, idxsuc = cst (option index) (Some i)}}.
 \end{lstlisting} \vspace{4pt}
 
-\subsection{Defining Shallow functions}
+\paragraph{Defining Shallow functions}
 As there is a dimorphism  between the deep embedding and the logic, it is generally necessary to have both a shallow and deep version of each function. The shallow versions are mainly used in the predicates included in the preconditions and postconditions of Hoare triples. For example, we used the shallow \textit{succIndexInternal} function, defined in script \ref{succInt} p.\pageref{succInt}, in the postcondition of the \textit{succWp} lemma, defined in script \ref{succWp} \pageref{succWp}, to describe the resulting value of the deep index successor function. We also used it extensively in the proof of the third invariant \textit{initVAddrTableNewProperty}, detailed in annex \ref{initFile} p.\pageref{initFile}. This practically implies double amount of work for deep proofs compared to shallow ones where we use only shallow functions. A possible solution to this problem is to define a deep language with embedded logic\cite{SoftwareFoundation}. 
 
+\subsection{Limitations of DEC}
+\paragraph{Pattern matching}
+The deep embedding doesn't provide us with a pattern matching construct which makes dealing with inductive types rather intricate. Indeed, we have to deal with such types at the shallow level, which is possible using generic effects. This is clearly outlined in the definition of \textit{ReadPhysical} in script \ref{ReadPhy} p.\pageref{ReadPhy}, where we had to specify its input type as \textit{option index} instead of \textit{index} and perform the pattern matching before reading the state. In this case, we couldn't put the pattern matching in a separate generic effect since we would have had an issue with the \textit{None} case. Another problem which arises in this case is that we may need to duplicate functions if, for instance, we need to use a definition of \textit{ReadPhysical} without pattern matching. \textbf{An effective solution to this problem would be to devise a pattern matching construct in the deep embedding}. It is important to note that, in the case of the PIP protokernel, this is not an issue since there aren't inductive types in C.
+\paragraph{Error handling}
+In our experiments, error handling was managed using inductive types. In the case of the PIP protokernel which will be translated to C, it would be more convenient to embed error handling within the semantics of the DEC language. That way, we won't need to devise a specific construct for pattern matching in the deep embedding as far as the PIP protokernel is concerned. 
 
-\subsection{Deep implementation of shallow functions}
-\textbf{What should we consider as a sufficiently deep implementation of a shallow function ?} The deep embedding of PIP is implemented in a way that allows extensibility of deep constructs using generic effects. This enabled us to model our functions gradually and temporarily resolved the problem of the lack of a pattern matching construct. But, it still remains quite risky since we can confuse deep with shallow. Indeed, the first version of the index successor function, called \textit{Succ} and defined in script \ref{SuccFn} p.\pageref{SuccFn}, is merely a call to the shallow function \textit{succIndexInternal}, defined in script \ref{succInt} p.\pageref{succInt}, that we wrapped in the \textit{Modify} construct. Although, \textit{Succ} was  defined as a deep expression, it is just the outer shell of the function that is deep but structurally it is shallow. \\
+\subsection{Further discussion about the deep implementation of shallow functions}
+\textbf{What should we consider as a sufficiently deep implementation of a shallow function ?} The deep embedding of PIP is implemented in a way that allows extensibility of deep constructs using generic effects. This enabled us to model our functions gradually and temporarily resolved the problem of the lack of a pattern matching construct. But, it still remains quite risky since we can confuse deep with shallow. Indeed, the first version of the index successor function, called \textit{Succ} and defined in script \ref{SuccFn} p.\pageref{SuccFn}, is merely a call to the shallow function \textit{succIndexInternal}, defined in script \ref{succInt} p.\pageref{succInt}, that we wrapped in the \textit{Modify} construct. Although, \textit{Succ} was  defined as a deep expression, it is just the outer shell of the function that is deep but structurally it is shallow. \pagebreak
 
-Then, we devised a comparatively deeper version of this function, called \textit{SuccD} and defined in script \ref{SuccD} \pageref{SuccD}. But, there are still shallow bits in this version like the index comparison function in particular. \textbf{In a completely deep definition of a shallow function, generic effects should be used just for essentially stateful operations.} However, the degree  to which we should deepen a shallow function is a choice that must be set according to our needs. For example, in our experiments we chose to omit completely deepening comparison functions.
+Then, we devised a comparatively deeper version of this function, called \textit{SuccD} and defined in script \ref{SuccD} p.\pageref{SuccD}. But, there are still shallow bits in this version like the index comparison function in particular. \textbf{In a completely deep definition of a shallow function, generic effects should be used just for essentially stateful operations.} However, the degree  to which we should deepen a shallow function is a choice that must be set according to our needs. For example, in our experiments we chose to omit completely deepening comparison functions. In the case of the PIP protokernel, deepening a shallow function depends on whether it is part of the PIP code or not. Therefore, we don't need to devise a deep implementation of shallow functions defined in the hardware model..

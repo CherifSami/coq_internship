@@ -71,7 +71,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.7}Index successor function in the shallow embedding}{34}{lstlisting.4.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {4.8}Rewritten shallow index successor function}{34}{lstlisting.4.8}
+\contentsline {lstlisting}{\numberline {4.8}Rewritten shallow index successor function}{35}{lstlisting.4.8}
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.9}Definition of Succ}{35}{lstlisting.4.9}
 \defcounter {refsection}{0}\relax 
@@ -95,7 +95,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.19}getFstShadow invariant definition}{39}{lstlisting.4.19}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {4.20}proof of the getFstShadow invariant}{40}{lstlisting.4.20}
+\contentsline {lstlisting}{\numberline {4.20}Proof of the getFstShadow invariant}{40}{lstlisting.4.20}
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.21}getSh1idxWp lemma definition and proof}{41}{lstlisting.4.21}
 \defcounter {refsection}{0}\relax 
@@ -121,7 +121,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.32}initVAddrTable in the shallow embedding}{48}{lstlisting.4.32}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {4.33}Maximum index}{48}{lstlisting.4.33}
+\contentsline {lstlisting}{\numberline {4.33}maxIndex definition}{48}{lstlisting.4.33}
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.34}LtLtb definition}{49}{lstlisting.4.34}
 \defcounter {refsection}{0}\relax 
