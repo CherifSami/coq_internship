@@ -3,7 +3,7 @@
 \BOOKMARK [1][-]{section.2.1}{History}{chapter.2}% 3
 \BOOKMARK [1][-]{section.2.2}{Research activities}{chapter.2}% 4
 \BOOKMARK [1][-]{section.2.3}{2XS team}{chapter.2}% 5
-\BOOKMARK [0][-]{chapter.3}{PIP project}{}% 6
+\BOOKMARK [0][-]{chapter.3}{Background : the PIP project}{}% 6
 \BOOKMARK [1][-]{section.3.1}{PIP protokernel}{chapter.3}% 7
 \BOOKMARK [2][-]{subsection.3.1.1}{A minimal OS kernel with provable isolation}{section.3.1}% 8
 \BOOKMARK [2][-]{subsection.3.1.2}{Horizontal isolation \046 vertical sharing}{section.3.1}% 9
@@ -29,11 +29,11 @@
 \BOOKMARK [1][-]{section.4.5}{3rd invariant and proof}{chapter.4}% 29
 \BOOKMARK [1][-]{section.4.6}{Observations}{chapter.4}% 30
 \BOOKMARK [2][-]{subsection.4.6.1}{Deep vs shallow}{section.4.6}% 31
-\BOOKMARK [2][-]{subsection.4.6.2}{Limitations of DEC}{section.4.6}% 32
+\BOOKMARK [2][-]{subsection.4.6.2}{Limitations imposed on the verification by DEC}{section.4.6}% 32
 \BOOKMARK [2][-]{subsection.4.6.3}{Further discussion about the deep implementation of shallow functions}{section.4.6}% 33
 \BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 34
-\BOOKMARK [0][-]{chapter*.20}{Bibliography}{}% 35
-\BOOKMARK [0][-]{section*.21}{Appendixes : Project Files}{}% 36
+\BOOKMARK [0][-]{chapter*.18}{Bibliography}{}% 35
+\BOOKMARK [0][-]{section*.19}{Appendixes : Project Files}{}% 36
 \BOOKMARK [0][-]{Appendix.a.A}{IdModTypeA.v}{}% 37
 \BOOKMARK [0][-]{Appendix.a.B}{Pip\137state.v}{}% 38
 \BOOKMARK [0][-]{Appendix.a.C}{Lib.v}{}% 39
