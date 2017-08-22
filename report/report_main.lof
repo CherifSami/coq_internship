@@ -12,15 +12,15 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Software layers of an OS built on top of PIP}}{6}{figure.3.1}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Software layers of an OS built on top of PIP}}{5}{figure.3.1}
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Horizontal isolation \& vertical sharing in PIP}}{6}{figure.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces FreeRTOS task isolation using PIP}}{7}{figure.3.3}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces FreeRTOS task isolation using PIP}}{6}{figure.3.3}
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {3.4}{\ignorespaces PIP design}}{7}{figure.3.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.5}{\ignorespaces HAL and API relationship}}{9}{figure.3.5}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces HAL and API relationship}}{8}{figure.3.5}
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {3.6}{\ignorespaces An example of a partition tree}}{12}{figure.3.6}
 \defcounter {refsection}{0}\relax 

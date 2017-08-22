@@ -104,7 +104,7 @@
       \verb{url}
       \verb http://doi.acm.org/10.1145/363235.363259
       \endverb
-      \keyw{axiomatic method,formal language definition,machine-independent programming,program documentation,programming language design,theory of programming' proofs of programs}
+      \keyw{axiomatic method,formal language definition,machine-independent programming,program documentation,programming language design,theory of programming,proofs of programs}
     \endentry
     \entry{MMUIsolation}{article}{}
       \name{labelname}{4}{}{%
@@ -147,9 +147,9 @@
       \strng{namehash}{a65e3c831194e98b73ae384e8fac52f2}
       \strng{fullhash}{45d429a280678607b130762242019116}
       \field{sortinit}{J}
-      \field{labeltitle}{Coding a real {O}{S} kernel in Coq and fomralising its security (unpublished paper draft)}
+      \field{labeltitle}{Coding a real {O}{S} kernel in Coq and formalising its security (unpublished paper draft)}
       \field{month}{01}
-      \field{title}{Coding a real {O}{S} kernel in Coq and fomralising its security (unpublished paper draft)}
+      \field{title}{Coding a real {O}{S} kernel in Coq and formalising its security (unpublished paper draft)}
       \field{year}{2017}
     \endentry
     \entry{PIPKernel}{unpublished}{}

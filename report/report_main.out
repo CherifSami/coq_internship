@@ -3,12 +3,12 @@
 \BOOKMARK [1][-]{section.2.1}{History}{chapter.2}% 3
 \BOOKMARK [1][-]{section.2.2}{Research activities}{chapter.2}% 4
 \BOOKMARK [1][-]{section.2.3}{2XS team}{chapter.2}% 5
-\BOOKMARK [0][-]{chapter.3}{Background : the PIP project}{}% 6
-\BOOKMARK [1][-]{section.3.1}{PIP protokernel}{chapter.3}% 7
+\BOOKMARK [0][-]{chapter.3}{Background : PIP project}{}% 6
+\BOOKMARK [1][-]{section.3.1}{The PIP protokernel}{chapter.3}% 7
 \BOOKMARK [2][-]{subsection.3.1.1}{A minimal OS kernel with provable isolation}{section.3.1}% 8
 \BOOKMARK [2][-]{subsection.3.1.2}{Horizontal isolation \046 vertical sharing}{section.3.1}% 9
 \BOOKMARK [2][-]{subsection.3.1.3}{Proof-oriented design}{section.3.1}% 10
-\BOOKMARK [2][-]{subsection.3.1.4}{In-depth understanding of PIP's Data structures}{section.3.1}% 11
+\BOOKMARK [2][-]{subsection.3.1.4}{In-depth understanding of PIP's data structures}{section.3.1}% 11
 \BOOKMARK [1][-]{section.3.2}{Hoare logic}{chapter.3}% 12
 \BOOKMARK [2][-]{subsection.3.2.1}{Introduction to Hoare logic theory}{section.3.2}% 13
 \BOOKMARK [2][-]{subsection.3.2.2}{Hoare logic in the shallow embedding}{section.3.2}% 14
@@ -18,7 +18,7 @@
 \BOOKMARK [2][-]{subsection.3.3.3}{Hoare logic in the deep embedding}{section.3.3}% 18
 \BOOKMARK [0][-]{chapter.4}{Proving invariants in the deep embedding}{}% 19
 \BOOKMARK [1][-]{section.4.1}{Preliminary experiments}{chapter.4}% 20
-\BOOKMARK [1][-]{section.4.2}{Modelling the PIP state in the deep embedding}{chapter.4}% 21
+\BOOKMARK [1][-]{section.4.2}{Modelling the PIP monad in the deep embedding}{chapter.4}% 21
 \BOOKMARK [1][-]{section.4.3}{1st invariant and proof}{chapter.4}% 22
 \BOOKMARK [2][-]{subsection.4.3.1}{Invariant in the shallow embedding}{section.4.3}% 23
 \BOOKMARK [2][-]{subsection.4.3.2}{Modelling the getFstShadow function}{section.4.3}% 24
@@ -29,11 +29,11 @@
 \BOOKMARK [1][-]{section.4.5}{3rd invariant and proof}{chapter.4}% 29
 \BOOKMARK [1][-]{section.4.6}{Observations}{chapter.4}% 30
 \BOOKMARK [2][-]{subsection.4.6.1}{Deep vs shallow}{section.4.6}% 31
-\BOOKMARK [2][-]{subsection.4.6.2}{Limitations imposed on the verification by DEC}{section.4.6}% 32
+\BOOKMARK [2][-]{subsection.4.6.2}{Limitations imposed by DEC}{section.4.6}% 32
 \BOOKMARK [2][-]{subsection.4.6.3}{Further discussion about the deep implementation of shallow functions}{section.4.6}% 33
 \BOOKMARK [0][-]{chapter.5}{Conclusion}{}% 34
-\BOOKMARK [0][-]{chapter*.18}{Bibliography}{}% 35
-\BOOKMARK [0][-]{section*.19}{Appendixes : Project Files}{}% 36
+\BOOKMARK [0][-]{chapter*.19}{Bibliography}{}% 35
+\BOOKMARK [0][-]{section*.20}{Appendixes : Project Files}{}% 36
 \BOOKMARK [0][-]{Appendix.a.A}{IdModTypeA.v}{}% 37
 \BOOKMARK [0][-]{Appendix.a.B}{Pip\137state.v}{}% 38
 \BOOKMARK [0][-]{Appendix.a.C}{Lib.v}{}% 39

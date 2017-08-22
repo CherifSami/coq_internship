@@ -1,9 +1,9 @@
-\chapter{Background : the PIP project}
+\chapter{Background : PIP project}
 
-\section{PIP protokernel}
+\section{The PIP protokernel}
 
 \subsection{A minimal OS kernel with provable isolation} \label{PIP}
-An operating system is organized as a hierarchy  of layers\cite{ModernOS}, each one constructed  upon  the one  below. Each layer focuses on an essential role of the operating system such as memory management, multiprogramming, input/output \dots Generally speaking, while developing a kernel for an operating system based on the layered  approach, the designers have a choice where to draw the kernel-user boundary. Traditionally, all the layers went in the kernel, but that is not necessary. In fact, putting as little as possible in kernel mode is safer because kernel bugs can bring down the system instantly. In contrast, user processes/layers are set up to have less power so that a bug there may not be fatal.\\
+An operating system is organized as a hierarchy  of layers \cite{ModernOS}, each one constructed  upon  the one  below. Each layer focuses on an essential role of the operating system such as memory management, multiprogramming and input/output. Generally speaking, while developing a kernel for an operating system based on the layered  approach, the designers have a choice where to draw the kernel-user boundary. Traditionally, all the layers went in the kernel, but that is not necessary. In fact, putting as little as possible in kernel mode is safer because kernel bugs can bring down the system instantly. In contrast, user processes/layers are set up to have less power so that a bug there may not be fatal.\\
 
 Various studies on bug density, relatively to the developed module size, age as well as other factors, have been conducted (e.g.  \textit{Basilli}  and  \textit{Perricone} in 1984;  and \textit{Ostrand}  and  \textit{Weyuker} in 2002). A  ballpark  figure  for  serious industrial systems is ten  bugs per a thousand  lines  of code. Operating  systems  are  sufficiently  buggy  that  computer  manufacturers  put  reset  buttons  on  them, something  the  manufacturers of cars, TV sets and stereos do  not do,  despite  the  large  amount  of software in these devices. Furthermore, Operating systems generally present hardware resources to applications through high-level abstractions such as (virtual) file systems.\\
 
@@ -13,31 +13,31 @@ Various studies on bug density, relatively to the developed module size, age as 
 	\item \textbf{Microkernels :} The basic idea  behind a microkernel design  is  to  achieve high reliability  by  splitting the operating  system  up into small, well-defined  modules, only  one  of  which, the  microkernel, runs  in  kernel  mode;
 	\item \textbf{Exokernels :} The idea behind an exokernel is to force as few abstractions as possible on application developers, enabling them to make as many decisions as possible about hardware abstractions.
 \end{itemize} 
+
+As a \textbf{minimal OS Kernel with provable isolation}, PIP \cite{PIP} focuses more on security and safety without sacrificing efficiency and ensures memory isolation between different tasks running on the same device. PIP's algorithmic part is written in Gallina, the language of the Coq proof assistant, in a monadic style that allows direct translation into free standing C. We will refer to this implementation in \textit{Gallina} as the shallow embedding in contrast to the deep embedding introduced in section \ref{deep} p.\pageref{deep}. \\
   
-\noindent Although the closest kernel design to PIP\cite{PIP} is the exokernel, PIP does not belong to any of the kernel families featured in the state of art, but it is the first member of a new kernel family, \textbf{protokernels}, as compared to most microkernels and exokernels, the TCB in PIP is even more restricted :
+Although the closest kernel design to PIP is the exokernel \cite{PIPSlides}, PIP does not belong to any of the kernel families featured in the state of art, but it is the first member of a new kernel family, \textbf{protokernels}, as compared to most microkernels and exokernels, the TCB in PIP is even more restricted :
 \begin{itemize}
 	\item Scheduling and IPC are done in user mode unlike a microkernel;
 	\item Multiplexing is also done in user mode unlike an exokernel.
 \end{itemize}
 
-\noindent whereas the kernel mode is only for \textbf{multi-level MMU control and configuration} (virtual memory) and \textbf{context switching}. This not only ensures less bugs but also more feasibility of formal proof that will warrant the memory isolation property of the protokernel\cite{PIPSlides}. \\
-
-As a \textbf{minimal OS Kernel with provable isolation}, PIP focuses more on security and safety without sacrificing efficiency and ensures memory isolation between different tasks running on the same device. PIP's algorithmic part is written in Gallina, the language of the Coq proof assistant, in a monadic style that allows direct translation into free standing C. We will refer to this implementation in \textit{Gallina} as the shallow embedding in contrast to the deep embedding introduced in section \ref{deep} p.\pageref{deep}. 
+\noindent whereas the kernel mode is only for \textbf{multi-level MMU control and configuration} (virtual memory) and \textbf{context switching}. This not only ensures less bugs but also more feasibility of formal proof that will warrant the memory isolation property of the protokernel.
 
 \begin{figure}[!ht]
 	\centering 
-	\includegraphics[width=\linewidth ,frame]{img/OSLayersPIP.png} 
-	\caption[Software layers of an OS built on top of PIP]{Software layers of an OS built on top of PIP\cite{PIPSlides}}
+	\includegraphics[width=0.9\linewidth ,frame]{img/OSLayersPIP.png} 
+	\caption[Software layers of an OS built on top of PIP]{Software layers of an OS built on top of PIP \cite{PIPSlides}}
 \end{figure}
 
 \subsection{Horizontal isolation \& vertical sharing} \label{properties}
 
-PIP can be used to partition the available memory which will be initially allocated to the root partition on top of PIP. Any partition can read and write in the memory of its descendants. However, partitions in different branches of the partition tree are disjoint. The former is referred to as \textbf{vertical sharing} and the latter as \textbf{horizontal isolation}. Needless to say, all memory lent to PIP for storing kernel data,such as when creating partitions, is inaccessible for all partitions to prevent messing up PIP data structures which means that the kernel data is totally isolated.
+PIP can be used to partition the available memory which will be initially allocated to the root partition on top of PIP. Any partition can read and write in the memory of its descendants. However, partitions in different branches of the partition tree are disjoint. The former is referred to as \textbf{vertical sharing} and the latter as \textbf{horizontal isolation} \cite{PIPKernel}. Needless to say, all memory lent to PIP for storing kernel data,such as when creating partitions, is inaccessible for all partitions to prevent messing up PIP data structures which means that the kernel data is totally isolated.
    
 \begin{figure}[!ht]
 	\centering 
 	\includegraphics[width=0.8\linewidth,frame]{img/memoryIsolShare.png} 
-	\caption[Horizontal isolation \& vertical sharing in PIP]{Horizontal isolation \& vertical sharing in PIP\cite{PIPKernel}}
+	\caption[Horizontal isolation \& vertical sharing in PIP]{Horizontal isolation \& vertical sharing in PIP \cite{PIPKernel}}
 \end{figure}
 
 \noindent Let us consider a more realistic partition tree, as shown in figure \ref{FreeRTOS}, in which we consider \textit{Linux} and \textit{FreeRTOS} as sub-partitions of a root partition, multiplexer. Knowing that \textit{FreeRTOS} is a real-time OS that does not isolate its tasks, we have easily secured it with task isolation by porting it on PIP.
@@ -45,13 +45,13 @@ PIP can be used to partition the available memory which will be initially alloca
 \begin{figure}[!ht] \label{FreeRTOS}
 	\centering 
 	\includegraphics[scale=0.5,frame]{img/FreeRTOSEx.png} 
-	\caption[FreeRTOS task isolation using PIP]{FreeRTOS task isolation using PIP\cite{PIPSlides}}
+	\caption[FreeRTOS task isolation using PIP]{FreeRTOS task isolation using PIP \cite{PIPSlides}}
 \end{figure}
 
 \subsection{Proof-oriented design}
 
 \subsubsection{PIP's design} 
-PIP's isolation properties are meant to be formally proven independently from the platform it's running onto. Consequently, the algorithm and the architecture dependant part were separated\cite{PIPKernel}. Indeed, as shown in figure \ref{design}, PIP is split into two distinct layers  :
+PIP's isolation properties are meant to be formally proven independently from the platform it's running onto. Consequently, the algorithm and the architecture dependant part were separated \cite{PIPKernel}. Indeed, as shown in figure \ref{design}, PIP is split into two distinct layers  :
 \begin{itemize}
 	\item \textbf{HAL :} gives direct access to the architecture and hardware;
 	\item \textbf{API :} implements the algorithmic part to configure the virtual memory and the hardware.
@@ -62,18 +62,18 @@ PIP's isolation properties are meant to be formally proven independently from th
 \begin{figure}[!ht]  
 	\centering 
 	\includegraphics[width=0.8\linewidth, frame]{img/PIPDesign.png} 
-	\caption[PIP design]{PIP design\cite{PIPKernel}}
+	\caption[PIP design]{PIP design \cite{PIPKernel}}
 	\label{design}
 \end{figure}
 
 \noindent PIP's HAL is split into three components, as shown in figure \ref{HAL}, each handling a specific part of the target platform's hardware :
 \begin{itemize}
-	\item \textbf{\gls{MAL} :} provides an interface for the configuration of the MMU chip;
+	\item \textbf{\gls{MAL} :} provides an interface for the configuration of the MMU chip (\cite{PIP}, MAL.v, MALInternal.v);
 	\item \textbf{\gls{IAL} :} provides an interface to dispatch interrupts and configure hardware;
 	\item \textbf{Bootstrap :} contains the low-level code required to boot the system.
 \end{itemize}
 
-\noindent PIP only provides system calls for management of the partitions and for context switching, thus reducing the TCB to its bare minimum as explained in section \ref{PIP} p.\pageref{PIP}. This user exposed API\cite{PIP} can be called by any partition using a platform dependant call :
+\noindent PIP only provides system calls for management of the partitions and for context switching, thus reducing the TCB to its bare minimum as explained in section \ref{PIP} p.\pageref{PIP}. This user exposed API (\cite{PIP}, Services.v) can be called by any partition using a platform dependant call :
 \begin{itemize}
 	\item \textbf{createPartition :} creates a new child (sub-partition) into the current partition;
 	\item \textbf{deletePartition :} removes a child partition and puts all its used pages back in the current partition;
@@ -83,7 +83,7 @@ PIP's isolation properties are meant to be formally proven independently from th
 	\item \textbf{addVaddr :} maps a virtual address into the given child;
 	\item \textbf{removeVAddr :} removes a given mapping from a given child.
 \end{itemize} 
-This API is sufficient as far as memory requirements are concerned but it lacks a way to handle interrupts. Hardware interrupts are implicitly handled by PIP and automatically dispatched to the root partition, while software interrupts, such as system calls, are notified to the parent partition of the caller\cite{PIPKernel} and can be managed by these two additional services of PIP :
+This API is sufficient as far as memory requirements are concerned but it lacks a way to handle interrupts. Hardware interrupts are implicitly handled by PIP and automatically dispatched to the root partition, while software interrupts, such as system calls, are notified to the parent partition of the caller \cite{PIPKernel} and can be managed by these two additional services of PIP :
 \begin{itemize}
 	\item \textbf{dispatch :} notifies an interrupt to a given partition, interrupting its current control flow and backing it up for a further resume call;
 	\item \textbf{resume :} restores a previously interrupted context.
@@ -91,7 +91,7 @@ This API is sufficient as far as memory requirements are concerned but it lacks 
 \vspace{-0.8em} 
 \begin{figure}[!ht]  
 	\centering 	\includegraphics[width=0.58\linewidth,frame]{img/HAL.png} 
-	\caption[HAL and API relationship]{HAL and API relationship\cite{PIPKernel}}
+	\caption[HAL and API relationship]{HAL and API relationship \cite{PIPKernel}}
 	\label{HAL}
 \end{figure}
 
@@ -101,8 +101,7 @@ This API is sufficient as far as memory requirements are concerned but it lacks 
 \centering
 \includegraphics[frame]{img/CoqLogo.png}
 \end{wrapfigure}
-Coq\cite{CoqWeb} is the result of about 30 years of research.
-It started in 1984 as an implementation of the Calculus of Constructions, an expressive formal language, at INRIA by \textit{Thierry Coquand} and \textit{G\'erard Huet} and was extended, later in 1991, by \textit{Christine Paulin} to the Calculus of Inductive Constructions\cite{Calculus}. \\
+Coq \cite{CoqWeb} is the result of about 30 years of research. It started in 1984 as an implementation of the Calculus of Constructions, an expressive formal language, at INRIA by \textit{Thierry Coquand} and \textit{G\'erard Huet} and was extended, later in 1991, by \textit{Christine Paulin} to the Calculus of Inductive Constructions \cite{Calculus}. \\
 
 Coq is a \textbf{formal proof management system}. It provides a formal language to write mathematical definitions, executable algorithms and theorems together with an environment for semi-interactive development of machine-checked proofs. Typical applications include the certification of properties of programming languages (e.g. the \textit{CompCert} compiler certification project, or the \textit{Bedrock} verified low-level programming library), the formalization of mathematics and teaching. It implements a program specification and mathematical higher-level language called \textit{Gallina} that is based on the Calculus of Inductive Constructions combining both a higher-order logic and a richly-typed functional programming language.\\
 
@@ -110,7 +109,7 @@ As a \textbf{proof development system}, Coq provides interactive proof methods, 
 
 For this project, the latest version of Coq, 8.6 released in December 2016, was used. It features among other things a faster universe checker, asynchronous error processing, proof search improvements, generalized introduction patterns, a new warning system and subterm selection algorithm. \\
 
-The Coq proof assistant provides us with powerful tactics to perform proofs\cite{Coq}. Here is a non exhaustive list of these tactics :
+The Coq proof assistant provides us with powerful tactics to perform proofs \cite{Coq}. Here is a non exhaustive list of these tactics :
 \begin{itemize}
 \item \textbf{simpl :} simplifies the current goal;
 	\item \textbf{assumption :} solves the current goal if it is computationally equal to a hypothesis;
@@ -129,11 +128,11 @@ The Coq proof assistant provides us with powerful tactics to perform proofs\cite
 Coq also provides several tactics to deal with higher-order logic, particularly targeting binary connectives and quantifiers such as \textbf{split} for conjunction, \textbf{left} and \textbf{right} for disjunction, \textbf{intros} for implication and universal quantifiers and \textbf{exists} for existential quantifiers when they are in the goal. In addition, We have \textbf{destruct} for conjunction and disjunction, \textbf{apply} for implication, \textbf{elim} for existential quantifiers and \textbf{specialize} for universal quantifiers when they are in the hypothesis. Furthermore, many tactics can be preceded with the letter \textit{e} like \textbf{eauto}, \textbf{eassumption} and \textbf{eapply} to deal with existential variables. Some tactics can also be applied on hypotheses if we use the reserved clause \textit{in} with the name of the hypothesis such as unfold, apply and simpl. 
 %ref Curry , In throry, \textbf{proving is the same as programming}. 
 
-\subsection{In-depth understanding of PIP's Data structures} \label{structures}
+\subsection{In-depth understanding of PIP's data structures} \label{structures}
 
 \subsubsection{The memory}
 
-PIP uses several data structures per partition\cite{PIPKernel}, which will represent the global state of the partition's memory state. This is necessary as it has to keep track of pages allocated to partitions in order to allow or deny derivation and partition creation while preserving the required properties. \\
+PIP uses several data structures per partition \cite{PIPKernel}, which will represent the global state of the partition's memory state. This is necessary as it has to keep track of pages allocated to partitions in order to allow or deny derivation and partition creation while preserving the required properties. \\
 
 Figure \ref{partitionEx} shows a partition tree example consisting of a partition, Parent, that has a single child, Child1. A partition is identified by a partition descriptor which is a page number essential to access the whole data structure of a partition. In our case, the partition descriptors of Parent and Child1 are respectively 1 and 12. The pages lent to PIP to manage a partition are organized in a tree with three branches : the MMU tables, the first shadow and the second shadow. The aim of this organization is to keep additional information about each page lent to a partition. Moreover these structures have multiple goals :
 \begin{itemize}
@@ -149,13 +148,13 @@ To prove the isolation properties on this memory structure, it is essential to e
 \begin{figure}[!ht]  
 	\centering 
 	\includegraphics[width=1\linewidth, height=0.6\textheight, frame]{img/memoryEx.png} 
-	\caption[An example of a partition tree]{An example of a partition tree\cite{PIPKernel}}
+	\caption[An example of a partition tree]{An example of a partition tree \cite{PIPKernel}}
 	\label{partitionEx}
 \end{figure}
 
-\subsubsection{The state} \label{PIPstateSection}
+\subsubsection{The memory state} \label{PIPstateSection}
  
-\noindent The PIP state\cite{PIPdraft} is defined as follows :
+\noindent The PIP memory state \cite{PIPdraft} (\cite{PIP}, ADT.v, Hardware.v) is defined as follows :
 \begin{lstlisting}[linewidth=1.02\linewidth,caption = {PIP state definition},label={PIPstate}] 
 Record state : Type := 
 { currentPartition: page ; memory: list (paddr * value) }.
@@ -190,7 +189,7 @@ Record Pentry : Type := {
    	user:    bool ;
    	pa:      page }.
 \end{lstlisting}
-Finally, the \textit{Ventry} type consists of a virtual address with a unique boolean flag :
+Finally, the \textit{Ventry} type consists of a virtual address with a boolean flag :
 \begin{lstlisting}[caption = {Ventry type definition},xleftmargin=.06\textwidth,xrightmargin=.06\textwidth]
 Record Ventry : Type := { pd: bool ; va: vaddr }.
 \end{lstlisting}
@@ -200,11 +199,44 @@ Record vaddr : Type :=
 { va :> list index ; Hva : length va = nbLevel + 1  }.
 \end{lstlisting}
 
+\subsubsection{The PIP monad}
+
+The previous memory state definition is used to define a monad, called \textit{LLI}, that performs the computation of PIP programs. When we execute a PIP program function starting from a certain memory state, we are not only interested in its resulting value but also in the resulting state. This is essential for stateful operations which modify the memory state. It is also important to deal with undefined behaviour. The \textit{LLI} ensures all of these specifications and is defined as follows (\cite{PIP},Hardware.v) : 
+\begin{lstlisting}[caption = {PIP LLI monad},xleftmargin=-.06\textwidth,xrightmargin=-.06\textwidth,label=monad,mathescape=true]
+Inductive result (A : Type) : Type :=
+| val : A $\rightarrow$ result A
+| undef : nat $\rightarrow$ state $\rightarrow$ result A.
+
+Definition LLI (A :Type) : Type := state $\rightarrow$ result (A * state).
+\end{lstlisting}
+
+\noindent Using the LLI monad, some instructions were explicitly defined as follows (\cite{PIP},Hardware.v) : 
+\begin{lstlisting}[caption = {Explicitly defined instructions in the shallow embedding},xleftmargin=-.02\textwidth,xrightmargin=-.02\textwidth,label=shallowIns,mathescape=true]
+(*Return instruction*)
+Definition ret {A : Type} (a : A) : LLI A :=
+  fun s $\Rightarrow$ val (a , s) .
+
+(*Assignment instruction*)
+Definition bind {A B : Type} (m : LLI A) 
+	        (f : A $\rightarrow$ LLI B) : LLI B :=  
+  fun s $\Rightarrow$ match m s with
+    | val (a, s') $\Rightarrow$ f a s'
+    | undef a s' $\Rightarrow$ undef a s'
+    end.
+
+(*Skip instruction*)
+Definition put (s : state) : LLI unit :=
+  fun _ $\Rightarrow$ val (tt, s).
+
+(*For undefined behaviour*)
+Definition undefined {A : Type} (code : nat) : LLI A :=
+  fun s $\Rightarrow$ undef code s.
+\end{lstlisting}
 \section{Hoare logic}
 
 \subsection{Introduction to Hoare logic theory} \label{HoareIntro}
 \textit{How can we argue that a program is correct ?}
-Nowadays, Building reliable software is becoming more and more difficult considering the growing scale, specifications and complexity of modern systems. Therefore, tests alone can no longer ascertain the reliability of programs especially if we're talking about critical systems. Logicians, computer scientists and software engineers have responded to these challenges by developing different kinds of techniques some of which are based on formal reasoning about properties of software and tools for helping validate these properties. One of these reasoning techniques that was used to prove PIP's properties is \textit{Floyd–Hoare logic}, often shortened to just \textbf{Hoare Logic}. It was proposed in 1969 by the British computer scientist and logician Tony Hoare\cite{Hoare} and it continues to be the subject of intensive research right up to the present day. It is not only a natural way of \textbf{writing down specifications of programs} but also a technique for \textbf{proving that programs are correct} with respect to such specifications.\\ % other technique : Model checking
+Nowadays, Building reliable software is becoming more and more difficult considering the growing scale, specifications and complexity of modern systems. Therefore, tests alone can no longer ascertain the reliability of programs especially if we're talking about critical systems. Logicians, computer scientists and software engineers have responded to these challenges by developing different kinds of techniques some of which are based on formal reasoning about properties of software and tools for helping validate these properties. One of these reasoning techniques that was used to prove PIP's properties is \textit{Floyd–Hoare logic}, often shortened to just \textbf{Hoare Logic}. It was proposed in 1969 by the British computer scientist and logician Tony Hoare \cite{Hoare} and it continues to be the subject of intensive research right up to the present day. It is not only a natural way of \textbf{writing down specifications of programs} but also a technique for \textbf{proving that programs are correct} with respect to such specifications. A Coq implementation of Hoare logic on a simple imperative programming language called Imp is explained in \textit{Software Foundations} \cite{SoftwareFoundation}. \\  % other technique : Model checking 
 
 Let S be a program that we want to execute starting from a certain state s, P a predicate on the state describing the condition S relies on for correct execution and Q a predicate on the resulting state after the execution of S describing the condition S establishes after correctly running. Knowing that P is verified on s, if we prove that Q is verified after the execution of s, we can ascertain that S is partially correct. And by partial correctness of S we mean that S is correct if it terminates. Using standard Hoare logic, only partial correctness can be proven, while termination needs to be proven separately. This triple S, P and Q, written as \textbf{ \{P\} S \{Q\} }, is referred to as a \textbf{Hoare triple}. The assertions P and Q are respectively referred to as the \textbf{precondition} and the \textbf{postcondition}. \\
 
@@ -224,7 +256,7 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \RightLabel{\small{Hoare\_weaken}}
 \BinaryInfC{\{P\} S \{Q\}}
 \end{prooftree}
-\item If we can weaken a Hoare triple, we expect it to have a \textbf{weakest precondition}. This notion was introduced by Dijkstra in 1976\cite{DIJ} and is very important since it enables us to prove total correctness and in particular program termination. Indeed, if a program doesn't terminate, its weakest precondition would be \textit{True} and it would verify any postcondition.
+\item If we can weaken a Hoare triple, we expect it to have a \textbf{weakest precondition}. This notion was introduced by Dijkstra in 1976 \cite{DIJ} and is very important since it enables us to prove total correctness and in particular program termination. Indeed, if a program doesn't terminate, its weakest precondition would be \textit{True} and it would verify any postcondition.
 \item If we consider a language containing a \textbf{SKIP instruction} which practically does nothing, we can affirm that this command preserves any property which means :
 \vspace{-15pt}
 \begin{prooftree}
@@ -256,10 +288,10 @@ Let S be a program that we want to execute starting from a certain state s, P a 
 \BinaryInfC{\{P\} IF B THEN C1 ELSE C2 \{Q\}}
 \end{prooftree}
 \end{enumerate}
-The rules defined above are in their simplest form and we need to adapt them to the language or semantics we are working on. Also, This list is not exhaustive\cite{SoftwareFoundation}. For example, we did not define a rule for \textit{While} loops because the Coq model of PIP doesn't actually use them and uses recursion instead. Likewise, We're sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
+The rules defined above are in their simplest form and we need to adapt them to the language or semantics we are working on. Also, This list is not exhaustive. For example, we did not define a rule for \textit{While} loops because the Coq model of PIP doesn't actually use them and uses recursion instead. Likewise, We are sure that all PIP's functions terminate since recursive functions are bounded by a maximum number of iterations.  
 
 \subsection{Hoare logic in the shallow embedding} \label{Hoare}
-The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section. A program in the shallow embedding is defined in a monadic style that returns a pair of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare}, \textbf{the postcondition is a predicate on the resulting state and the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in Coq.
+The Hoare logic devised for the shallow embedding is slightly different from what we saw in the previous section \cite{MMUIsolation}. A program in the shallow embedding is defined in a monadic style that returns a pair of values, the first being the resulting state and the second the value returned by the program which generally corresponds to a function. Thus, as shown in script \ref{shallow_Hoare} (\cite{PIP}, Hardware.v), \textbf{the postcondition is a predicate on the resulting state and the returned value} so that we can verify it and propagate it in the case of long proofs. The notation chosen for the Hoare triple stays the same as the one mentioned in the previous section except for the brackets that are doubled since single brackets are already used in Coq.
 \begin{lstlisting}[caption = {Hoare triple in the shallow embedding},label = {shallow_Hoare}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition hoareTriple {A : Type} (P : state $\rightarrow$ Prop) 
@@ -273,7 +305,7 @@ Notation "{{ P }} m {{ Q }}" := (hoareTriple P m Q)
   (at level 90, format "'[' '[' {{  P  }}  ']' '/  '
   '[' m ']' '['  {{  Q  }} ']' ']'") : state_scope.
 \end{lstlisting}
-The weakening lemma on Hoare triples was also defined and proven as shown in script \ref{shallow_weaken}. This Lemma is extensively used in PIP's proofs.
+The weakening lemma, extensively used in PIP's proofs, was also defined and proven in the following script (\cite{PIP}, WeakestPreconditions.v) :
 \begin{lstlisting}[caption = {Weakening Hoare triples in the shallow embedding},label = {shallow_weaken}, mathescape=true,xleftmargin=.06\textwidth,
 xrightmargin=.06\textwidth]
 Lemma weaken (A : Type) (m : LLI A) 
@@ -289,7 +321,7 @@ try rewrite H4 in H3; trivial.
 intros. rewrite H in H3. assumption. 
 Qed.
 \end{lstlisting}
-Some simple instructions were considered as primitive like conditional structures while some others were explicitly defined, like assignments in the form of \linebreak \textit{\textbf{perform x := m in e}} where the value of the program m gets assigned to x in the evaluation of the program e. Furthermore, a Hoare triple rule was devised for assignments.
+Some instructions were considered as primitive like conditional structures while some others were explicitly defined like assignments, in the form of \textit{\textbf{perform x := m in e}} where the value of the program m gets assigned to x in the evaluation of the program e, defined in script \ref{shallowIns} p.\pageref{shallowIns}. Furthermore, a Hoare triple rule was devised for assignments as follows (\cite{PIP}, WeakestPreconditions.v) :
 \begin{lstlisting}[caption = {Hoare triples assignment rule in the shallow embedding},label = {shallow_assign},mathescape=true]
 Lemma bind (A B : Type) (m : LLI A) (f : A $\rightarrow$ LLI B) 
 (P : state $\rightarrow$ Prop) ( Q : A $\rightarrow$ state $\rightarrow$ Prop) 
@@ -306,8 +338,8 @@ apply H1 in H3; rewrite H5 in H3; trivial.
 Qed. 
 \end{lstlisting}
 
-Finally, to reason with Hoare logic we need to formally  specify the properties we want to prove\cite{MMUIsolation}\cite{PIPKernel}, the most important being partition memory isolation,
-kernel data isolation, vertical sharing and consistency mentioned in \ref{properties} p.\pageref{properties}. To that end, the following necessary functions on PIP's data structures were defined : 
+Finally, to reason with Hoare logic we need to formally  specify the properties we want to prove \cite{PIPKernel}, the most important being partition memory isolation,
+kernel data isolation, vertical sharing and consistency mentioned in \ref{properties} p.\pageref{properties}. To that end, the following necessary functions on PIP's data structures were defined (\cite{PIP}, StateLib.v) : 
 \begin{itemize}
 	\item \textbf{getChildren :} returns the list of all children of a given parent partition in the partition tree of a given state;
 	\item \textbf{getAncestors :} returns the list of all ancestors of a given partition in the partition tree of a given state;
@@ -317,7 +349,7 @@ kernel data isolation, vertical sharing and consistency mentioned in \ref{proper
 		\item \textbf{getConfigPages :} returns the list of configuration pages lent to PIP to manage a given partition;
 	\item \textbf{getPartitions :} returns the list of all existing partitions of a given state which is naturally obtained by a search on the partition tree.
 \end{itemize} 
-The first property defines horizontal isolation between children i.e., for any state s of the system, all memory pages owned by two different children of a given parent partition in the partition tree must be distinct. This property is formally defined in the Coq proof assistant as follows :
+The first property defines horizontal isolation between children i.e., for any state s of the system, all memory pages owned by two different children of a given parent partition in the partition tree must be distinct. This property is formally defined in the Coq proof assistant as follows (\cite{PIP}, Isolation.v) :
 \begin{lstlisting}[caption = {Horizontal isolation}, mathescape=true,xleftmargin=.02\textwidth,
 xrightmargin=.02\textwidth]
 Definition horizontalIsolation s :=
@@ -328,7 +360,7 @@ child2 $\in$ getChildren parent s $\rightarrow$
 child1 $\neq$ child2 $\rightarrow$
 (getUsedPages child1 s) $\cap$ (getUsedPages child2 s) = $\emptyset$.
 \end{lstlisting}
-The second property defines vertical sharing between a parent partition and its children i.e. it ensures that all pages mapped by a child are mapped in its parent. This property is formally defined as follows :
+The second property defines vertical sharing between a parent partition and its children i.e. it ensures that all pages mapped by a child are mapped in its parent. This property is formally defined as follows (\cite{PIP}, Isolation.v) :
 \begin{lstlisting}[caption = {Vertical sharing}, mathescape=true,xleftmargin=.08\textwidth,
 xrightmargin=.08\textwidth]
 Definition verticalSharing s :=
@@ -337,7 +369,7 @@ parent $\in$ getPartitions s $\rightarrow$
 child $\in$ getChildren parent s $\rightarrow$
 getUsedPages child s $\subseteq$ getMappedPages parent s.
 \end{lstlisting}
-The third property defines kernel data isolation meaning it ensures that for any state of the system and any given two possibly-equal partitions, the code running in the second partition cannot access the pages containing configuration tables lent to PIP to manage the first partition. This property is formally defined as follows :
+The third property defines kernel data isolation meaning it ensures that for any state of the system and any given two possibly-equal partitions, the code running in the second partition cannot access the pages containing configuration tables lent to PIP to manage the first partition. This property is formally defined as follows (\cite{PIP}, Isolation.v) :
 \begin{lstlisting}[caption = {Kernel data isolation}, mathescape=true,xleftmargin=.12\textwidth,
 xrightmargin=.12\textwidth]
 Definition kernelDataIsolation s :=
@@ -347,7 +379,7 @@ partition2 $\in$ getPartitions s $\rightarrow$
 (getAccessibleMappedPages partition1 s) $\cap$
 (getConfigPages partition2 s) = $\emptyset$.
 \end{lstlisting}
-The last property of consistency is mandatory to prove the previously detailed properties. Consistency encompasses different sub-properties that were divided into four categories. As the definition of this property is quite cumbersome, we will only disclose these categories and illustrate each one with an example :
+The last property of consistency is mandatory to prove the previously detailed properties . Consistency encompasses different sub-properties that were divided into four categories. As the definition of this property is quite cumbersome, we will only disclose these categories and illustrate each one with an example (\cite{PIP}, Consistency.v):
 \begin{itemize}
 	\item \textbf{Partition tree structure :} the properties in this category ensure that the partition tree of a given state is consistent relatively to its awaited structure preset in section \ref{structures} p.\pageref{structures}. For example, one of the properties defined in this category and called \textit{noCycleInPartitionTree} ensures that there is no cycle in the partition tree of a given system i.e. each partition is different from all its ancestors in the partition tree. This property is formally defined as follows :
 \begin{lstlisting}[caption = {Example of partition-tree-consistency property}, mathescape=true,xleftmargin=.08\textwidth,
@@ -374,7 +406,7 @@ NoDup (getMappedPages partition s).
 \end{lstlisting}	
 	\item \textbf{Well-typedness :} This last category concerns kernel data types and ensures that PIP doesn't contain any type confusion. For instance, when PIP writes a virtual address in the memory, it should be read later as a virtual address which is ensured by a property called \textit{dataStructurePdSh1Sh2asRoot}. Otherwise, it is considered as an undefined behaviour in the model.
 \end{itemize}
-The most difficult system call invariant, called \textit{createPartition}, was successfully proven. It required about 60000 lines of code to prove. It is defined as follows :
+The most difficult system call invariant, called \textit{createPartition}, was successfully proven (\cite{PIP}, CreatePartition.v). It required about 60000 lines of code to prove. It is defined as follows :
 \begin{lstlisting}[caption = {createPartition Hoare triple}, mathescape=true]
 Lemma createPartition (descChild pdChild
            shadow1 shadow2 list : vaddr) :
@@ -390,10 +422,10 @@ createPartition descChild pdChild shadow1 shadow2 list
 \section{The deep embedding} \label{deep}
 
 \subsection{DEC}
-DEC\cite{DEC} (Deep Embedding of a
-terminating C-style language with effects) is a \gls{DSL} embedded in \textit{Gallina} and developed as an intermediate language for the translation of PIP to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type (\textit{IdModType} defined in annex \ref{ModType} p.\pageref{ModType}). The dynamic semantics of DEC is specified in the small-step style of \gls{SOS}, introduced by \textit{Plotkin}\cite{SOS}, which formally describe how the individual steps of a computation take place enabling us to perform software verification by reasoning on formulas' structure. In small-step semantics, program behaviour is specified in terms of atomic steps and this makes it easier to specify constructs in dependently of one another\cite{TAOSD}. \\
+DEC \cite{DEC} (Deep Embedding of a
+terminating C-style language with effects) is a \gls{DSL} embedded in \textit{Gallina} and developed as an intermediate language for the translation of PIP to C. DEC Relies on Coq modules to define parametrisable state and identifiers types which are both specified in a module type (\textit{IdModType} shown in annex \ref{ModType} p.\pageref{ModType}). The dynamic semantics of DEC is specified in the small-step style of \gls{SOS}, introduced by \textit{Plotkin} \cite{SOS}, which formally describe how the individual steps of a computation take place enabling us to perform software verification by reasoning on formulas' structure. In small-step semantics, program behaviour is specified in terms of atomic steps and this makes it easier to specify constructs in dependently of one another \cite{TAOSD}. \\
 
-\noindent The DEC language has the following properties : 
+\noindent The DEC language has the following properties (\cite{DEC}, README.txt) : 
 \begin{enumerate}
 	\item \textbf{Type soundness :} no well-typed program gets stuck on a
 non-value, and when a well-typed program terminates it gives a value
@@ -407,14 +439,14 @@ program can only evaluate to one value and one new state;
 	\item \textbf{Type uniqueness :} each program has at most one
 type.	
 \end{enumerate}
-DEC supports Hoare logic reasoning, providing proven Hoare logic rules that will be detailed in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec}.
+DEC supports Hoare logic reasoning, providing proven Hoare logic rules that will be detailed in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec} (\cite{DEC}, THoare.v).
 
 \iffalse
 A deep embedding is mainly an \textbf{abstract representation of a language by modelling its expressions as data}. Strictly speaking, The main difference between a shallow and deep embedding is that the former is \textbf{ extensible with regards to adding language constructs} while the latter is \textbf{extensible with regards to adding interpretations of its abstract data types}. A typical approach in PIP's case would have been reasoning on a predefined deep embedding as structural abstraction enables us to perform cost-effective software verification by inversion on formulas' structure. However, defining such an abstract language, at the beginning, is quite tedious and rather intricate since we need to worry about the wingspan of such language and expression soundness among others. Therefore, the tasks of proof engineering and developing the deep embedding were separated. At first, a formal reasoning system based on Hoare logic was built on the shallow embedding as shown in section \ref{Hoare} p.\pageref{Hoare}. Then, an abstract representation of the shallow model was written in \textit{Gallina} which corresponds to the deep embedding. Needless to say, at some point later on, we need to worry about the preservation of proven properties between both embeddings either by proving that there is a bijection between them or by rewriting all the proofs in the deep embedding. By and large, we need to \textbf{ascertain the feasibility of such proofs in the deep embedding} as well as \textbf{compare examples of conducted proofs in both embeddings}.
 \fi
 
 \subsection{Deep embedding constructs}
-Before we move on to the main constructs of the deep embedding, we need to introduce essential background types and structures :
+\noindent Before we move on to the main constructs of the deep embedding, we need to introduce some essential background types and structures (\cite{DEC}, StaticSemA.v) :
 \begin{itemize}
 	\item \textbf{Id type :} represents the identifiers' type in the deep embedding. Typically, identifiers of variables are strings but we can use any other type;
 	\item \textbf{Value type :} represents the actual values the programs will be manipulating. They can be built using the constructor \textit{cst} followed by a shallow type and a value that should be of that type. The value type and its constructor are defined as follows :
@@ -474,7 +506,7 @@ Record XFun (T1 T2: Type) : Type := {
 \end{lstlisting}
 \end{itemize}
 
-As shown in script \ref{DeepEmb}, The deep embedding provides us with 8 constructs to build expressions :
+As shown in script \ref{DeepEmb} (\cite{DEC}, StaticSemA.v), The deep embedding provides us with 8 constructs to build expressions :
 \begin{enumerate}
 	\item \textbf{Val} \textit{v} \textbf{:} lifts the value \textit{v} to an expression using the constructor \textit{Val};
 	\item \textbf{BindN} \textit{e1 e2} \textbf{:} represents a \textbf{sequence} of instructions where the expression \textit{e1} is evaluated first then \textit{e2} next. It is equivalent to ``\textit{e1;;e2}'' in the shallow embedding;
@@ -516,7 +548,7 @@ Inductive Exp : Type :=
  		(xf: XFun T1 T2) (qv: QValue)
 \end{lstlisting}
 
-The deep expressions are meant to be evaluated in certain variable and function environments. To that end, single and multi-step evaluation were defined as follows :
+The deep expressions are meant to be evaluated in certain variable and function environments. To that end, single and multi-step evaluation were defined as follows (\cite{DEC}, DynamicSemA.v) :
 \begin{itemize}
 	\item \textbf{EStep fenv env (Conf Exp n e) (Conf Exp n' e') :} represents a \textbf{single-step evaluation} of the expression \textit{e}, in the function environment \textit{fenv} and variable environment \textit{env}, with \textit{n} as the current state. The constructor \textit{Conf} builds a configuration of the type we seek to evaluate which, in our case, is \textit{Exp} and contains the current state as well as the starting expression. \textit{n'} and \textit{e'} are respectively the resulting state and expression. \pagebreak
 \item \textbf{PrmsStep fenv env (Conf Prms n es) (Conf Prms n' es') :} represents a single-step evaluation of the list of parameters \textit{es} which conducts a single-step evaluation of the first expression in the list. If the first expression is a value, it moves on to the next parameter;
@@ -527,7 +559,7 @@ The deep expressions are meant to be evaluated in certain variable and function 
 Finally, the state in the deep embedding is represented with a type parameter \textit{W}, as shown in script \ref{XFun} p.\pageref{XFun}, that can be specified as required. 
 
 \subsection{Hoare logic in the deep embedding} \label{HoareDeepSec}
-A Hoare triple in the deep embedding is slightly different from its counterpart in the shallow embedding. Indeed, this new version of the Hoare triple depends on the function environment as well as the variable environment we're evaluating the expression in. Both will be passed to the Hoare triple as parameters along with the expression, the precondition and the postcondition. The precondition is a predicate on the state while the postcondition is a predicate on both the resulting value and state. We must also ensure that the expression we are dealing with is well-typed. Therefore, as shown in script \ref{HoareEval}, a Hoare triple is considered valid if and only if the expression \emph{e} is well-typed and there is an \textit{EClosure} from a certain starting state verifying the precondition to a certain resulting state and value that verify the postcondition with \textit{e} evaluated in the given function and variable environments \textit{fenv} and \textit{env}. \textbf{\{\{P\}\} fenv $>>$ env $>>$ e \{\{Q\}\}} is the chosen notation for the Hoare triple in the deep embedding where \textit{P}, \textit{Q}, \textit{e}, \textit{fenv}, and \textit{env} are respectively the precondition, the postcondition, the expression, the function environment and the variable environment. Furthermore, as the evaluation of parameters is different from that of expressions, we need to devise a separate Hoare triple for parameters as shown in script \ref{HoarePrmsEval} where \textit{EClosure} is replaced by \textit{PrmsClosure}.
+A Hoare triple in the deep embedding is slightly different from its counterpart in the shallow embedding. Indeed, this new version of the Hoare triple depends on the function environment as well as the variable environment we are evaluating the expression in. Both will be passed to the Hoare triple as parameters along with the expression, the precondition and the postcondition. The precondition is a predicate on the state while the postcondition is a predicate on both the resulting value and state. We must also ensure that the expression we are dealing with is well-typed. Therefore, as shown in script \ref{HoareEval} (\cite{DEC}, THoare.v), a Hoare triple is considered valid if and only if the expression \emph{e} is well-typed and there is an \textit{EClosure} from a certain starting state verifying the precondition to a certain resulting state and value that verify the postcondition with \textit{e} evaluated in the given function and variable environments \textit{fenv} and \textit{env}. \textbf{\{\{P\}\} fenv $>>$ env $>>$ e \{\{Q\}\}} is the chosen notation for the Hoare triple in the deep embedding where \textit{P}, \textit{Q}, \textit{e}, \textit{fenv}, and \textit{env} are respectively the precondition, the postcondition, the expression, the function environment and the variable environment. Furthermore, as the evaluation of parameters is different from that of expressions, we need to devise a separate Hoare triple for parameters as shown in script \ref{HoarePrmsEval} where \textit{EClosure} is replaced by \textit{PrmsClosure}.
 \pagebreak
 \begin{lstlisting}[caption = {Hoare triple for expressions in the deep embedding}, label={HoareEval},mathescape=true]
 Definition THoareTriple_Eval
@@ -559,7 +591,7 @@ Definition THoarePrmsTriple_Eval
         (PS (map Val vs))) $\rightarrow$ P s $\rightarrow$ Q vs s'.
 \end{lstlisting}
 
-Several Hoare triple rules were devised and proven. We show the importance of these rules in section \ref{HoareRules} p.\pageref{HoareRules}. For simplicity's sake, We will only give the formal definition of some of these rules and not their actual implementation in Coq :
+Several Hoare triple rules were devised and proven (\cite{DEC}, THoare.v). We show the importance of these rules in section \ref{HoareRules} p.\pageref{HoareRules}. For simplicity's sake, We will only give the formal definition of some of these rules and not their actual implementation in Coq :
 \begin{itemize}
 	\item \textbf{weakening lemmas :} the weakening lemma on expressions is the same as the one defined for the shallow embedding in script \ref{shallow_weaken} p.\pageref{shallow_weaken}. However, we need another weakening lemma for a Hoare triple on parameters. The weakest preconditions for expression and parameter triples were also defined as functions called respectively \textit{wp} and \textit{wpPrms}. The two weakening lemmas are formally defined as follows :
 \begin{prooftree}
@@ -628,7 +660,7 @@ Lemma Apply_VHTT1 (P0: W $\rightarrow$ Prop)
  THoareTriple_Eval P0 P2 fenv env (Apply (QF f) (PS es)).
 \end{lstlisting}
 		\item \leftskip -4em
- \textbf{Apply\_VHTT2 :} only evaluates the parameters in a function application. It's defined as follows : 
+ \textbf{Apply\_VHTT2 :} only evaluates the parameters in a function application. It is defined as follows : 
 \vspace{-1em} 
 \begin{prooftree}
 \leftskip -6em
