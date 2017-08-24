@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  16 AUG 2017 11:54
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  24 AUG 2017 18:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -8,7 +8,7 @@ LaTeX2e <2011/06/27>
 Babel <3.9h> and hyphenation patterns for 4 languages loaded.
 ! Undefined control sequence.
 l.1 \chapter
-            {CRIStAL laboratry}
+            {CRIStAL laboratory}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -23,7 +23,7 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.1 \chapter{C
-              RIStAL laboratry}
+              RIStAL laboratory}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
@@ -41,6 +41,7 @@ Missing character: There is no o in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no t in font nullfont!
+Missing character: There is no o in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no y in font nullfont!
 
@@ -89,7 +90,7 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.5 C
-     RIStAL\footnotemark[1]\cite{cristal} (Research Center in Computer Scien...
+     RIStAL\footnotemark[1] \cite{cristal} (Research Center in Computer Scie...
 
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -110,8 +111,8 @@ Missing character: There is no [ in font nullfont!
 ! Undefined control sequence.
 <write> ...: Citation `\@citeb ' on page \thepage 
                                                   \space undefined\on@line .
-l.5 CRIStAL\footnotemark[1]\cite{cristal}
-                                          (Research Center in Computer Scien...
+l.5 CRIStAL\footnotemark[1] \cite{cristal}
+                                           (Research Center in Computer Scie...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -793,8 +794,13 @@ Missing character: There is no e in font nullfont!
 Missing character: There is no ) in font nullfont!
 Missing character: There is no . in font nullfont!
 
-Overfull \hbox (29.91666pt too wide) in paragraph at lines 5--6
-[][][]
+Overfull \hbox (24.48613pt too wide) in paragraph at lines 5--6
+[][]
+ []
+
+
+Overfull \hbox (5.43053pt too wide) in paragraph at lines 5--6
+[]
  []
 
 
@@ -989,7 +995,7 @@ Overfull \hbox (32.50008pt too wide) in paragraph at lines 9--9
 ! Undefined control sequence.
 \@footnotetext ...tins {\reset@font \footnotesize 
                                                   \interlinepenalty \interfo...
-l.11 ...omatique, G√©nie Informatique et Signal''}
+l.11 ...matique, G\'enie Informatique et Signal''}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1000,7 +1006,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \@footnotetext ...}\color@begingroup \@makefntext 
                                                   {\rule \z@ \footnotesep \i...
-l.11 ...omatique, G√©nie Informatique et Signal''}
+l.11 ...matique, G\'enie Informatique et Signal''}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1008,8 +1014,6 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-Missing character: There is no √ in font cmr10!
-Missing character: There is no © in font cmr10!
 
 Overfull \hbox (56.02792pt too wide) in paragraph at lines 11--11
 [][]\OT1/cmr/m/n/10 ``Laboratoire
@@ -1021,8 +1025,8 @@ Overfull \hbox (68.33351pt too wide) in paragraph at lines 11--11
  []
 
 
-Overfull \hbox (20.62503pt too wide) in paragraph at lines 11--11
-\OT1/cmr/m/n/10 Gnie
+Overfull \hbox (25.06947pt too wide) in paragraph at lines 11--11
+\OT1/cmr/m/n/10 G^^Senie
  []
 
 
@@ -1125,7 +1129,7 @@ Overfull \hbox (24.02783pt too wide) in paragraph at lines 13--13
 ! Undefined control sequence.
 \@footnotetext ...tins {\reset@font \footnotesize 
                                                   \interlinepenalty \interfo...
-l.15 ...n et la communication avanc√©e de Lille''}
+l.15 ... et la communication avanc\'ee de Lille''}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1136,7 +1140,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \@footnotetext ...}\color@begingroup \@makefntext 
                                                   {\rule \z@ \footnotesep \i...
-l.15 ...n et la communication avanc√©e de Lille''}
+l.15 ... et la communication avanc\'ee de Lille''}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1144,10 +1148,6 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-Missing character: There is no √ in font cmr10!
-Missing character: There is no © in font cmr10!
-Missing character: There is no √ in font cmr10!
-Missing character: There is no © in font cmr10!
 
 Overfull \hbox (38.1112pt too wide) in paragraph at lines 15--15
 [][]\OT1/cmr/m/n/10 ``Institut
@@ -1199,13 +1199,8 @@ Overfull \hbox (8.33334pt too wide) in paragraph at lines 15--15
  []
 
 
-Overfull \hbox (16.6667pt too wide) in paragraph at lines 15--15
-\OT1/cmr/m/n/10 ma-
- []
-
-
-Overfull \hbox (21.75003pt too wide) in paragraph at lines 15--15
-\OT1/cmr/m/n/10 triels
+Overfull \hbox (39.52785pt too wide) in paragraph at lines 15--15
+\OT1/cmr/m/n/10 mat^^Seriels
  []
 
 
@@ -1254,8 +1249,8 @@ Overfull \hbox (17.22227pt too wide) in paragraph at lines 15--15
  []
 
 
-Overfull \hbox (28.88895pt too wide) in paragraph at lines 15--15
-\OT1/cmr/m/n/10 avance
+Overfull \hbox (33.33339pt too wide) in paragraph at lines 15--15
+\OT1/cmr/m/n/10 avanc^^See
  []
 
 
@@ -1479,6 +1474,7 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no b in font nullfont!
 Missing character: There is no o in font nullfont!
+Missing character: There is no u in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no s in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -1739,7 +1735,7 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.22 	\caption
-              {CRIStAL laboratry Location}
+              {CRIStAL laboratory Location}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
@@ -1757,6 +1753,7 @@ Missing character: There is no o in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no t in font nullfont!
+Missing character: There is no o in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no y in font nullfont!
 Missing character: There is no L in font nullfont!
@@ -2102,6 +2099,7 @@ Missing character: There is no o in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no t in font nullfont!
+Missing character: There is no o in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no y in font nullfont!
 Missing character: There is no i in font nullfont!
@@ -2125,7 +2123,6 @@ Missing character: There is no v in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no l in font nullfont!
 Missing character: There is no o in font nullfont!
-Missing character: There is no p in font nullfont!
 Missing character: There is no p in font nullfont!
 Missing character: There is no m in font nullfont!
 Missing character: There is no e in font nullfont!
@@ -2221,7 +2218,6 @@ Missing character: There is no v in font nullfont!
 Missing character: There is no e in font nullfont!
 Missing character: There is no l in font nullfont!
 Missing character: There is no o in font nullfont!
-Missing character: There is no p in font nullfont!
 Missing character: There is no p in font nullfont!
 Missing character: There is no m in font nullfont!
 Missing character: There is no e in font nullfont!
@@ -2801,7 +2797,7 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.35 T
-      he team is lead by \textit{Prof.Gilles Grimaud} and has 15 members\foo...
+      he team is led by \textit{Prof. Gilles Grimaud} and has 15 members\foo...
 
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -2817,7 +2813,6 @@ Missing character: There is no i in font nullfont!
 Missing character: There is no s in font nullfont!
 Missing character: There is no l in font nullfont!
 Missing character: There is no e in font nullfont!
-Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no b in font nullfont!
 Missing character: There is no y in font nullfont!
@@ -2921,14 +2916,6 @@ Missing character: There is no d in font nullfont!
 Missing character: There is no i in font nullfont!
 Missing character: There is no t in font nullfont!
 Missing character: There is no s in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no s in font nullfont!
-Missing character: There is no s in font nullfont!
-Missing character: There is no i in font nullfont!
-Missing character: There is no b in font nullfont!
-Missing character: There is no l in font nullfont!
-Missing character: There is no e in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no p in font nullfont!
 Missing character: There is no p in font nullfont!
@@ -2948,8 +2935,13 @@ Overfull \hbox (20.0pt too wide) in paragraph at lines 35--36
  []
 
 
-Overfull \hbox (46.84692pt too wide) in paragraph at lines 35--36
-\OT1/cmr/m/it/10 Prof.Gilles
+Overfull \hbox (21.73318pt too wide) in paragraph at lines 35--36
+\OT1/cmr/m/it/10 Prof.
+ []
+
+
+Overfull \hbox (25.11374pt too wide) in paragraph at lines 35--36
+\OT1/cmr/m/it/10 Gilles
  []
 
 
@@ -3050,10 +3042,15 @@ Type  H <return>  for immediate help.
  ...                                              
                                                   
 l.40 	\caption
-              {2XS team organigram}
+              [The 2XS team organizational chart]{The 2XS team organizationa...
+
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
+Missing character: There is no [ in font nullfont!
+Missing character: There is no T in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no e in font nullfont!
 Missing character: There is no 2 in font nullfont!
 Missing character: There is no X in font nullfont!
 Missing character: There is no S in font nullfont!
@@ -3067,10 +3064,66 @@ Missing character: There is no g in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no n in font nullfont!
 Missing character: There is no i in font nullfont!
-Missing character: There is no g in font nullfont!
+Missing character: There is no z in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
 Missing character: There is no r in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no T in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no X in font nullfont!
+Missing character: There is no S in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no e in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no m in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no z in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no [ in font nullfont!
+\citation{cristal}
+! Undefined control sequence.
+<write> ...: Citation `\@citeb ' on page \thepage 
+                                                  \space undefined\on@line .
+l.40 ...S team organizational chart \cite{cristal}
+                                                  }
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+LaTeX Warning: Citation `cristal' on page  undefined on input line 40.
+
+Missing character: There is no ] in font nullfont!
 
 ! LaTeX Error: \begin{document} ended by \end{figure}.
 
@@ -3086,6 +3139,11 @@ or  <return>  to continue without it.
 
 
 Overfull \hbox (20.0pt too wide) in paragraph at lines 37--42
+[]
+ []
+
+
+Overfull \hbox (5.43053pt too wide) in paragraph at lines 37--42
 []
  []
 
@@ -3140,11 +3198,11 @@ Overfull \hbox (8.05559pt too wide) in paragraph at lines 45--45
 
  
 Here is how much of TeX's memory you used:
- 16 strings out of 494985
- 244 string characters out of 6180356
+ 17 strings out of 494985
+ 252 string characters out of 6180356
  49094 words of memory out of 5000000
- 3331 multiletter control sequences out of 15000+600000
+ 3332 multiletter control sequences out of 15000+600000
  4294 words of font info for 16 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 22i,5n,21p,909b,102s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 22i,5n,21p,909b,105s stack positions out of 5000i,500n,10000p,200000b,80000s
 !  ==> Fatal error occurred, no output PDF file produced!
