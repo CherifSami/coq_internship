@@ -321,7 +321,7 @@ try rewrite H4 in H3; trivial.
 intros. rewrite H in H3. assumption. 
 Qed.
 \end{lstlisting}
-Some instructions were considered as primitive like conditional structures while some others were explicitly defined like assignments, in the form of \textit{\textbf{perform x := m in e}} where the value of the program m gets assigned to x in the evaluation of the program e, defined in script \ref{shallowIns} p.\pageref{shallowIns}. Furthermore, a Hoare triple rule was devised for assignments as follows (\cite{PIP}, WeakestPreconditions.v) :
+Some instructions were considered as primitive like conditional structures while some others were explicitly defined like assignments, in the form of \textit{\textbf{perform x := m in e}} where the value of the program m gets assigned to x in the evaluation of the program e, defined in script \ref{shallowIns} p.\pageref{shallowIns}. Furthermore, a Hoare logic rule was devised for assignments as follows (\cite{PIP}, WeakestPreconditions.v) :
 \begin{lstlisting}[caption = {Hoare triples assignment rule in the shallow embedding},label = {shallow_assign},mathescape=true]
 Lemma bind (A B : Type) (m : LLI A) (f : A $\rightarrow$ LLI B) 
 (P : state $\rightarrow$ Prop) ( Q : A $\rightarrow$ state $\rightarrow$ Prop) 
@@ -591,7 +591,7 @@ Definition THoarePrmsTriple_Eval
         (PS (map Val vs))) $\rightarrow$ P s $\rightarrow$ Q vs s'.
 \end{lstlisting}
 
-Several Hoare triple rules were devised and proven (\cite{DEC}, THoare.v). We show the importance of these rules in section \ref{HoareRules} p.\pageref{HoareRules}. For simplicity's sake, We will only give the formal definition of some of these rules and not their actual implementation in Coq :
+Several Hoare logic rules were devised and proven (\cite{DEC}, THoare.v). We show the importance of these rules in section \ref{HoareRules} p.\pageref{HoareRules}. For simplicity's sake, We will only give the formal definition of some of these rules and not their actual implementation in Coq :
 \begin{itemize}
 	\item \textbf{weakening lemmas :} the weakening lemma on expressions is the same as the one defined for the shallow embedding in script \ref{shallow_weaken} p.\pageref{shallow_weaken}. However, we need another weakening lemma for a Hoare triple on parameters. The weakest preconditions for expression and parameter triples were also defined as functions called respectively \textit{wp} and \textit{wpPrms}. The two weakening lemmas are formally defined as follows :
 \begin{prooftree}
@@ -636,7 +636,7 @@ Several Hoare triple rules were devised and proven (\cite{DEC}, THoare.v). We sh
 	\item \textbf{Apply rules :} the apply construct has several rules :
 	\begin{itemize}
 	\item \textbf{Apply\_VHTT1 :} the main rule of the Apply construct which evaluates not only the parameters but also the next recursive call of the function by performing a pattern matching on the bound. It is formally defined in Coq as follows :
-\begin{lstlisting}[caption = {Main Hoare triple rule for the Apply construct},mathescape=true,
+\begin{lstlisting}[caption = {Main Hoare logic rule for the Apply construct},mathescape=true,
 xleftmargin=-.14\textwidth]
 Lemma Apply_VHTT1 (P0: W $\rightarrow$ Prop) 
    (P1: list Value $\rightarrow$ W $\rightarrow$ Prop) 

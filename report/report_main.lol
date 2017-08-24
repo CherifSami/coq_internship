@@ -59,7 +59,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {3.30}Hoare triple for parameters in the deep embedding}{28}{lstlisting.3.30}
 \defcounter {refsection}{0}\relax 
-\contentsline {lstlisting}{\numberline {3.31}Main Hoare triple rule for the Apply construct}{30}{lstlisting.3.31}
+\contentsline {lstlisting}{\numberline {3.31}Main Hoare logic rule for the Apply construct}{30}{lstlisting.3.31}
 \defcounter {refsection}{0}\relax 
 \contentsline {lstlisting}{\numberline {4.1}PIP state in the deep embedding}{32}{lstlisting.4.1}
 \defcounter {refsection}{0}\relax 
