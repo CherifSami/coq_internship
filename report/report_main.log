@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  24 AUG 2017 16:35
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.7.24)  24 AUG 2017 17:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1021,7 +1021,7 @@ File: csquotes.cfg
 \glo@main@file=\write5
 \openout5 = `report_main.glo'.
 
-Package glossaries Info: Writing glossary file report_main.glo on input line 77
+Package glossaries Info: Writing glossary file report_main.glo on input line 76
 .
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
@@ -1037,20 +1037,20 @@ Package csquotes Info: Redefining alias 'default' -> 'english'.
 (./report_main.aux)
 \openout1 = `report_main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 135.
+LaTeX Font Info:    ... okay on input line 135.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 135.
+LaTeX Font Info:    ... okay on input line 135.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 135.
+LaTeX Font Info:    ... okay on input line 135.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 135.
+LaTeX Font Info:    ... okay on input line 135.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 135.
+LaTeX Font Info:    ... okay on input line 135.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 135.
+LaTeX Font Info:    ... okay on input line 135.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 135.
+LaTeX Font Info:    ... okay on input line 135.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -1090,15 +1090,15 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'report_main.bbl' found.
 
 (./report_main.bbl)
-Package biblatex Info: Reference section=0 on input line 136.
-Package biblatex Info: Reference segment=0 on input line 136.
+Package biblatex Info: Reference section=0 on input line 135.
+Package biblatex Info: Reference segment=0 on input line 135.
 
 (/usr/share/texlive/texmf-dist/tex/latex/glossaries/dict/glossaries-dictionary-
 English.dict
 Dictionary: glossaries-dictionary, Language: English 
 ) (./report_main.glsdefs)
 \AtBeginShipoutBox=\box48
-Package hyperref Info: Link coloring OFF on input line 136.
+Package hyperref Info: Link coloring OFF on input line 135.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -1108,9 +1108,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count330
 )
-LaTeX Info: Redefining \ref on input line 136.
-LaTeX Info: Redefining \pageref on input line 136.
-LaTeX Info: Redefining \nameref on input line 136.
+LaTeX Info: Redefining \ref on input line 135.
+LaTeX Info: Redefining \pageref on input line 135.
+LaTeX Info: Redefining \nameref on input line 135.
 
 (./report_main.out) (./report_main.out)
 \@outlinefile=\write6
@@ -1186,7 +1186,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.155 \newpage
+l.154 \newpage
                [2] (./report_main.lolpdfTeX warning (ext4): destination with th
 e same identifier (name{page.3}) has been already used, duplicate ignored
 <to be read again> 
@@ -1203,7 +1203,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.165 \cleardoublepage
+l.164 \cleardoublepage
                        [4] (./report_main.lof)
 \tf@lof=\write9
 \openout9 = `report_main.lof'.
@@ -1595,7 +1595,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 6--7
  []
 
 )
-Underfull \hbox (badness 10000) in paragraph at lines 8--193
+Underfull \hbox (badness 10000) in paragraph at lines 8--192
 
  []
 
@@ -1651,12 +1651,12 @@ Overfull \hbox (7.99164pt too wide) in paragraph at lines 901--902
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 203.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 198.
  [81]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 203.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 198.
  (./report_main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 203.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 203.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 198.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 198.
 Package rerunfilecheck Info: File `report_main.out' has not changed.
 (rerunfilecheck)             Checksum: 2F36B2B876C750E9E74D4063358E032D;2968.
 Package logreq Info: Writing requests to 'report_main.run.xml'.
@@ -1665,13 +1665,13 @@ Package logreq Info: Writing requests to 'report_main.run.xml'.
  )
 (\end occurred inside a group at level 1)
 
-### semi simple group (level 1) entered at line 150 (\begingroup)
+### semi simple group (level 1) entered at line 149 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 21242 strings out of 494985
- 322993 string characters out of 6180356
- 808148 words of memory out of 5000000
- 22296 multiletter control sequences out of 15000+600000
+ 21244 strings out of 494985
+ 323036 string characters out of 6180356
+ 808266 words of memory out of 5000000
+ 22298 multiletter control sequences out of 15000+600000
  16080 words of font info for 57 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  46i,13n,72p,1714b,5051s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1691,7 +1691,7 @@ s/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
 y10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pf
 b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on report_main.pdf (93 pages, 1230238 bytes).
+Output written on report_main.pdf (93 pages, 1230442 bytes).
 PDF statistics:
  3030 PDF objects out of 3580 (max. 8388607)
  2871 compressed objects within 29 object streams

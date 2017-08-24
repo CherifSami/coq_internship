@@ -1,6 +1,8 @@
 # General information 
 Author : Cherif Mohamed Sami
 
+Supervisor : Paolo Torrini
+
 Internship period : May 22 - August 11, 2017
 
 Team & laboratory : 2XS, CRIStAL (https://www.cristal.univ-lille.fr/)

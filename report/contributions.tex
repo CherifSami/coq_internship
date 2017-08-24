@@ -641,7 +641,7 @@ Specifying programs in the deep embedding has the great advantage of simplifying
 \paragraph{Importance of Hoare logic rules} \label{HoareRules}
 Throughout our experiments, the Hoare logic rules shown in section \ref{HoareDeepSec} p.\pageref{HoareDeepSec} have proven efficient at dealing with proofs in the deep embedding and this is due to many reasons :
 \begin{itemize}
-	\item They enable us to structurally decompose our proofs and deal with each instruction at a time which makes them well structured and legible. This is really important when dealing with large expressions and it is what made our modular approach possible.
+	\item They enable us to structurally decompose our proofs and deal with each instruction at a time which makes them well structured and legible. This is really important when dealing with large expressions and it is what made our compositional approach possible.
 	\item They enable us to construct shorter proofs as was the case with the \textit{succRecW} lemma, mentioned in section \ref{proof} p.\pageref{proof}, which was 130 lines less than its counterpart with inversions only. 
 	\item They internally deal with well-typedness issues which simplifies further our proofs.
 \end{itemize}

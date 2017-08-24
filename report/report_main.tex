@@ -13,7 +13,7 @@
 \usepackage{wrapfig}
 \usepackage{amsmath} 
 \usepackage{bussproofs}
-\usepackage[firstinits=true,backend=biber]{biblatex}
+\usepackage[firstinits=true,backend=biber,maxbibnames=5]{biblatex}
 %\usepackage{cite}
 \usepackage[nonumberlist,nopostdot]{glossaries}
 \usepackage{color}
@@ -27,9 +27,8 @@
 % PDF setup
 \hypersetup{							
 pdfauthor = {Mohamed Sami Cherif},
-pdftitle = {Title},	% Titre du document
-pdfsubject = {}, % Sujet
-pdfkeywords = {PIP, Hoare, logic, proof}, % Mots-clefs
+pdftitle = {Modelling and verifying the PIP protokernel in a deep embedding of C},	% Titre du document
+pdfkeywords = { Hoare logic, formal proofs}, % Mots-clefs
 pdfstartview={FitH}
 pdfcreator = {Texmaker}}	
 
@@ -192,11 +191,7 @@ keepaspectratio]{img/cover.jpg}%
 \input{./conclusion.tex}
 
 % bibliography
-% not cited
 \printbibliography[heading=bibintoc]
-%\DeclareNameAlias{author}{last-first}
-%\bibliography{biblio.bib}{}
-%\bibliographystyle{plain}
 
 \input{./annexes.tex}
 
